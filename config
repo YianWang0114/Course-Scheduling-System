@@ -1,0 +1,10 @@
+ClassStartsAfter = 8 # the class starts at 8:30am or later
+ClassEndsBy = 18 # classes must end by 6:30pm
+SpecClassStartsAt = 9 # classes between 9:30am-3:30pm are subject to the
+SpecClassEndsAt = 15 # 10%-rule
+SpecClassPercent = 0.125 # the "10% rule". It is actually 12.5\%. Adjust this var if the percentage TwinSuffix = "tw" # the suffix added to the id of a twin course.
+CourseList = "inputs/CourseListFile"
+ConflictCourses = "inputs/ConflictCoursesFile"
+InstructorPref = "inputs/2024-2025/InstructorPrefFile"
+CourseInstructors = "inputs/2024-2025/fall2024/CourseInstructorsFile"
+outputDir = "inputs/2024-2025/fall2024/output/"
