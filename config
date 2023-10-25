@@ -1,10 +1,30 @@
-ClassStartsAfter = 8 # the class starts at 8:30am or later
-ClassEndsBy = 18 # classes must end by 6:30pm
-SpecClassStartsAt = 9 # classes between 9:30am-3:30pm are subject to the
-SpecClassEndsAt = 15 # 10%-rule
-SpecClassPercent = 0.125 # the "10% rule". It is actually 12.5\%. Adjust this var if the percentage TwinSuffix = "tw" # the suffix added to the id of a twin course.
-CourseList = "inputs/CourseListFile"
-ConflictCourses = "inputs/ConflictCoursesFile"
-InstructorPref = "inputs/2024-2025/InstructorPrefFile"
-CourseInstructors = "inputs/2024-2025/fall2024/CourseInstructorsFile"
+# The standard instructional day is from 8:30 am to 6:20 pm.
+InstructDayStartsAt = 8:30
+InstructDayEndsAt = 18:20
+# block scheduling affecting courses ending before 14:30
+BlockSchedulingStartsAt = 8:30
+BlockSchedulingEndsAt = 14:30
+# 10% rule applies to any given time per week (M-F numbers are combined).
+# Right now, the percentage is 12%
+10PercRuleStartsAt = 8:30
+10PercRuleEndsAt = 18:20
+RulePercentage = 0.12
+# block scheduling requires the following starting time:
+50-min-class-start-time = 8:30 9:30 10:30 11:30 12:30 13:30
+80-min-class-start-time = 8:30 10:00 11:30 13:00
+110-min-class-start-time = 8:30 10:30 12:30 13:00
+170-min-class-start-time = 8:30 11:30
+# The second part of the file specifies the constants and options we choose when forming the ILP problem.
+# if the first variable is 1, we strictly follow the block policy (i.e., we set the X
+# decision variables to 0 for any slots that do not meet the policy)
+# if it is 0, then we do not set X, but the slot in CW with a penalty.
+must-follow-block-policy = 1
+penalty-for-violating-block-policy = -10
+# The third part specifies the input files and the output directory.
+# input files for running the code
+CourseInfo = "inputs/CourseInfo"
+ConflictCourse = "inputs/ConflictCourse"
+InstructorPref = "inputs/2024-2025/InstructorPref"
+CourseInstructor = "inputs/2024-2025/fall2024/CourseInstructor"
+# the output will be stored under this directory:
 outputDir = "inputs/2024-2025/fall2024/output/"

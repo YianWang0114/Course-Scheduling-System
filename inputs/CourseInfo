@@ -1,0 +1,8 @@
+#(course name, leng per session, num of sessions per week, large-class, 10-percent-rule-exempted, is-a-TA-session, AllSessionsMustBeOnSameDay, MustOnDay)
+200 50 3 1 0 0 0 - # ling570 is 80-min long, 3 sessions/week,
+# large class, not exempted from 10% rule.
+# it is not a TA session
+200A 60 4 0 0 1 1 T # an TA session that must meet on Tues only.
+200B 60 5 0 0 1 1 R # an TA session that must meet on Thurs only
+570 80 2 0 1 0 0 - # CLMS courses are exempted from the rule
+575C 140 1 0 1 0 0 -
