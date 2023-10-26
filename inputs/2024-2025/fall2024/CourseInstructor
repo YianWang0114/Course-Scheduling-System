@@ -1,0 +1,8 @@
+# (course name, instructor name, must on days, must start time, must end time)
+200 laura MWF 10:30 11:20 # ling200 is scheduled already
+200AA - - - -   # the TA session's instructor is unknown
+200AB - - - -
+
+570 fei - - - 
+575C fei - - -
+575D gina - - -
