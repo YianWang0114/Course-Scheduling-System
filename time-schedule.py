@@ -69,7 +69,7 @@ def read_config(file_name):
             config[key] = int(value)
         elif key in list_keys:
             new_list = []
-            for timeName in value.split(' '):
+            for timeName in value.split():
                 slotId = math.floor(timeSlotName2Id(start_time, time_transfer(timeName)))
                 new_list.append(slotId)
             config[key] = new_list
@@ -161,8 +161,8 @@ def read_courseInfo(file_name, course_instructor):
             large_class = int(values[3])
             ten_percent_rule_exempted = int(values[4])
             is_a_TA_session = int(values[5])
-            all_sessions_must_be_on_same_day = int(values[6])
-            must_on_day = values[7] 
+            # all_sessions_must_be_on_same_day = int(values[6])
+            # must_on_day = values[7] 
 
             cur_course = CourseInfo[CourseName2Id[course_name]]
             cur_course.lengPerSession = length_per_session
@@ -170,8 +170,8 @@ def read_courseInfo(file_name, course_instructor):
             cur_course.largeClass = large_class
             cur_course.exempted = ten_percent_rule_exempted
             cur_course.isTASession = is_a_TA_session
-            cur_course.mustBeOnSameDay = all_sessions_must_be_on_same_day
-            cur_course.mustOnWhichDay = must_on_day
+            # cur_course.mustBeOnSameDay = all_sessions_must_be_on_same_day
+            # cur_course.mustOnWhichDay = must_on_day
             cur_course.slotNum = math.ceil(length_per_session/30)
 
             if (ten_percent_rule_exempted == 0): # if a course is not exempted
@@ -180,20 +180,41 @@ def read_courseInfo(file_name, course_instructor):
 
     return CourseInfo, NonExemptedC, TotalNonExemptedHours
 
+def read_conflict(file_name, course_instructor):
+    CourseName2Id = course_instructor[0]
+    Instructor2Courses = course_instructor[4]
+    conflict_course_pairs = []
+    with open(file_name, "r") as file:
+        for line in file:
+            # Ignore lines starting with "#"
+            if not line.strip() or line.startswith("#"):
+                continue
+            courses = line.split('#')[0].strip().split()
+            course_ids = [CourseName2Id[course] for course in courses if course in CourseName2Id]
+            for i in range(len(course_ids)-1):
+                for j in range(i + 1, len(course_ids)):
+                    conflict_course_pairs.append((min(course_ids[i], course_ids[j]), max(course_ids[i], course_ids[j])))
 
+    for key in Instructor2Courses.keys():
+        if (key != -1 and len(Instructor2Courses[key]) > 1):
+            course_ids = Instructor2Courses[key]
+            for i in range(len(course_ids)-1):
+                for j in range(i + 1, len(course_ids)):
+                    conflict_course_pairs.append((min(course_ids[i], course_ids[j]), max(course_ids[i], course_ids[j])))
+    return conflict_course_pairs
 
 
 
 def main():
     config_file = sys.argv[1]
     config = read_config(config_file)
-    courseInfo_file = config['CourseInfo']
     courseInstructor_file = config['CourseInstructor']
-    # course_instructor = [CourseName2Id, CourseId2Name, InstructorName2Id, InstructorId2Name, Instructor2Courses, CourseInfo, TotalCourseNum]
     course_instructor = read_courseInstructor(courseInstructor_file, config)
+    courseInfo_file = config['CourseInfo']
     CourseInfo, NonExemptedC, TotalNonExemptedHours = read_courseInfo(courseInfo_file, course_instructor)
+    conflict_file = config['ConflictCourse']
+    conflict_course_pairs = read_conflict(conflict_file, course_instructor)
     pdb.set_trace()
-
 if __name__ == "__main__":
     main()
 
