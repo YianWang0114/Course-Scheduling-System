@@ -1,8 +1,65 @@
-#(course name, leng per session, num of sessions per week, large-class, 10-percent-rule-exempted, is-a-TA-session)
-200 50 3 1 0 0 # ling570 is 80-min long, 3 sessions/week,
-# large class, not exempted from 10% rule.
-# it is not a TA session
-200A 60 4 0 0 1 # an TA session that must meet on Tues only.
-200B 60 5 0 0 1 # an TA session that must meet on Thurs only
-570 80 2 0 1 0 # CLMS courses are exempted from the rule
-575C 140 1 0 1 0
+# the format is:
+# (course name, session length, num of sessions per week,
+#  is-large-class, 10%-rule-exempted, is-a-TA-session)
+
+# see https://uwnetid.sharepoint.com/:x:/s/linguistics_dept/EZxNf07dwJtGjHTt_YBYO-UBBE37rcN6Qf0wrhLE9gpSRA?email=fxia%40uw.edu&e=4%3AGKJz9T&fromShare=true&at=9
+
+
+### courses in fall 2024:
+200       50 3   1 0   0 
+
+210       50 3   0 0   0 
+
+233       50 3   1 0   0 
+
+432/532  110 2   0 0   0 
+
+433/533  110 2   0 0   0 
+
+441/541  110 2   0 0   0 
+
+450/550  110 2   0 0   0 
+
+461/561  110 2   0 0   0 
+
+478/578  110 2   0 0   0 
+
+507      110 2   0 0   0 
+
+566       80 2   0 0   0
+
+570       80 2   0 1   0
+
+571       80 2   0 1   0
+
+575-Ben  140 1   0 1   0
+
+580-Cit  140 1   0 0   0 
+
+580-Che  140 1   0 0   0 
+
+599A     140 1   0 0   0 
+
+599B     110 1   0 0   0 
+
+#### TA sessions
+200AA     50 2   0 0   1
+200AB     50 2   0 0   1
+200AC     50 2   0 0   1
+
+200AD     50 2   0 0   1
+200AE     50 2   0 0   1
+200AF     50 2   0 0   1
+
+200AG     50 2   0 0   1
+200AH     50 2   0 0   1
+200AI     50 2   0 0   1
+
+
+233AA     50 1   0 0   1
+233AD     50 1   0 0   1
+233AE     50 1   0 0   1
+
+233AF     50 1   0 0   1
+233AG     50 1   0 0   1
+233AH     50 1   0 0   1

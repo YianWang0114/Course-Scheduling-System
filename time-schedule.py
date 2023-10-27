@@ -203,7 +203,36 @@ def read_conflict(file_name, course_instructor):
                     conflict_course_pairs.append((min(course_ids[i], course_ids[j]), max(course_ids[i], course_ids[j])))
     return conflict_course_pairs
 
-
+def read_instructorPref(file_name, course_instructor):
+    SameDayPairs = set()
+    InstructorName2Id = course_instructor[2]
+    Instructor2Courses = course_instructor[4]
+    CourseInfo = course_instructor[5]
+    with open(file_name, "r") as file:
+        for line in file:
+            # Ignore lines starting with "#"
+            if not line.strip() or line.startswith("#"):
+                continue
+            instructor_name, prefDays, prefStartTime, prefEndTime, sameDay = line.strip().split()
+            #If the instructor is not teaching that quarter, skip the line
+            '''
+            We might also want to consider if the instructor is an TA
+            '''
+            if (instructor_name not in InstructorName2Id):
+                continue
+            InstructorID = InstructorName2Id[instructor_name]
+            if (InstructorID not in Instructor2Courses):
+                continue          
+            course_ids = Instructor2Courses[InstructorID]
+            if (sameDay == '1' and len(course_ids) > 1):
+                for i in range(len(course_ids)-1):
+                    for j in range(i + 1, len(course_ids)):
+                        if (CourseInfo[course_ids[i]].sessionsPerWeek <= CourseInfo[course_ids[j]].sessionsPerWeek):
+                            SameDayPairs.add((course_ids[i], course_ids[j]))
+                        else:
+                            SameDayPairs.add((course_ids[j], course_ids[i]))                
+    pdb.set_trace()
+            
 
 def main():
     config_file = sys.argv[1]
@@ -214,7 +243,8 @@ def main():
     CourseInfo, NonExemptedC, TotalNonExemptedHours = read_courseInfo(courseInfo_file, course_instructor)
     conflict_file = config['ConflictCourse']
     conflict_course_pairs = read_conflict(conflict_file, course_instructor)
-    pdb.set_trace()
+    instructorPref_file = config['InstructorPref']
+    read_instructorPref(instructorPref_file, course_instructor)
 if __name__ == "__main__":
     main()
 
