@@ -34,7 +34,7 @@ def timeSlotId2ISlot(start, timeSlotId):
     return name.strftime('%H:%M')
 
 def days2listint(days):
-    day_mapping = {'M': 1, 'T': 2, 'W': 3, 'R': 4, 'F': 5}
+    day_mapping = {'M': 0, 'T': 1, 'W': 2, 'R': 3, 'F': 4}
     return [day_mapping[day] for day in days if day in day_mapping]
 
 def read_config(file_name):
@@ -78,6 +78,7 @@ def read_config(file_name):
     config['BlockSchedulingEndsAtid'] = math.floor(timeSlotName2Id(start_time, time_transfer(config['BlockSchedulingEndsAt'])))
     config['10PercRuleStartsAtid'] = math.floor(timeSlotName2Id(start_time, time_transfer(config['10PercRuleStartsAt'])))
     config['10PercRuleEndsAtid'] = math.floor(timeSlotName2Id(start_time, time_transfer(config['10PercRuleEndsAt'])))
+    config['SlotNumPerday'] = SlotNumPerday
     return config
 
 def read_courseInstructor(filename, config):
@@ -203,17 +204,21 @@ def read_conflict(file_name, course_instructor):
                     conflict_course_pairs.append((min(course_ids[i], course_ids[j]), max(course_ids[i], course_ids[j])))
     return conflict_course_pairs
 
-def read_instructorPref(file_name, course_instructor):
+def read_instructorPref(file_name, course_instructor, config):
     SameDayPairs = set()
     InstructorName2Id = course_instructor[2]
     Instructor2Courses = course_instructor[4]
     CourseInfo = course_instructor[5]
+    TotalCourseNum = course_instructor[6]
+    start_time = time_transfer(config['InstructDayStartsAt'])
+    IW = [[[0 for _ in range(config['SlotNumPerday'])] for _ in range(5)] for _ in range(TotalCourseNum)]
     with open(file_name, "r") as file:
         for line in file:
             # Ignore lines starting with "#"
             if not line.strip() or line.startswith("#"):
                 continue
             instructor_name, prefDays, prefStartTime, prefEndTime, sameDay = line.strip().split()
+
             #If the instructor is not teaching that quarter, skip the line
             '''
             We might also want to consider if the instructor is an TA
@@ -230,9 +235,34 @@ def read_instructorPref(file_name, course_instructor):
                         if (CourseInfo[course_ids[i]].sessionsPerWeek <= CourseInfo[course_ids[j]].sessionsPerWeek):
                             SameDayPairs.add((course_ids[i], course_ids[j]))
                         else:
-                            SameDayPairs.add((course_ids[j], course_ids[i]))                
-    pdb.set_trace()
-            
+                            SameDayPairs.add((course_ids[j], course_ids[i]))  
+
+            if (prefDays == '-' and prefStartTime == '-' and prefEndTime == '-'):
+                continue
+
+            #Set default value
+            if (prefStartTime == '-'):
+                prefStartSlot = 0
+            else:
+                prefStartSlot = math.floor(timeSlotName2Id(start_time, time_transfer(prefStartTime)))
+            if (prefEndTime == '-'):
+                prefEndSlot = config['SlotNumPerday'] - 1
+            else:
+                prefEndSlot = math.floor(timeSlotName2Id(start_time, time_transfer(prefEndTime)-timedelta(hours=0, minutes=1)))
+            if (prefDays == '-'):
+                prefDayList = [0,1,2,3,4]
+            else:
+                prefDayList = days2listint(prefDays)
+
+            for c in course_ids:
+                for d in prefDayList:
+                    for t in range(prefStartSlot, prefEndSlot - math.ceil(CourseInfo[c].lengPerSession/30) + 1):
+                        IW[c][d][t] = 1 / CourseInfo[c].sessionsPerWeek
+                        if (1 / CourseInfo[c].sessionsPerWeek < 0):
+                            print('CourseInfo fail to find')
+                            pdb.set_trace()
+    
+    return IW, SameDayPairs
 
 def main():
     config_file = sys.argv[1]
@@ -244,7 +274,9 @@ def main():
     conflict_file = config['ConflictCourse']
     conflict_course_pairs = read_conflict(conflict_file, course_instructor)
     instructorPref_file = config['InstructorPref']
-    read_instructorPref(instructorPref_file, course_instructor)
+    IW, SameDayPairs = read_instructorPref(instructorPref_file, course_instructor, config)
+    pdb.set_trace()
+
 if __name__ == "__main__":
     main()
 
