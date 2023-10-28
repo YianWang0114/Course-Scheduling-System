@@ -6,7 +6,8 @@ from collections import defaultdict
 
 class Course:
     #def __init__(self, instructorId=None, mustOnDays=None, mustStartSlot=None, mustEndSlot=None, lengPerSession=None, sessionsPerWeek=None, largeClass=None, exempted=None, isTASession=None, mustBeOnSameDay=None, mustOnWhichDay=None, slotNum=None):
-    def __init__(self, instructorId, mustOnDays, mustStartSlot, mustEndSlot, lengPerSession, sessionsPerWeek, largeClass, exempted, isTASession, mustBeOnSameDay, mustOnWhichDay, slotNum):
+    def __init__(self, courseId, instructorId, mustOnDays, mustStartSlot, mustEndSlot, lengPerSession, sessionsPerWeek, largeClass, exempted, isTASession, mustBeOnSameDay, mustOnWhichDay, slotNum):
+        self.courseId = courseId
         self.instructorId = instructorId
         self.mustOnDays = mustOnDays
         self.mustStartSlot = mustStartSlot
@@ -54,7 +55,7 @@ def read_config(file_name):
 
     start_time = time_transfer(config['InstructDayStartsAt'])
     total_day_time = time_transfer(config['InstructDayEndsAt']) - start_time
-    SlotNumPerday = math.ceil(total_day_time.total_seconds()/60/20) #A slot is 30 min
+    SlotNumPerday = math.ceil(total_day_time.total_seconds()/60/30) #A slot is 30 min
 
     # Define keys that should be treated as floats, integers, or list
     float_keys = ["RulePercentage"]
@@ -75,7 +76,7 @@ def read_config(file_name):
             config[key] = new_list
 
     config['BlockSchedulingStartsAtid'] = math.floor(timeSlotName2Id(start_time, time_transfer(config['BlockSchedulingStartsAt'])))
-    config['BlockSchedulingEndsAtid'] = math.floor(timeSlotName2Id(start_time, time_transfer(config['BlockSchedulingEndsAt'])))
+    config['BlockSchedulingEndsAtid'] = math.floor(timeSlotName2Id(start_time, time_transfer(config['BlockSchedulingEndsAt']) - timedelta(hours=0, minutes=1)))
     config['10PercRuleStartsAtid'] = math.floor(timeSlotName2Id(start_time, time_transfer(config['10PercRuleStartsAt'])))
     config['10PercRuleEndsAtid'] = math.floor(timeSlotName2Id(start_time, time_transfer(config['10PercRuleEndsAt'])))
     config['SlotNumPerday'] = SlotNumPerday
@@ -86,7 +87,7 @@ def read_courseInstructor(filename, config):
     CourseId2Name = []
     InstructorName2Id = {}
     InstructorId2Name = []
-    CourseInfo = [Course(-1,[], -1, -1, -1, -1, -1, -1, -1, -1, -1, -1) for _ in range(100)]
+    CourseInfo = [Course(-1, -1,[], -1, -1, -1, -1, -1, -1, -1, -1, -1, -1) for _ in range(100)]
     Instructor2Courses = defaultdict(list)
     TotalCourseNum = 0
     # Read the CourseInstructor file line by line
@@ -127,6 +128,7 @@ def read_courseInstructor(filename, config):
 
             Instructor2Courses[instructor_id].append(course_id)
             cur_course = CourseInfo[course_id]
+            cur_course.courseId = course_id
             cur_course.instructorId = instructor_id
             start_time = time_transfer(config['InstructDayStartsAt'])
             if (must_on_days != '-'):
@@ -264,6 +266,42 @@ def read_instructorPref(file_name, course_instructor, config):
     
     return IW, SameDayPairs
 
+def createCW(course_instructor, config):
+    CourseInfo = course_instructor[5]
+    TotalCourseNum = course_instructor[6]
+    totalSlot = config['SlotNumPerday']
+    BlockingSlot = list(range(config['BlockSchedulingStartsAtid'], config['BlockSchedulingEndsAtid'] + 1))
+    CW = [[[0 for _ in range(config['SlotNumPerday'])] for _ in range(5)] for _ in range(TotalCourseNum)]
+    
+    for c in CourseInfo:
+        if (c.lengPerSession == 50):
+            for d in range(5):
+                for t in BlockingSlot:
+                    CW[c.courseId][d][t] = config['penalty-for-violating-block-policy']
+                for t in config['50-min-class-start-time']:
+                    CW[c.courseId][d][t] = 1
+        elif (c.lengPerSession == 80):
+            for d in range(5):
+                for t in BlockingSlot:
+                    CW[c.courseId][d][t] = config['penalty-for-violating-block-policy']
+                for t in config['80-min-class-start-time']:
+                    CW[c.courseId][d][t] = 1
+        elif (c.lengPerSession == 110):
+            for d in range(5):
+                for t in BlockingSlot:
+                    CW[c.courseId][d][t] = config['penalty-for-violating-block-policy']
+                for t in config['110-min-class-start-time']:
+                    CW[c.courseId][d][t] = 1 
+        elif (c.lengPerSession == 170):
+            for d in range(5):
+                for t in BlockingSlot:
+                    CW[c.courseId][d][t] = config['penalty-for-violating-block-policy']
+                for t in config['170-min-class-start-time']:
+                    CW[c.courseId][d][t] = 1  
+                        
+    
+    return CW
+
 def main():
     config_file = sys.argv[1]
     config = read_config(config_file)
@@ -275,6 +313,7 @@ def main():
     conflict_course_pairs = read_conflict(conflict_file, course_instructor)
     instructorPref_file = config['InstructorPref']
     IW, SameDayPairs = read_instructorPref(instructorPref_file, course_instructor, config)
+    CW = createCW(course_instructor, config)
     pdb.set_trace()
 
 if __name__ == "__main__":
