@@ -312,7 +312,7 @@ def createDecisionvariable(TotalCourseNum, totalSlot, var):
                 var[c][d][t] = pulp.LpVariable(f"{var}_{c}_{d}_{t}", 0, 1, pulp.LpBinary)
     return var
 
-def ILP(IW, CW, course_instructor, config):
+def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours):
     TotalCourseNum = course_instructor[6]
     CourseInfo = course_instructor[5]
     totalSlot = config['SlotNumPerday']
@@ -320,7 +320,6 @@ def ILP(IW, CW, course_instructor, config):
     l2 = 0.5
     # Create the ILP problem
     problem = pulp.LpProblem("ILP_Maximization_Problem", pulp.LpMaximize)
-    #pdb.set_trace()
     # X = createDecisionvariable(TotalCourseNum, totalSlot, "X")
     # Y = createDecisionvariable(TotalCourseNum, totalSlot, Y)
     X = {}
@@ -374,10 +373,39 @@ def ILP(IW, CW, course_instructor, config):
                 problem += X[c][0][t] == X[c][2][t]   # M and W have the same schedule
             # not meet on Friday
             problem += pulp.lpSum(X[c][4][t] for t in range(totalSlot)) == 0
+            '''
+            We don't have large courses that have two sessions per week
+            '''
             if CourseInfo[c].largeClass == 1:
                 # must meet on T and R
                 problem += pulp.lpSum(X[c][1][t] for t in range(totalSlot)) >= 1
                 problem += pulp.lpSum(X[c][3][t] for t in range(totalSlot)) >= 1
+    
+    # Constraint 4: Non-TA courses that meet three times per week
+    for c in range(TotalCourseNum):
+        if CourseInfo[c].sessionsPerWeek == 3 and CourseInfo[c].mustBeOnSameDay != 1:
+            # must meet on M, W, F
+            problem += pulp.lpSum(X[c][0][t] for t in range(totalSlot)) >= 1
+            problem += pulp.lpSum(X[c][2][t] for t in range(totalSlot)) >= 1
+            problem += pulp.lpSum(X[c][4][t] for t in range(totalSlot)) >= 1
+            # M, W, and F have the same schedule
+            for t in range(totalSlot):
+                problem += X[c][0][t] == X[c][2][t]   
+                problem += X[c][0][t] == X[c][4][t]   
+
+    # Constraint 5: Conflicting courses should not overlap in time
+    for (c1, c2) in conflict_course_pairs:
+        for d in range(5):
+            for t in range(totalSlot):
+                problem += Y[c1][d][t] + Y[c2][d][t] <= 1
+
+    # Constraint 6: Meet the 10%-rule requirement
+    target = config['RulePercentage'] * TotalNonExemptedHours
+    for t in range(config['10PercRuleStartsAtid'], config['10PercRuleEndsAtid'] + 1, 2):
+        t1 = pulp.lpSum(Y[c][d][t] for c in NonExemptedC for d in range(5))
+        t2 = pulp.lpSum(Y[c][d][t + 1] for c in NonExemptedC for d in range(5))
+        problem += (t1 + t2) / 2 <= target
+
 
     problem.solve()
     for c in range(TotalCourseNum):
@@ -400,7 +428,7 @@ def main():
     instructorPref_file = config['InstructorPref']
     IW, SameDayPairs = read_instructorPref(instructorPref_file, course_instructor, config)
     CW = createCW(course_instructor, config)
-    ILP(IW, CW, course_instructor, config)
+    ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours)
     pdb.set_trace()
 
 if __name__ == "__main__":
