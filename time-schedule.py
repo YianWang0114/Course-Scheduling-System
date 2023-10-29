@@ -3,6 +3,7 @@ import sys
 import math
 from datetime import datetime, timedelta
 from collections import defaultdict
+import pulp
 
 class Course:
     #def __init__(self, instructorId=None, mustOnDays=None, mustStartSlot=None, mustEndSlot=None, lengPerSession=None, sessionsPerWeek=None, largeClass=None, exempted=None, isTASession=None, mustBeOnSameDay=None, mustOnWhichDay=None, slotNum=None):
@@ -298,9 +299,94 @@ def createCW(course_instructor, config):
                     CW[c.courseId][d][t] = config['penalty-for-violating-block-policy']
                 for t in config['170-min-class-start-time']:
                     CW[c.courseId][d][t] = 1  
-                        
-    
+                    
     return CW
+
+def createDecisionvariable(TotalCourseNum, totalSlot, var):
+    var = {}
+    for c in range(TotalCourseNum):
+        var[c] = {}
+        for d in range(5):
+            var[c][d] = {}
+            for t in range(totalSlot):
+                var[c][d][t] = pulp.LpVariable(f"{var}_{c}_{d}_{t}", 0, 1, pulp.LpBinary)
+    return var
+
+def ILP(IW, CW, course_instructor, config):
+    TotalCourseNum = course_instructor[6]
+    CourseInfo = course_instructor[5]
+    totalSlot = config['SlotNumPerday']
+    l1 = 0.5
+    l2 = 0.5
+    # Create the ILP problem
+    problem = pulp.LpProblem("ILP_Maximization_Problem", pulp.LpMaximize)
+    #pdb.set_trace()
+    # X = createDecisionvariable(TotalCourseNum, totalSlot, "X")
+    # Y = createDecisionvariable(TotalCourseNum, totalSlot, Y)
+    X = {}
+    for c in range(TotalCourseNum):
+        X[c] = {}
+        for d in range(5):
+            X[c][d] = {}
+            for t in range(totalSlot):
+                X[c][d][t] = pulp.LpVariable(f"X_{c}_{d}_{t}", 0, 1, pulp.LpBinary)
+    Y = {}
+    for c in range(TotalCourseNum):
+        Y[c] = {}
+        for d in range(5):
+            Y[c][d] = {}
+            for t in range(totalSlot):
+                Y[c][d][t] = pulp.LpVariable(f"Y_{c}_{d}_{t}", 0, 1, pulp.LpBinary)
+
+    # objective function
+    problem +=  pulp.lpSum((l1 * CW[c][d][t] + l2 * IW[c][d][t]) * X[c][d][t] for c in range(TotalCourseNum) for d in range(5) for t in range(totalSlot))
+    
+    # Constraint 1: Matrix Y must be consistent with Matrix X
+    for c in range(TotalCourseNum):
+        slotNum = CourseInfo[c].slotNum
+        for d in range(5):
+            problem += pulp.lpSum(X[c][d][t] for t in range(totalSlot)) * slotNum == pulp.lpSum(Y[c][d][t] for t in range(totalSlot))
+            for t in range(totalSlot):
+                for j in range(t, min(t + slotNum, totalSlot)):
+                    problem += Y[c][d][j] >= X[c][d][t]
+
+    # Constraint 2: Each course must meet the correct number of times per week
+    for c in range(TotalCourseNum):
+        sessionsPerWeek = CourseInfo[c].sessionsPerWeek
+        #Total sessions taught in a week equal to sessionsPerWeek
+        problem += pulp.lpSum(X[c][d][t] for d in range(5) for t in range(totalSlot)) == sessionsPerWeek  
+        if (CourseInfo[c].mustBeOnSameDay == 1):
+            '''
+            We don't read in 'mustBeOnSameDay'
+            '''
+            d1 = CourseInfo[c].mustOnWhichDay
+            problem += pulp.lpSum(X[c][d1][t] for t in range(totalSlot)) == sessionsPerWeek
+        else:
+            for d in range(5):
+                #meet at most once per day
+                problem += pulp.lpSum(X[c][d][t] for t in range(totalSlot)) <= 1
+
+    # Constraint 3: Non-TA courses that meet twice per week
+    for c in range(TotalCourseNum):
+        if CourseInfo[c].sessionsPerWeek == 2 and CourseInfo[c].mustBeOnSameDay != 1:
+            for t in range(totalSlot):
+                problem += X[c][1][t] == X[c][3][t]   # T and R have the same schedule
+                problem += X[c][0][t] == X[c][2][t]   # M and W have the same schedule
+            # not meet on Friday
+            problem += pulp.lpSum(X[c][4][t] for t in range(totalSlot)) == 0
+            if CourseInfo[c].largeClass == 1:
+                # must meet on T and R
+                problem += pulp.lpSum(X[c][1][t] for t in range(totalSlot)) >= 1
+                problem += pulp.lpSum(X[c][3][t] for t in range(totalSlot)) >= 1
+
+    problem.solve()
+    for c in range(TotalCourseNum):
+        for d in range(5):
+            for t in range(totalSlot):
+                x_value = X[c][d][t].varValue
+                print(f"X_{c}_{d}_{t} = {x_value}")
+    pdb.set_trace()
+    print(pulp.value(problem.objective))
 
 def main():
     config_file = sys.argv[1]
@@ -314,6 +400,7 @@ def main():
     instructorPref_file = config['InstructorPref']
     IW, SameDayPairs = read_instructorPref(instructorPref_file, course_instructor, config)
     CW = createCW(course_instructor, config)
+    ILP(IW, CW, course_instructor, config)
     pdb.set_trace()
 
 if __name__ == "__main__":
