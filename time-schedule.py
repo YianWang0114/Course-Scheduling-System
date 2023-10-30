@@ -39,6 +39,10 @@ def days2listint(days):
     day_mapping = {'M': 0, 'T': 1, 'W': 2, 'R': 3, 'F': 4}
     return [day_mapping[day] for day in days if day in day_mapping]
 
+def intlist2days(intlist):
+    day_mapping = {0: 'M', 1: 'T', 2: 'W', 3: 'R', 4: 'F'}
+    return [day_mapping[day] for day in intlist if day in day_mapping]
+
 def read_config(file_name):
     # Initialize a dictionary to store course information
     config = {}
@@ -313,6 +317,7 @@ def createDecisionvariable(TotalCourseNum, totalSlot, var):
     return var
 
 def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs):
+    CourseId2Name = course_instructor[1]
     TotalCourseNum = course_instructor[6]
     CourseInfo = course_instructor[5]
     totalSlot = config['SlotNumPerday']
@@ -328,14 +333,14 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
         for d in range(5):
             X[c][d] = {}
             for t in range(totalSlot):
-                X[c][d][t] = pulp.LpVariable(f"X_{c}_{d}_{t}", 0, 1, pulp.LpBinary)
+                X[c][d][t] = pulp.LpVariable(f"X_{c}_{d}_{t}", 0, 1, cat=pulp.LpBinary)
     Y = {}
     for c in range(TotalCourseNum):
         Y[c] = {}
         for d in range(5):
             Y[c][d] = {}
             for t in range(totalSlot):
-                Y[c][d][t] = pulp.LpVariable(f"Y_{c}_{d}_{t}", 0, 1, pulp.LpBinary)
+                Y[c][d][t] = pulp.LpVariable(f"Y_{c}_{d}_{t}", 0, 1, cat=pulp.LpBinary)
 
     # objective function
     problem +=  pulp.lpSum((l1 * CW[c][d][t] + l2 * IW[c][d][t]) * X[c][d][t] for c in range(TotalCourseNum) for d in range(5) for t in range(totalSlot))
@@ -353,7 +358,10 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
     for c in range(TotalCourseNum):
         sessionsPerWeek = CourseInfo[c].sessionsPerWeek
         #Total sessions taught in a week equal to sessionsPerWeek
-        problem += pulp.lpSum(X[c][d][t] for d in range(5) for t in range(totalSlot)) == sessionsPerWeek  
+        if (sessionsPerWeek != 3 and sessionsPerWeek != 1 and sessionsPerWeek != 2):
+            print('incorrect session number')
+            pdb.set_trace()
+        problem += pulp.lpSum(X[c][d][t] for d in range(5) for t in range(totalSlot)) == sessionsPerWeek
         if (CourseInfo[c].mustBeOnSameDay == 1):
             '''
             We don't read in 'mustBeOnSameDay'
@@ -365,7 +373,7 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
                 #meet at most once per day
                 problem += pulp.lpSum(X[c][d][t] for t in range(totalSlot)) <= 1
 
-    # Constraint 3: Non-TA courses that meet twice per week
+    #Constraint 3: Non-TA courses that meet twice per week
     for c in range(TotalCourseNum):
         if CourseInfo[c].sessionsPerWeek == 2 and CourseInfo[c].mustBeOnSameDay != 1:
             for t in range(totalSlot):
@@ -413,7 +421,7 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
         for d in range(5):
             problem += pulp.lpSum(X[c1][d][t] for t in range(totalSlot)) <= pulp.lpSum(X[c2][d][t] for t in range(totalSlot))
 
-    # Constraint 8: If must-follow-block-policy is 1, we set X value
+    # Constraint 8: If must-follow-block-policy is 1, we set corresponding X value
     BlockingSlot = list(range(config['BlockSchedulingStartsAtid'], config['BlockSchedulingEndsAtid'] + 1))
     if (config['must-follow-block-policy'] == '1'):
         for c in range(TotalCourseNum):
@@ -421,31 +429,95 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
                 for d in range(5):
                     for t in BlockingSlot:
                         if (t not in config['50-min-class-start-time']):
-                            problem += X[c][d][t] == 1
+                            problem += X[c][d][t] <= 0
             elif (CourseInfo[c].lengPerSession == 80):
                 for d in range(5):
                     for t in BlockingSlot:
                         if (t not in config['80-min-class-start-time']):
-                            problem += X[c][d][t] == 0
+                            problem += X[c][d][t] <= 0
             elif (CourseInfo[c].lengPerSession == 110):
                 for d in range(5):
                     for t in BlockingSlot:
                         if (t not in config['110-min-class-start-time']):
-                            problem += X[c][d][t] == 0
+                            problem += X[c][d][t] <= 0
             elif (CourseInfo[c].lengPerSession == 170):
                 for d in range(5):
                     for t in BlockingSlot:
                         if (t not in config['170-min-class-start-time']):
-                            problem += X[c][d][t] == 0
-
+                            problem += X[c][d][t] <= 0
+    pulp.LpSolverDefault.timeLimit = 10
     problem.solve()
-    for c in range(TotalCourseNum):
-        for d in range(5):
-            for t in range(totalSlot):
-                x_value = X[c][d][t].varValue
-                print(f"X_{c}_{d}_{t} = {x_value}")
-    pdb.set_trace()
+
+    print(pulp.LpStatus[problem.status])
     print(pulp.value(problem.objective))
+    return X
+
+def generate_output(X, file_name, course_instructor, config, IW):
+    CourseId2Name = course_instructor[1]
+    InstructorId2Name = course_instructor[3]
+    CourseInfo = course_instructor[5]
+    TotalCourseNum = course_instructor[6]
+    start_time = time_transfer(config['InstructDayStartsAt'])
+    totalSlot = config['SlotNumPerday']
+    BlockingSlot = list(range(config['BlockSchedulingStartsAtid'], config['BlockSchedulingEndsAtid'] + 1))
+    with open("raw_output.txt", "w") as file:
+        for c in range(TotalCourseNum):
+            for d in range(5):
+                for t in range(totalSlot):
+                    x_value = X[c][d][t].varValue
+                    file.write(f"X_{c}_{d}_{t} = {x_value}\n")
+    with open(file_name+"output.txt", "w") as file:
+        for c in range(TotalCourseNum):
+            course_name = CourseId2Name[CourseInfo[c].courseId]
+            if (CourseInfo[c].instructorId != -1):
+                instructor_name = InstructorId2Name[CourseInfo[c].instructorId]
+            else:
+                instructor_name = '-'  
+            meetIP = 'y'
+            days = []
+            slots = set()
+            for d in range(5):
+                for t in range(totalSlot):
+                    if (X[c][d][t].varValue >= 1) :
+                        if (IW[c][d][t] == 0):
+                            meetIP = 'n'
+                        days.append(d)
+                        slots.add(t)
+            slots = list(slots)
+            if (len(slots) > 1):
+                print('more than one session in a day')
+                pdb.set_trace()
+            else:
+                course_start = timeSlotId2ISlot(start_time, slots[0])
+            teaching_days = ''.join(intlist2days(days))
+            session_length = CourseInfo[c].lengPerSession
+            course_end = (time_transfer(course_start) + timedelta(minutes=session_length)).strftime('%H:%M')
+            meetBP = 'y'
+            meetIP = 'y'
+            #irrelevent to Blocking Rule
+            if (slots[0] > config['BlockSchedulingEndsAtid'] or slots[0] < config['BlockSchedulingStartsAtid']):
+                meetBP = '-'
+            else:
+                if (session_length == 50):
+                    for s in slots:
+                        if (s in BlockingSlot and s not in config['50-min-class-start-time']):
+                            meetBP = 'n'
+                elif (session_length == 80):
+                    for s in slots:
+                        if (s in BlockingSlot and s not in config['80-min-class-start-time']):
+                            meetBP = 'n'
+                elif (session_length == 110):
+                    for s in slots:
+                        if (s in BlockingSlot and s not in config['110-min-class-start-time']):
+                            meetBP = 'n'
+                elif (session_length == 170):
+                    for s in slots:
+                        if (s in BlockingSlot and s not in config['170-min-class-start-time']):
+                            meetBP = 'n'
+
+            file.write(f"{course_name}\t{instructor_name}\t{teaching_days}\t{course_start}\t{course_end}\t{session_length}\t{meetBP}\t{meetIP}\n")   
+    return
+
 
 def main():
     config_file = sys.argv[1]
@@ -459,8 +531,9 @@ def main():
     instructorPref_file = config['InstructorPref']
     IW, SameDayPairs = read_instructorPref(instructorPref_file, course_instructor, config)
     CW = createCW(course_instructor, config)
-    ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs)
-    pdb.set_trace()
+    X = ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs)
+    output_file = config['outputDir']
+    generate_output(X, output_file, course_instructor, config, IW)
 
 if __name__ == "__main__":
     main()
