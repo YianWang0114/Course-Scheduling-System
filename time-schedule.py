@@ -16,7 +16,7 @@ class Course:
         self.lengPerSession = lengPerSession
         self.sessionsPerWeek = sessionsPerWeek
         self.largeClass = largeClass
-        self.exempted = exempted
+        self.exempted = exempted 
         self.isTASession = isTASession
         self.mustBeOnSameDay = mustBeOnSameDay
         self.mustOnWhichDay = mustOnWhichDay
@@ -243,7 +243,9 @@ def read_instructorPref(file_name, course_instructor, config):
                             SameDayPairs.add((course_ids[i], course_ids[j]))
                         else:
                             SameDayPairs.add((course_ids[j], course_ids[i]))  
-
+            '''
+            Should we just skip it or should we set all the slots pref slots?
+            '''
             if (prefDays == '-' and prefStartTime == '-' and prefEndTime == '-'):
                 continue
 
@@ -464,9 +466,9 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
 
     print(pulp.LpStatus[problem.status])
     print(pulp.value(problem.objective))
-    return X
+    return X, Y
 
-def generate_output(X, file_name, course_instructor, config, IW):
+def generate_output(X, output_dir, course_instructor, config, IW):
     CourseId2Name = course_instructor[1]
     InstructorId2Name = course_instructor[3]
     CourseInfo = course_instructor[5]
@@ -480,7 +482,7 @@ def generate_output(X, file_name, course_instructor, config, IW):
                 for t in range(totalSlot):
                     x_value = X[c][d][t].varValue
                     file.write(f"X_{c}_{d}_{t} = {x_value}\n")
-    with open(file_name+"output.txt", "w") as file:
+    with open(output_dir+"output.txt", "w") as file:
         for c in range(TotalCourseNum):
             course_name = CourseId2Name[CourseInfo[c].courseId]
             if (CourseInfo[c].instructorId != -1):
@@ -492,7 +494,7 @@ def generate_output(X, file_name, course_instructor, config, IW):
             slots = set()
             for d in range(5):
                 for t in range(totalSlot):
-                    if (X[c][d][t].varValue >= 1) :
+                    if (X[c][d][t].varValue >= 1):
                         if (IW[c][d][t] == 0):
                             meetIP = 'n'
                         days.append(d)
@@ -507,7 +509,6 @@ def generate_output(X, file_name, course_instructor, config, IW):
             session_length = CourseInfo[c].lengPerSession
             course_end = (time_transfer(course_start) + timedelta(minutes=session_length)).strftime('%H:%M')
             meetBP = 'y'
-            meetIP = 'y'
             #irrelevent to Blocking Rule
             if (slots[0] > config['BlockSchedulingEndsAtid'] or slots[0] < config['BlockSchedulingStartsAtid']):
                 meetBP = '-'
@@ -532,6 +533,26 @@ def generate_output(X, file_name, course_instructor, config, IW):
             file.write(f"{course_name}\t{instructor_name}\t{teaching_days}\t{course_start}\t{course_end}\t{session_length}\t{meetBP}\t{meetIP}\n")   
     return
 
+def generateHeatMap(Y, output_dir, course_instructor, config, NonExemptedC, TotalNonExemptedHours):
+    CourseInfo = course_instructor[5]
+    TotalCourseNum = course_instructor[6]
+    start_slot = config['10PercRuleStartsAtid']
+    start_time = time_transfer(config['10PercRuleStartsAt'])
+    end_slot = config['10PercRuleEndsAtid']
+    totalSlot = end_slot - start_slot + 1
+    target_value = math.floor(TotalNonExemptedHours * config['RulePercentage'])
+    with open(output_dir+"heatMap.txt", "w") as file:
+        file.write(f"\t\tM\tT\tW\tR\tF\tHourly total\tHourly Target\n")
+        for i in range(start_slot, end_slot + 1):
+            time = timeSlotId2ISlot(start_time, i)
+            weekly_sum = []
+            for d in range(5):
+                total_sum = 0
+                for c in NonExemptedC:                    
+                    total_sum += (Y[c][d][i].varValue / 2)
+                weekly_sum.append(total_sum)
+            file.write(f"{time}\t{weekly_sum[0]}\t{weekly_sum[1]}\t{weekly_sum[2]}\t{weekly_sum[3]}\t{weekly_sum[4]}\t{sum(weekly_sum)}\t{target_value}\n")
+    return
 
 def main():
     config_file = sys.argv[1]
@@ -545,9 +566,10 @@ def main():
     instructorPref_file = config['InstructorPref']
     IW, SameDayPairs = read_instructorPref(instructorPref_file, course_instructor, config)
     CW = createCW(course_instructor, config)
-    X = ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs)
-    output_file = config['outputDir']
-    generate_output(X, output_file, course_instructor, config, IW)
+    X, Y = ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs)
+    output_dir = config['outputDir']
+    #generate_output(X, output_dir, course_instructor, config, IW)
+    generateHeatMap(Y, output_dir, course_instructor, config, NonExemptedC, TotalNonExemptedHours)
 
 if __name__ == "__main__":
     main()
