@@ -325,22 +325,10 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
     l2 = 0.5
     # Create the ILP problem
     problem = pulp.LpProblem("ILP_Maximization_Problem", pulp.LpMaximize)
-    # X = createDecisionvariable(TotalCourseNum, totalSlot, "X")
-    # Y = createDecisionvariable(TotalCourseNum, totalSlot, Y)
-    X = {}
-    for c in range(TotalCourseNum):
-        X[c] = {}
-        for d in range(5):
-            X[c][d] = {}
-            for t in range(totalSlot):
-                X[c][d][t] = pulp.LpVariable(f"X_{c}_{d}_{t}", 0, 1, cat=pulp.LpBinary)
-    Y = {}
-    for c in range(TotalCourseNum):
-        Y[c] = {}
-        for d in range(5):
-            Y[c][d] = {}
-            for t in range(totalSlot):
-                Y[c][d][t] = pulp.LpVariable(f"Y_{c}_{d}_{t}", 0, 1, cat=pulp.LpBinary)
+
+    # Initialize variable X and Y (three dimensional array)
+    X = [[[pulp.LpVariable(f"X_{c}_{d}_{t}", 0, 1, cat=pulp.LpBinary) for t in range(totalSlot)] for d in range(5)] for c in range(TotalCourseNum)]
+    Y = [[[pulp.LpVariable(f"Y_{c}_{d}_{t}", 0, 1, cat=pulp.LpBinary) for t in range(totalSlot)] for d in range(5)] for c in range(TotalCourseNum)]
 
     # objective function
     problem +=  pulp.lpSum((l1 * CW[c][d][t] + l2 * IW[c][d][t]) * X[c][d][t] for c in range(TotalCourseNum) for d in range(5) for t in range(totalSlot))
@@ -420,8 +408,34 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
         assert (CourseInfo[c1].sessionsPerWeek <= CourseInfo[c2].sessionsPerWeek)
         for d in range(5):
             problem += pulp.lpSum(X[c1][d][t] for t in range(totalSlot)) <= pulp.lpSum(X[c2][d][t] for t in range(totalSlot))
+    
+    # Constraint 8: X's time later than InstructDayEndsAt - course length should be set to 0
+    for c in range(TotalCourseNum):
+        for d in range(5):
+            for t in range(totalSlot - CourseInfo[c].slotNum + 1, config['SlotNumPerday']):
+                problem += X[c][d][t] <= 0
+    
+    # Constraint 9: mustOnDays, mustStartSlot and mustEndSlot
+    for c in range(TotalCourseNum):
+        if (CourseInfo[c].mustOnDays != []):
+            # Course must be on specific days
+            d1 = CourseInfo[c].mustOnDays
+            for d in [0,1,2,3,4]:
+                if (d in d1):
+                    problem += pulp.lpSum(X[c][d][t] for t in range(totalSlot)) >= 1
+                else:
+                    problem += pulp.lpSum(X[c][d][t] for t in range(totalSlot)) == 0
+        if (CourseInfo[c].mustStartSlot != -1):
+            for d in range(5):
+                for t in range(totalSlot):
+                    if (t != CourseInfo[c].mustStartSlot):
+                        problem += X[c][d][t] == 0
+        if (CourseInfo[c].mustEndSlot != -1):
+            for d in range(5):
+                for t in range(CourseInfo[c].mustEndSlot - CourseInfo[c].slotNum + 2, totalSlot):
+                    problem += X[c][d][t] == 0
 
-    # Constraint 8: If must-follow-block-policy is 1, we set corresponding X value
+    # Constraint 10: If must-follow-block-policy is 1, we set corresponding X value
     BlockingSlot = list(range(config['BlockSchedulingStartsAtid'], config['BlockSchedulingEndsAtid'] + 1))
     if (config['must-follow-block-policy'] == '1'):
         for c in range(TotalCourseNum):
@@ -445,7 +459,7 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
                     for t in BlockingSlot:
                         if (t not in config['170-min-class-start-time']):
                             problem += X[c][d][t] <= 0
-    pulp.LpSolverDefault.timeLimit = 10
+    pulp.LpSolverDefault.timeLimit = 15
     problem.solve()
 
     print(pulp.LpStatus[problem.status])
