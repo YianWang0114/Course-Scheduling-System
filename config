@@ -28,3 +28,6 @@ InstructorPref = "inputs/2024-2025/InstructorPref"
 CourseInstructor = "inputs/2024-2025/fall2024/CourseInstructor"
 # the output will be stored under this directory:
 outputDir = "inputs/2024-2025/fall2024/output/"
+# add CW weight and IW weight
+UWPolicyWeight = 1
+InstructorPrefWeight = 1

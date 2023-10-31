@@ -7,8 +7,9 @@ import pulp
 
 class Course:
     #def __init__(self, instructorId=None, mustOnDays=None, mustStartSlot=None, mustEndSlot=None, lengPerSession=None, sessionsPerWeek=None, largeClass=None, exempted=None, isTASession=None, mustBeOnSameDay=None, mustOnWhichDay=None, slotNum=None):
-    def __init__(self, courseId, instructorId, mustOnDays, mustStartSlot, mustEndSlot, lengPerSession, sessionsPerWeek, largeClass, exempted, isTASession, mustBeOnSameDay, mustOnWhichDay, slotNum):
+    def __init__(self, courseId, courseName, instructorId, mustOnDays, mustStartSlot, mustEndSlot, lengPerSession, sessionsPerWeek, largeClass, exempted, isTASession, slotNum):
         self.courseId = courseId
+        self.courseName = courseName
         self.instructorId = instructorId
         self.mustOnDays = mustOnDays
         self.mustStartSlot = mustStartSlot
@@ -18,8 +19,6 @@ class Course:
         self.largeClass = largeClass
         self.exempted = exempted 
         self.isTASession = isTASession
-        self.mustBeOnSameDay = mustBeOnSameDay
-        self.mustOnWhichDay = mustOnWhichDay
         self.slotNum = slotNum
 
 def time_transfer(time_string):
@@ -64,7 +63,7 @@ def read_config(file_name):
 
     # Define keys that should be treated as floats, integers, or list
     float_keys = ["RulePercentage"]
-    int_keys = ["penalty-for-violating-block-policy"]
+    int_keys = ["penalty-for-violating-block-policy", "UWPolicyWeight", "InstructorPrefWeight"]
     list_keys = ["50-min-class-start-time", "80-min-class-start-time", "110-min-class-start-time", "170-min-class-start-time"]
 
     # Convert values to the appropriate data types
@@ -92,7 +91,7 @@ def read_courseInstructor(filename, config):
     CourseId2Name = []
     InstructorName2Id = {}
     InstructorId2Name = []
-    CourseInfo = [Course(-1, -1,[], -1, -1, -1, -1, -1, -1, -1, -1, -1, -1) for _ in range(100)]
+    CourseInfo = [Course(-1, -1, -1, [], -1, -1, -1, -1, -1, -1, -1, -1) for _ in range(100)]
     Instructor2Courses = defaultdict(list)
     TotalCourseNum = 0
     # Read the CourseInstructor file line by line
@@ -105,6 +104,7 @@ def read_courseInstructor(filename, config):
             values = line.strip().split()
             # Extract course name and instructor name
             course_name = values[0]
+            course_name_before_slash = course_name.split('/')[0]
             instructor_name = values[1]
             must_on_days = values[2]
             must_start_time = values[3]
@@ -123,17 +123,18 @@ def read_courseInstructor(filename, config):
                 else:
                     instructor_id = InstructorName2Id[instructor_name]
 
-            if (course_name not in CourseName2Id):
+            if (course_name_before_slash not in CourseName2Id):
                 course_id = len(CourseName2Id)
-                CourseName2Id[course_name] = course_id
-                CourseId2Name.append(course_name)
+                CourseName2Id[course_name_before_slash] = course_id
+                CourseId2Name.append(course_name_before_slash)
                 assert(len(CourseName2Id) == len(CourseId2Name)) # Make sure they are of equal length
             else:
-                course_id = CourseName2Id[course_name]
+                course_id = CourseName2Id[course_name_before_slash]
 
             Instructor2Courses[instructor_id].append(course_id)
             cur_course = CourseInfo[course_id]
             cur_course.courseId = course_id
+            cur_course.courseName = course_name
             cur_course.instructorId = instructor_id
             start_time = time_transfer(config['InstructDayStartsAt'])
             if (must_on_days != '-'):
@@ -161,29 +162,26 @@ def read_courseInfo(file_name, course_instructor):
             # Split the line into values and create a CourseInfo object
             values = line.strip().split()
             course_name = values[0]
+            course_name_before_slash = course_name.split('/')[0]
             #If the course is not taught this quarter, skip the line.
-            if (course_name not in course_instructor[0]):
+            if (course_name_before_slash not in course_instructor[0]):
                 continue
             length_per_session = int(values[1])
             num_sessions_per_week = int(values[2])
             large_class = int(values[3])
             ten_percent_rule_exempted = int(values[4])
             is_a_TA_session = int(values[5])
-            # all_sessions_must_be_on_same_day = int(values[6])
-            # must_on_day = values[7] 
 
-            cur_course = CourseInfo[CourseName2Id[course_name]]
+            cur_course = CourseInfo[CourseName2Id[course_name_before_slash]]
             cur_course.lengPerSession = length_per_session
             cur_course.sessionsPerWeek = num_sessions_per_week
             cur_course.largeClass = large_class
             cur_course.exempted = ten_percent_rule_exempted
             cur_course.isTASession = is_a_TA_session
-            # cur_course.mustBeOnSameDay = all_sessions_must_be_on_same_day
-            # cur_course.mustOnWhichDay = must_on_day
             cur_course.slotNum = math.ceil(length_per_session/30)
 
             if (ten_percent_rule_exempted == 0): # if a course is not exempted
-                NonExemptedC.append(CourseName2Id[course_name])
+                NonExemptedC.append(CourseName2Id[course_name_before_slash])
                 TotalNonExemptedHours += cur_course.slotNum * num_sessions_per_week / 2
 
     return CourseInfo, NonExemptedC, TotalNonExemptedHours
@@ -246,8 +244,8 @@ def read_instructorPref(file_name, course_instructor, config):
             '''
             Should we just skip it or should we set all the slots pref slots?
             '''
-            if (prefDays == '-' and prefStartTime == '-' and prefEndTime == '-'):
-                continue
+            # if (prefDays == '-' and prefStartTime == '-' and prefEndTime == '-'):
+            #     continue
 
             #Set default value
             if (prefStartTime == '-'):
@@ -323,8 +321,8 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
     TotalCourseNum = course_instructor[6]
     CourseInfo = course_instructor[5]
     totalSlot = config['SlotNumPerday']
-    l1 = 0.5
-    l2 = 0.5
+    l1 = config['UWPolicyWeight']
+    l2 = config['InstructorPrefWeight']
     # Create the ILP problem
     problem = pulp.LpProblem("ILP_Maximization_Problem", pulp.LpMaximize)
 
@@ -352,20 +350,14 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
             print('incorrect session number')
             pdb.set_trace()
         problem += pulp.lpSum(X[c][d][t] for d in range(5) for t in range(totalSlot)) == sessionsPerWeek
-        if (CourseInfo[c].mustBeOnSameDay == 1):
-            '''
-            We don't read in 'mustBeOnSameDay'
-            '''
-            d1 = CourseInfo[c].mustOnWhichDay
-            problem += pulp.lpSum(X[c][d1][t] for t in range(totalSlot)) == sessionsPerWeek
-        else:
-            for d in range(5):
-                #meet at most once per day
-                problem += pulp.lpSum(X[c][d][t] for t in range(totalSlot)) <= 1
+
+        #Each course meet at most once per day
+        for d in range(5):
+            problem += pulp.lpSum(X[c][d][t] for t in range(totalSlot)) <= 1
 
     #Constraint 3: Non-TA courses that meet twice per week
     for c in range(TotalCourseNum):
-        if CourseInfo[c].sessionsPerWeek == 2 and CourseInfo[c].mustBeOnSameDay != 1:
+        if CourseInfo[c].sessionsPerWeek == 2:
             for t in range(totalSlot):
                 problem += X[c][1][t] == X[c][3][t]   # T and R have the same schedule
                 problem += X[c][0][t] == X[c][2][t]   # M and W have the same schedule
@@ -381,7 +373,7 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
     
     # Constraint 4: Non-TA courses that meet three times per week
     for c in range(TotalCourseNum):
-        if CourseInfo[c].sessionsPerWeek == 3 and CourseInfo[c].mustBeOnSameDay != 1:
+        if CourseInfo[c].sessionsPerWeek == 3:
             # must meet on M, W, F
             problem += pulp.lpSum(X[c][0][t] for t in range(totalSlot)) >= 1
             problem += pulp.lpSum(X[c][2][t] for t in range(totalSlot)) >= 1
@@ -427,11 +419,14 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
                     problem += pulp.lpSum(X[c][d][t] for t in range(totalSlot)) >= 1
                 else:
                     problem += pulp.lpSum(X[c][d][t] for t in range(totalSlot)) == 0
+        '''
+        Make it must start at or after mustStartSlot
+        '''
         if (CourseInfo[c].mustStartSlot != -1):
             for d in range(5):
-                for t in range(totalSlot):
-                    if (t != CourseInfo[c].mustStartSlot):
-                        problem += X[c][d][t] == 0
+                for t in range(0, CourseInfo[c].mustStartSlot):
+                    #if (t != CourseInfo[c].mustStartSlot):
+                    problem += X[c][d][t] == 0
         if (CourseInfo[c].mustEndSlot != -1):
             for d in range(5):
                 for t in range(CourseInfo[c].mustEndSlot - CourseInfo[c].slotNum + 2, totalSlot):
@@ -484,7 +479,7 @@ def generate_output(X, output_dir, course_instructor, config, IW):
                     file.write(f"X_{c}_{d}_{t} = {x_value}\n")
     with open(output_dir+"output.txt", "w") as file:
         for c in range(TotalCourseNum):
-            course_name = CourseId2Name[CourseInfo[c].courseId]
+            course_name = CourseInfo[c].courseName
             if (CourseInfo[c].instructorId != -1):
                 instructor_name = InstructorId2Name[CourseInfo[c].instructorId]
             else:
@@ -499,6 +494,8 @@ def generate_output(X, output_dir, course_instructor, config, IW):
                             meetIP = 'n'
                         days.append(d)
                         slots.add(t)
+            if (CourseInfo[c].isTASession == 1):
+                meetIP = '-'
             slots = list(slots)
             if (len(slots) > 1):
                 print('more than one session in a day')
@@ -529,8 +526,8 @@ def generate_output(X, output_dir, course_instructor, config, IW):
                     for s in slots:
                         if (s in BlockingSlot and s not in config['170-min-class-start-time']):
                             meetBP = 'n'
-
-            file.write(f"{course_name}\t{instructor_name}\t{teaching_days}\t{course_start}\t{course_end}\t{session_length}\t{meetBP}\t{meetIP}\n")   
+            formatted_output = "{:<8}\t{:<20}\t{:<5}\t{:<8}\t{:<8}\t{:<5}\t{:<3}\t{:<3}\n".format(course_name, instructor_name, teaching_days, course_start, course_end, session_length, meetBP, meetIP)
+            file.write(formatted_output)
     return
 
 def generateHeatMap(Y, output_dir, course_instructor, config, NonExemptedC, TotalNonExemptedHours):
@@ -543,15 +540,18 @@ def generateHeatMap(Y, output_dir, course_instructor, config, NonExemptedC, Tota
     target_value = math.floor(TotalNonExemptedHours * config['RulePercentage'])
     with open(output_dir+"heatMap.txt", "w") as file:
         file.write(f"\t\tM\tT\tW\tR\tF\tHourly total\tHourly Target\n")
-        for i in range(start_slot, end_slot + 1):
+        for i in range(start_slot, end_slot + 1, 2):
             time = timeSlotId2ISlot(start_time, i)
             weekly_sum = []
             for d in range(5):
                 total_sum = 0
                 for c in NonExemptedC:                    
                     total_sum += (Y[c][d][i].varValue / 2)
+                    total_sum += (Y[c][d][i+1].varValue / 2)
                 weekly_sum.append(total_sum)
-            file.write(f"{time}\t{weekly_sum[0]}\t{weekly_sum[1]}\t{weekly_sum[2]}\t{weekly_sum[3]}\t{weekly_sum[4]}\t{sum(weekly_sum)}\t{target_value}\n")
+            formatted_output = "{:<5}\t{:<3}\t{:<3}\t{:<3}\t{:<3}\t{:<3}\t{:<8}\t{:<8}\n".format(time, weekly_sum[0], weekly_sum[1], weekly_sum[2], weekly_sum[3], weekly_sum[4], sum(weekly_sum), target_value)
+            file.write(formatted_output)
+            #file.write(f"{time}\t{weekly_sum[0]}\t{weekly_sum[1]}\t{weekly_sum[2]}\t{weekly_sum[3]}\t{weekly_sum[4]}\t{sum(weekly_sum)}\t{target_value}\n")
     return
 
 def main():
@@ -568,7 +568,7 @@ def main():
     CW = createCW(course_instructor, config)
     X, Y = ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs)
     output_dir = config['outputDir']
-    #generate_output(X, output_dir, course_instructor, config, IW)
+    generate_output(X, output_dir, course_instructor, config, IW)
     generateHeatMap(Y, output_dir, course_instructor, config, NonExemptedC, TotalNonExemptedHours)
 
 if __name__ == "__main__":
