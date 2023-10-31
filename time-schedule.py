@@ -196,7 +196,7 @@ def read_conflict(file_name, course_instructor):
             if not line.strip() or line.startswith("#"):
                 continue
             courses = line.split('#')[0].strip().split()
-            course_ids = [CourseName2Id[course] for course in courses if course in CourseName2Id]
+            course_ids = [CourseName2Id[course.split('/')[0]] for course in courses if course.split('/')[0] in CourseName2Id]
             for i in range(len(course_ids)-1):
                 for j in range(i + 1, len(course_ids)):
                     conflict_course_pairs.append((min(course_ids[i], course_ids[j]), max(course_ids[i], course_ids[j])))
