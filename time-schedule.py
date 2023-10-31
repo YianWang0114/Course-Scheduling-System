@@ -241,11 +241,6 @@ def read_instructorPref(file_name, course_instructor, config):
                             SameDayPairs.add((course_ids[i], course_ids[j]))
                         else:
                             SameDayPairs.add((course_ids[j], course_ids[i]))  
-            '''
-            Should we just skip it or should we set all the slots pref slots?
-            '''
-            # if (prefDays == '-' and prefStartTime == '-' and prefEndTime == '-'):
-            #     continue
 
             #Set default value
             if (prefStartTime == '-'):
@@ -364,7 +359,7 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
             # not meet on Friday
             problem += pulp.lpSum(X[c][4][t] for t in range(totalSlot)) == 0
             '''
-            We don't have large courses that have two sessions per week
+            We currently don't have large courses that have two sessions per week
             '''
             if CourseInfo[c].largeClass == 1:
                 # must meet on T and R
@@ -419,9 +414,7 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
                     problem += pulp.lpSum(X[c][d][t] for t in range(totalSlot)) >= 1
                 else:
                     problem += pulp.lpSum(X[c][d][t] for t in range(totalSlot)) == 0
-        '''
-        Make it must start at or after mustStartSlot
-        '''
+
         if (CourseInfo[c].mustStartSlot != -1):
             for d in range(5):
                 for t in range(0, CourseInfo[c].mustStartSlot):
@@ -506,6 +499,7 @@ def generate_output(X, output_dir, course_instructor, config, IW):
             session_length = CourseInfo[c].lengPerSession
             course_end = (time_transfer(course_start) + timedelta(minutes=session_length)).strftime('%H:%M')
             meetBP = 'y'
+            
             #irrelevent to Blocking Rule
             if (slots[0] > config['BlockSchedulingEndsAtid'] or slots[0] < config['BlockSchedulingStartsAtid']):
                 meetBP = '-'
