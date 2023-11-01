@@ -142,7 +142,8 @@ def read_courseInstructor(filename, config):
             if (must_start_time != '-'):
                 cur_course.mustStartSlot = math.floor(timeSlotName2Id(start_time, time_transfer(must_start_time)))
             if (must_end_time != '-'):
-                cur_course.mustEndSlot = math.floor(timeSlotName2Id(start_time, time_transfer(must_end_time)))
+                cur_course.mustEndSlot = math.floor(timeSlotName2Id(start_time, time_transfer(must_end_time)-timedelta(hours=0, minutes=1)))
+    
     course_instructor = [CourseName2Id, CourseId2Name, InstructorName2Id, InstructorId2Name, Instructor2Courses, CourseInfo, TotalCourseNum]
 
     return course_instructor
@@ -217,6 +218,7 @@ def read_instructorPref(file_name, course_instructor, config):
     TotalCourseNum = course_instructor[6]
     start_time = time_transfer(config['InstructDayStartsAt'])
     IW = [[[0 for _ in range(config['SlotNumPerday'])] for _ in range(5)] for _ in range(TotalCourseNum)]
+    instructor_in_insPref = [] 
     with open(file_name, "r") as file:
         for line in file:
             # Ignore lines starting with "#"
@@ -225,14 +227,12 @@ def read_instructorPref(file_name, course_instructor, config):
             instructor_name, prefDays, prefStartTime, prefEndTime, sameDay = line.strip().split()
 
             #If the instructor is not teaching that quarter, skip the line
-            '''
-            We might also want to consider if the instructor is an TA
-            '''
             if (instructor_name not in InstructorName2Id):
                 continue
             InstructorID = InstructorName2Id[instructor_name]
             if (InstructorID not in Instructor2Courses):
-                continue          
+                continue 
+            instructor_in_insPref.append(InstructorID)
             course_ids = Instructor2Courses[InstructorID]
             if (sameDay == '1' and len(course_ids) > 1):
                 for i in range(len(course_ids)-1):
@@ -264,7 +264,7 @@ def read_instructorPref(file_name, course_instructor, config):
                             print('CourseInfo fail to find')
                             pdb.set_trace()
     
-    return IW, SameDayPairs
+    return IW, SameDayPairs, instructor_in_insPref
 
 def createCW(course_instructor, config):
     CourseInfo = course_instructor[5]
@@ -279,25 +279,25 @@ def createCW(course_instructor, config):
                 for t in BlockingSlot:
                     CW[c.courseId][d][t] = config['penalty-for-violating-block-policy']
                 for t in config['50-min-class-start-time']:
-                    CW[c.courseId][d][t] = 1
+                    CW[c.courseId][d][t] = 1 / c.sessionsPerWeek
         elif (c.lengPerSession == 80):
             for d in range(5):
                 for t in BlockingSlot:
                     CW[c.courseId][d][t] = config['penalty-for-violating-block-policy']
                 for t in config['80-min-class-start-time']:
-                    CW[c.courseId][d][t] = 1
+                    CW[c.courseId][d][t] = 1 / c.sessionsPerWeek
         elif (c.lengPerSession == 110):
             for d in range(5):
                 for t in BlockingSlot:
                     CW[c.courseId][d][t] = config['penalty-for-violating-block-policy']
                 for t in config['110-min-class-start-time']:
-                    CW[c.courseId][d][t] = 1 
+                    CW[c.courseId][d][t] = 1 / c.sessionsPerWeek 
         elif (c.lengPerSession == 170):
             for d in range(5):
                 for t in BlockingSlot:
                     CW[c.courseId][d][t] = config['penalty-for-violating-block-policy']
                 for t in config['170-min-class-start-time']:
-                    CW[c.courseId][d][t] = 1  
+                    CW[c.courseId][d][t] = 1 / c.sessionsPerWeek  
                     
     return CW
 
@@ -456,7 +456,7 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
     print(pulp.value(problem.objective))
     return X, Y
 
-def generate_output(X, output_dir, course_instructor, config, IW):
+def generate_output(X, output_dir, course_instructor, config, IW, instructor_in_insPref):
     CourseId2Name = course_instructor[1]
     InstructorId2Name = course_instructor[3]
     CourseInfo = course_instructor[5]
@@ -480,6 +480,7 @@ def generate_output(X, output_dir, course_instructor, config, IW):
             meetIP = 'y'
             days = []
             slots = set()
+            
             for d in range(5):
                 for t in range(totalSlot):
                     if (X[c][d][t].varValue >= 1):
@@ -487,6 +488,10 @@ def generate_output(X, output_dir, course_instructor, config, IW):
                             meetIP = 'n'
                         days.append(d)
                         slots.add(t)
+            # Only if an instructor has preference and the preference is violated, we output "n"
+            if (CourseInfo[c].instructorId not in instructor_in_insPref):
+                meetIP = 'y'
+            # If it is a TA session. We output "-" for instructor preference
             if (CourseInfo[c].isTASession == 1):
                 meetIP = '-'
             slots = list(slots)
@@ -495,6 +500,7 @@ def generate_output(X, output_dir, course_instructor, config, IW):
                 pdb.set_trace()
             else:
                 course_start = timeSlotId2ISlot(start_time, slots[0])
+
             teaching_days = ''.join(intlist2days(days))
             session_length = CourseInfo[c].lengPerSession
             course_end = (time_transfer(course_start) + timedelta(minutes=session_length)).strftime('%H:%M')
@@ -548,6 +554,32 @@ def generateHeatMap(Y, output_dir, course_instructor, config, NonExemptedC, Tota
             #file.write(f"{time}\t{weekly_sum[0]}\t{weekly_sum[1]}\t{weekly_sum[2]}\t{weekly_sum[3]}\t{weekly_sum[4]}\t{sum(weekly_sum)}\t{target_value}\n")
     return
 
+def printStandardOutput(course_instructor, NonExemptedC, TotalNonExemptedHours):
+    courseID2Name = course_instructor[1]
+    NonExemptedCName = [courseID2Name[course_id] for course_id in NonExemptedC]
+    TotalC = list(range(course_instructor[6]))
+    ExemptedC = [c for c in TotalC if c not in NonExemptedC]
+    ExemptedCName = [courseID2Name[course_id] for course_id in ExemptedC]
+    print(f"Total Number of Course: {course_instructor[6]}")
+    print(f"Non-Exempted Courses: {NonExemptedCName}")
+    print(f"Total Number of Non-Exempted Hours: {TotalNonExemptedHours}")
+    print(f"Exempted Courses: {ExemptedCName}")
+
+def computeCWIWPoint(course_instructor, config, X, IW, CW):
+    #Compute IW and CW points earned
+    TotalCourseNum = course_instructor[6]
+    totalSlot = config['SlotNumPerday']
+    CW_point = 0
+    IW_point = 0
+    for c in range(TotalCourseNum):
+        for d in range(5):
+            for t in range(totalSlot):
+                CW_point += CW[c][d][t] *  X[c][d][t].varValue
+                IW_point += IW[c][d][t] *  X[c][d][t].varValue
+
+    return IW_point, CW_point
+                
+
 def main():
     config_file = sys.argv[1]
     config = read_config(config_file)
@@ -558,12 +590,15 @@ def main():
     conflict_file = config['ConflictCourse']
     conflict_course_pairs = read_conflict(conflict_file, course_instructor)
     instructorPref_file = config['InstructorPref']
-    IW, SameDayPairs = read_instructorPref(instructorPref_file, course_instructor, config)
+    IW, SameDayPairs, instructor_in_insPref = read_instructorPref(instructorPref_file, course_instructor, config)
     CW = createCW(course_instructor, config)
     X, Y = ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs)
     output_dir = config['outputDir']
-    generate_output(X, output_dir, course_instructor, config, IW)
+    generate_output(X, output_dir, course_instructor, config, IW, instructor_in_insPref)
     generateHeatMap(Y, output_dir, course_instructor, config, NonExemptedC, TotalNonExemptedHours)
+    printStandardOutput(course_instructor, NonExemptedC, TotalNonExemptedHours)
+    IW_point, CW_point = computeCWIWPoint(course_instructor, config, X, IW, CW)
+    pdb.set_trace()
 
 if __name__ == "__main__":
     main()
