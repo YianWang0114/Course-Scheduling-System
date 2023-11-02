@@ -1,4 +1,4 @@
-UseDefaultPath = 0
+UseDefaultPath = 1
 # The standard instructional day is from 8:30 am to 6:20 pm.
 InstructDayStartsAt = 8:30
 InstructDayEndsAt = 18:20

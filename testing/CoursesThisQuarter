@@ -1,0 +1,74 @@
+# (course name, instructor name, must on days, must start time, must end time)
+
+# this file is used to set X and to expand conflicting course pairs
+
+200        Ferjan-Ramirez MWF  8:30 9:20
+
+210        McGarrity      -    -    15:31 
+
+233        Evans          MWF  8:30 9:20
+
+432/532    Wassink        -    -    15:20 
+
+433/533    Evans          -    -    15:20 
+
+441/541    Ferjan-Ramirez -    -    15:20 
+
+450/550    Wassink        -    -    15:20
+
+461        Hedding        -    -    15:20     
+
+478/578    Ogihara        -    -    15:20
+
+507        Hedding        -    -    15:20
+
+566        Bender         -    -    15:20
+
+570        Xia            -    -    15:20
+
+571        Steinert-Threlkeld -    -   15:20 
+
+575-Ben    Bender        -   15:30  17:50 
+
+580-Cit    Citko         -   15:30  17:50
+
+580-Che    Cheng         -   15:30  17:50 
+
+580-Ogi    Ogihara       -   15:30  17:50   
+
+599A       lingColloq    F   15:30  17:50 
+
+599B       proseminar    W   -      - 
+
+
+### TA sessions
+
+## 200 has 9 sessions, 3 TAs, must meet on TR
+200AA      TA1           TR  -   15:20
+200AB      TA1           TR  -   15:20
+
+
+200AC      TA2           TR  -   15:20
+200AD      TA2           TR  -   15:20
+
+200AE      TA3           TR  -   15:20
+200AF      TA3           TR  -   15:20
+
+200AG      TA4           TR  -   15:20
+200AH      TA4           TR  -   15:20
+
+200AI      TA5           TR  -   15:20
+
+
+## 233 has 6 sessions, 2 TAs, must meet on R
+233AA      TA8           R   -   15:20
+233AD      TA8           R   -   15:20
+233AE      TA8           R   -   15:20
+
+233AF      TA9           R   -   15:20
+233AG      TA9           R   -   15:20
+233AH      TA9           R   -   15:20
+
+
+
+## Does 450 have 1 TA session? If so, on what day?

@@ -2,7 +2,7 @@ Welcome to the CBC MILP Solver
 Version: 2.10.3 
 Build Date: Dec 15 2019 
 
-command line - /home2/wangyian/miniconda3/lib/python3.9/site-packages/pulp/solverdir/cbc/linux/64/cbc /tmp/99e54e3aad7f49f49743b1d66d538ef5-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/99e54e3aad7f49f49743b1d66d538ef5-pulp.sol (default strategy 1)
+command line - /home2/wangyian/miniconda3/lib/python3.9/site-packages/pulp/solverdir/cbc/linux/64/cbc /tmp/f10386078b5b4d5fa9f9b61317326b65-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/f10386078b5b4d5fa9f9b61317326b65-pulp.sol (default strategy 1)
 At line 2 NAME          MODEL
 At line 3 ROWS
 At line 20307 COLUMNS
@@ -13,7 +13,7 @@ Problem MODEL has 20302 rows, 6800 columns and 57905 elements
 Coin0008I MODEL read with 0 errors
 seconds was changed from 1e+100 to 15
 Option for timeMode changed from cpu to elapsed
-Continuous objective value is 45 - 0.05 seconds
+Continuous objective value is 45 - 0.04 seconds
 Cgl0002I 2522 variables fixed
 Cgl0003I 248 fixed, 0 tightened bounds, 2971 strengthened rows, 459 substitutions
 Cgl0003I 0 fixed, 0 tightened bounds, 250 strengthened rows, 16 substitutions
@@ -76,7 +76,7 @@ Cbc0038I Solution found of -8
 Cbc0038I Cleaned solution of -8
 Cbc0038I Before mini branch and bound, 1394 integers at bound fixed and 0 continuous
 Cbc0038I Full problem 1601 rows 1676 columns, reduced to 327 rows 262 columns
-Cbc0038I Mini branch and bound improved solution from -8 to -41 (0.85 seconds)
+Cbc0038I Mini branch and bound improved solution from -8 to -41 (0.86 seconds)
 Cbc0038I Round again with cutoff of -41.2
 Cbc0038I Reduced cost fixing fixed 254 variables on major pass 3
 Cbc0038I Pass  40: suminf.   11.50000 (28) obj. -41.25 iterations 10
@@ -112,9 +112,9 @@ Cbc0038I Pass  69: suminf.    8.00000 (21) obj. -41.25 iterations 116
 Cbc0038I No solution found this major pass
 Cbc0038I Before mini branch and bound, 1407 integers at bound fixed and 0 continuous
 Cbc0038I Full problem 1601 rows 1676 columns, reduced to 325 rows 256 columns
-Cbc0038I Mini branch and bound did not improve solution (1.16 seconds)
-Cbc0038I After 1.16 seconds - Feasibility pump exiting with objective of -41 - took 0.84 seconds
-Cbc0012I Integer solution of -41 found by feasibility pump after 0 iterations and 0 nodes (1.16 seconds)
+Cbc0038I Mini branch and bound did not improve solution (1.17 seconds)
+Cbc0038I After 1.17 seconds - Feasibility pump exiting with objective of -41 - took 0.86 seconds
+Cbc0012I Integer solution of -41 found by feasibility pump after 0 iterations and 0 nodes (1.17 seconds)
 Cbc0038I Full problem 1601 rows 1676 columns, reduced to 210 rows 144 columns
 Cbc0031I 4 added rows had average density of 75.5
 Cbc0013I At root node, 4 cuts changed objective from -42 to -41.5 in 5 passes
@@ -125,7 +125,7 @@ Cbc0014I Cut generator 3 (Clique) - 0 row cuts average 0.0 elements, 0 column cu
 Cbc0014I Cut generator 4 (MixedIntegerRounding2) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.002 seconds - new frequency is -100
 Cbc0014I Cut generator 5 (FlowCover) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
 Cbc0014I Cut generator 6 (TwoMirCuts) - 46 row cuts average 117.0 elements, 0 column cuts (0 active)  in 0.028 seconds - new frequency is 1
-Cbc0010I After 0 nodes, 1 on tree, -41 best solution, best possible -41.5 (1.30 seconds)
+Cbc0010I After 0 nodes, 1 on tree, -41 best solution, best possible -41.5 (1.31 seconds)
 Cbc0038I Full problem 1601 rows 1676 columns, reduced to 206 rows 156 columns
 Cbc0038I Full problem 1605 rows 1676 columns, reduced to 1224 rows 1119 columns
 Cbc0044I Reduced cost fixing - 1224 rows, 1119 columns - restarting search
@@ -142,7 +142,7 @@ Cbc0014I Cut generator 5 (FlowCover) - 0 row cuts average 0.0 elements, 0 column
 Cbc0014I Cut generator 6 (TwoMirCuts) - 15 row cuts average 31.5 elements, 0 column cuts (0 active)  in 0.005 seconds - new frequency is -100
 Cbc0014I Cut generator 7 (ZeroHalf) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.002 seconds - new frequency is -100
 Cbc0014I Cut generator 9 (Stored from first) - 4 row cuts average 47.2 elements, 0 column cuts (0 active)
-Cbc0001I Search completed - best objective -41.0000000000002, took 11 iterations and 0 nodes (2.43 seconds)
+Cbc0001I Search completed - best objective -41.0000000000002, took 11 iterations and 0 nodes (2.44 seconds)
 Cbc0035I Maximum depth 0, 43 variables fixed on reduced cost
 Cbc0038I Probing was tried 1 times and created 2 cuts of which 0 were active after adding rounds of cuts (0.002 seconds)
 Cbc0038I Gomory was tried 1 times and created 4 cuts of which 0 were active after adding rounds of cuts (0.001 seconds)
@@ -153,7 +153,7 @@ Cbc0038I FlowCover was tried 1 times and created 0 cuts of which 0 were active a
 Cbc0038I TwoMirCuts was tried 1 times and created 15 cuts of which 0 were active after adding rounds of cuts (0.005 seconds)
 Cbc0038I ZeroHalf was tried 1 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.002 seconds)
 Cbc0038I Stored from first was tried 1 times and created 4 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
-Cbc0001I Search completed - best objective -41.0000000000002, took 1270 iterations and 50 nodes (2.43 seconds)
+Cbc0001I Search completed - best objective -41.0000000000002, took 1270 iterations and 50 nodes (2.44 seconds)
 Cbc0032I Strong branching done 788 times (11221 iterations), fathomed 8 nodes and fixed 9 variables
 Cbc0035I Maximum depth 17, 412 variables fixed on reduced cost
 Cuts at root node changed objective from -42 to -41.5
@@ -164,16 +164,16 @@ Clique was tried 5 times and created 0 cuts of which 0 were active after adding 
 MixedIntegerRounding2 was tried 5 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.002 seconds)
 FlowCover was tried 5 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
 TwoMirCuts was tried 20 times and created 46 cuts of which 0 were active after adding rounds of cuts (0.035 seconds)
-ZeroHalf was tried 1 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.003 seconds)
+ZeroHalf was tried 1 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.002 seconds)
 
 Result - Optimal solution found
 
 Objective value:                41.00000000
 Enumerated nodes:               50
 Total iterations:               1270
-Time (CPU seconds):             2.45
-Time (Wallclock seconds):       2.48
+Time (CPU seconds):             2.46
+Time (Wallclock seconds):       2.49
 
 Option for printingOptions changed from normal to all
-Total time (CPU seconds):       2.49   (Wallclock seconds):       2.52
+Total time (CPU seconds):       2.50   (Wallclock seconds):       2.53
 
