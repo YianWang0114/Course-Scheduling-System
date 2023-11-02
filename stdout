@@ -2,7 +2,7 @@ Welcome to the CBC MILP Solver
 Version: 2.10.3 
 Build Date: Dec 15 2019 
 
-command line - /home2/wangyian/miniconda3/lib/python3.9/site-packages/pulp/solverdir/cbc/linux/64/cbc /tmp/878b170fe6fc47c99feb34d402df8877-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/878b170fe6fc47c99feb34d402df8877-pulp.sol (default strategy 1)
+command line - /home2/wangyian/miniconda3/lib/python3.9/site-packages/pulp/solverdir/cbc/linux/64/cbc /tmp/99e54e3aad7f49f49743b1d66d538ef5-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/99e54e3aad7f49f49743b1d66d538ef5-pulp.sol (default strategy 1)
 At line 2 NAME          MODEL
 At line 3 ROWS
 At line 20307 COLUMNS
@@ -122,10 +122,10 @@ Cbc0014I Cut generator 0 (Probing) - 0 row cuts average 0.0 elements, 41 column 
 Cbc0014I Cut generator 1 (Gomory) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.016 seconds - new frequency is -100
 Cbc0014I Cut generator 2 (Knapsack) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.006 seconds - new frequency is -100
 Cbc0014I Cut generator 3 (Clique) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
-Cbc0014I Cut generator 4 (MixedIntegerRounding2) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.003 seconds - new frequency is -100
+Cbc0014I Cut generator 4 (MixedIntegerRounding2) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.002 seconds - new frequency is -100
 Cbc0014I Cut generator 5 (FlowCover) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
-Cbc0014I Cut generator 6 (TwoMirCuts) - 46 row cuts average 117.0 elements, 0 column cuts (0 active)  in 0.029 seconds - new frequency is 1
-Cbc0010I After 0 nodes, 1 on tree, -41 best solution, best possible -41.5 (1.31 seconds)
+Cbc0014I Cut generator 6 (TwoMirCuts) - 46 row cuts average 117.0 elements, 0 column cuts (0 active)  in 0.028 seconds - new frequency is 1
+Cbc0010I After 0 nodes, 1 on tree, -41 best solution, best possible -41.5 (1.30 seconds)
 Cbc0038I Full problem 1601 rows 1676 columns, reduced to 206 rows 156 columns
 Cbc0038I Full problem 1605 rows 1676 columns, reduced to 1224 rows 1119 columns
 Cbc0044I Reduced cost fixing - 1224 rows, 1119 columns - restarting search
@@ -153,17 +153,17 @@ Cbc0038I FlowCover was tried 1 times and created 0 cuts of which 0 were active a
 Cbc0038I TwoMirCuts was tried 1 times and created 15 cuts of which 0 were active after adding rounds of cuts (0.005 seconds)
 Cbc0038I ZeroHalf was tried 1 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.002 seconds)
 Cbc0038I Stored from first was tried 1 times and created 4 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
-Cbc0001I Search completed - best objective -41.0000000000002, took 1270 iterations and 50 nodes (2.44 seconds)
+Cbc0001I Search completed - best objective -41.0000000000002, took 1270 iterations and 50 nodes (2.43 seconds)
 Cbc0032I Strong branching done 788 times (11221 iterations), fathomed 8 nodes and fixed 9 variables
 Cbc0035I Maximum depth 17, 412 variables fixed on reduced cost
 Cuts at root node changed objective from -42 to -41.5
-Probing was tried 20 times and created 48 cuts of which 0 were active after adding rounds of cuts (0.019 seconds)
+Probing was tried 20 times and created 48 cuts of which 0 were active after adding rounds of cuts (0.018 seconds)
 Gomory was tried 5 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.016 seconds)
 Knapsack was tried 5 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.006 seconds)
 Clique was tried 5 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
-MixedIntegerRounding2 was tried 5 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.003 seconds)
+MixedIntegerRounding2 was tried 5 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.002 seconds)
 FlowCover was tried 5 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
-TwoMirCuts was tried 20 times and created 46 cuts of which 0 were active after adding rounds of cuts (0.036 seconds)
+TwoMirCuts was tried 20 times and created 46 cuts of which 0 were active after adding rounds of cuts (0.035 seconds)
 ZeroHalf was tried 1 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.003 seconds)
 
 Result - Optimal solution found
@@ -175,17 +175,5 @@ Time (CPU seconds):             2.45
 Time (Wallclock seconds):       2.48
 
 Option for printingOptions changed from normal to all
-Total time (CPU seconds):       2.49   (Wallclock seconds):       2.53
+Total time (CPU seconds):       2.49   (Wallclock seconds):       2.52
 
----------------------------------------
-Result: Optimal
-Objective value: 41.0
-Total Number of Course: 34
-Non-Exempted Courses List: ['200', '210', '233', '432', '433', '441', '450', '461', '478', '507', '566', '580-Cit', '580-Che', '599A', '599B', '200AA', '200AB', '200AC', '200AD', '200AE', '200AF', '200AG', '200AH', '200AI', '233AA', '233AD', '233AE', '233AF', '233AG', '233AH', '580-Ogi']
-Total Number of Non-Exempted Courses: 31
-Total Number of Non-Exempted Hours: 75.0
-The number of courses for which the instructors are not listed in the instructorpref file: 18
-The number of courses for which the instructors' preference are not met: 0
-The number of courses that violate Block Policy: 0
-IW points earned: 16.0
-CW points earned: 25.0

@@ -48,7 +48,7 @@ def read_config(file_name):
     with open(file_name, "r") as file:
         for line in file:
             #Ignore lines starting with "#"
-            if line.startswith("#"):
+            if line.startswith("#") or not line.strip():
                 continue
             # Split each line into key and value
             key, value = line.strip().split("=")
@@ -84,6 +84,19 @@ def read_config(file_name):
     config['10PercRuleStartsAtid'] = math.floor(timeSlotName2Id(start_time, time_transfer(config['10PercRuleStartsAt'])))
     config['10PercRuleEndsAtid'] = math.floor(timeSlotName2Id(start_time, time_transfer(config['10PercRuleEndsAt'])))
     config['SlotNumPerday'] = SlotNumPerday
+
+    # Use default file path if not specified by user in the config file
+    if ("CourseInfo" not in config):
+        config['CourseInfo'] = config['DefaultCourseInfoFile']
+    if ("ConflictCourse" not in config):
+        config['ConflictCourse'] = config['DefaultConflictCourseFile']
+    if ("InstructorPref" not in config):
+        config['InstructorPref'] = config['DefaultInstructorPrefFile']
+    if ("CourseInstructor" not in config):
+        config['CourseInstructor'] = config['DefaultCoursesThisQuarterFile']
+    if ("outputDir" not in config):
+        config["outputDir"] = config['DefaultOutputDir']
+
     return config
 
 def read_courseInstructor(filename, config):
@@ -465,9 +478,8 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
     problem.solve()
     if (pulp.LpStatus[problem.status] != 'Optimal'):
         sys.exit("Pulp fail to find an optimal solution.")  
-    print('---------------------------------------')  
-    print(f"Result: {pulp.LpStatus[problem.status]}")
-    print(f"Objective value: {pulp.value(problem.objective)}")
+    print(f"Result: {pulp.LpStatus[problem.status]}", file=sys.stderr)
+    print(f"Objective value: {pulp.value(problem.objective)}", file=sys.stderr)
     return X, Y
 
 def generate_output(X, output_dir, course_instructor, config, IW, instructor_in_insPref):
@@ -578,24 +590,26 @@ def generateHeatMap(Y, output_dir, course_instructor, config, NonExemptedC, Tota
     return
 
 def printStandardOutput(course_instructor, NonExemptedC, TotalNonExemptedHours, IW_point, CW_point, NumCNoPref, InsNotMet, BPNotMet):
+    print(f"IW points earned: {IW_point}", file=sys.stderr)
+    print(f"CW points earned: {CW_point}", file=sys.stderr)
+    print(f"", file=sys.stderr)
     courseID2Name = course_instructor[1]
     NonExemptedCName = [courseID2Name[course_id] for course_id in NonExemptedC]
     TotalC = list(range(course_instructor[6]))
     ExemptedC = [c for c in TotalC if c not in NonExemptedC]
     ExemptedCName = [courseID2Name[course_id] for course_id in ExemptedC]
-    print(f"Total Number of Course: {course_instructor[6]}")
-    print(f"Non-Exempted Courses List: {NonExemptedCName}")
-    print(f"Total Number of Non-Exempted Courses: {len(NonExemptedCName)}")
-    print(f"Total Number of Non-Exempted Hours: {TotalNonExemptedHours}")
-    print(f"The number of courses for which the instructors are not listed in the instructorpref file: {NumCNoPref}")
-    print(f"The number of courses for which the instructors' preference are not met: {int(course_instructor[6] - IW_point - NumCNoPref)}")
+    print(f"Total Number of Course: {course_instructor[6]}", file=sys.stderr)
+    print(f"Exempted Courses List: {ExemptedCName}", file=sys.stderr)
+    #print(f"Non-Exempted Courses List: {NonExemptedCName}", file=sys.stderr)
+    print(f"Total Number of Non-Exempted Courses: {len(NonExemptedCName)}", file=sys.stderr)
+    print(f"Total Number of Non-Exempted Hours: {TotalNonExemptedHours}", file=sys.stderr)
+    print(f"The number of courses for which the instructors are not listed in the instructorpref file: {NumCNoPref}", file=sys.stderr)
+    print(f"The number of courses for which the instructors' preference are not met: {int(course_instructor[6] - IW_point - NumCNoPref)}", file=sys.stderr)
     if (len(InsNotMet) > 0):
-        print(f"Instructors whose preference are not met: {InsNotMet}")
-    print(f"The number of courses that violate Block Policy: {len(BPNotMet)}")
+        print(f"Instructors whose preference are not met: {InsNotMet}", file=sys.stderr)
+    print(f"The number of courses that violate Block Policy: {len(BPNotMet)}", file=sys.stderr)
     if (len(BPNotMet) > 0):
-        print(f"Courses that violate Block Policy: {BPNotMet}")
-    print(f"IW points earned: {IW_point}")
-    print(f"CW points earned: {CW_point}")
+        print(f"Courses that violate Block Policy: {BPNotMet}", file=sys.stderr)
 
 
 def computeCWIWPoint(course_instructor, config, X, IW, CW):

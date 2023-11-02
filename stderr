@@ -1,0 +1,12 @@
+Result: Optimal
+Objective value: 41.0
+IW points earned: 16.0
+CW points earned: 25.0
+
+Total Number of Course: 34
+Exempted Courses List: ['570', '571', '575-Ben']
+Total Number of Non-Exempted Courses: 31
+Total Number of Non-Exempted Hours: 75.0
+The number of courses for which the instructors are not listed in the instructorpref file: 18
+The number of courses for which the instructors' preference are not met: 0
+The number of courses that violate Block Policy: 0
