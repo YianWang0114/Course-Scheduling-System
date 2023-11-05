@@ -1,0 +1,3 @@
+cannot find an optimal solution if we require all TA sessions to end before 3:30pm. I removed that constraint for one of the ling200 sessions.
+
+also 599B has too many constraints. Need to find a better solution to this. Right now, we require 599B  to not be at the same time as TA sessions and the courses that have TA sessions.

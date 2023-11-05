@@ -30,7 +30,7 @@ must-follow-block-policy = 1
 penalty-for-violating-block-policy = -10
 
 # lambdas for CW matrix and IW matrix
-UWPolicyWeight = 0
+UWPolicyWeight = 1
 InstructorPrefWeight = 1
 
 

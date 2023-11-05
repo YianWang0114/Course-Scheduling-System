@@ -1,3 +1,5 @@
+# If UseDefaultPath = 0, you should specifies the input files and the output directory.
+# If it is 1, you will use the default path.
 UseDefaultPath = 0
 # The standard instructional day is from 8:30 am to 6:20 pm.
 InstructDayStartsAt = 8:30
