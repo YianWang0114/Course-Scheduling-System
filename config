@@ -21,7 +21,7 @@ RulePercentage = 0.12
 # if the first variable is 1, we strictly follow the block policy (i.e., we set the X
 # decision variables to 0 for any slots that do not meet the policy)
 # if it is 0, then we do not set X, but the slot in CW with a penalty.
-must-follow-block-policy = 0
+must-follow-block-policy = 1
 penalty-for-violating-block-policy = -10
 
 # The third part specifies the input files and the output directory.
