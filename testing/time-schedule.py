@@ -366,10 +366,10 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
     # Constraint 2: Each course must meet the correct number of times per week
     for c in range(TotalCourseNum):
         sessionsPerWeek = CourseInfo[c].sessionsPerWeek
+        #If CoursesThisQuarter includes a course that is not in CourseInfo, exit.
+        if (sessionsPerWeek < 1):
+            sys.exit(f"course {CourseInfo[c].courseName} is not found in CourseInfo. Please either add the course to CourseInfo or remove it from '{config['CourseInstructor']}'")
         #Total sessions taught in a week equal to sessionsPerWeek
-        if (sessionsPerWeek != 3 and sessionsPerWeek != 1 and sessionsPerWeek != 2):
-            print('incorrect session number')
-            pdb.set_trace()
         problem += pulp.lpSum(X[c][d][t] for d in range(5) for t in range(totalSlot)) == sessionsPerWeek
 
         #Each course meet at most once per day
@@ -479,9 +479,21 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
     problem.solve()
     if (pulp.LpStatus[problem.status] != 'Optimal'):
         sys.exit("Pulp fail to find an optimal solution.")  
-    print(f"Result: {pulp.LpStatus[problem.status]}", file=sys.stderr)
-    print(f"Objective value: {pulp.value(problem.objective)}", file=sys.stderr)
-    return X, Y
+    return X, Y, problem
+
+def computeCWIWPoint(course_instructor, config, X, IW, CW):
+    #Compute IW and CW points earned
+    TotalCourseNum = course_instructor[6]
+    totalSlot = config['SlotNumPerday']
+    CW_point = 0
+    IW_point = 0
+    for c in range(TotalCourseNum):
+        for d in range(5):
+            for t in range(totalSlot):
+                CW_point += CW[c][d][t] *  X[c][d][t].varValue
+                IW_point += IW[c][d][t] *  X[c][d][t].varValue
+
+    return IW_point, CW_point
 
 def generate_output(X, output_dir, course_instructor, config, IW, instructor_in_insPref):
     CourseId2Name = course_instructor[1]
@@ -492,14 +504,14 @@ def generate_output(X, output_dir, course_instructor, config, IW, instructor_in_
     totalSlot = config['SlotNumPerday']
     BlockingSlot = list(range(config['BlockSchedulingStartsAtid'], config['BlockSchedulingEndsAtid'] + 1))
     NumCNoPref = 0
-    InsNotMet = set()
+    InsNotMet = defaultdict(set)
     BPNotMet = set()
-    with open("raw_output.txt", "w") as file:
-        for c in range(TotalCourseNum):
-            for d in range(5):
-                for t in range(totalSlot):
-                    x_value = X[c][d][t].varValue
-                    file.write(f"X_{c}_{d}_{t} = {x_value}\n")
+    # with open("raw_output.txt", "w") as file:
+    #     for c in range(TotalCourseNum):
+    #         for d in range(5):
+    #             for t in range(totalSlot):
+    #                 x_value = X[c][d][t].varValue
+    #                 file.write(f"X_{c}_{d}_{t} = {x_value}\n")
     with open(output_dir+"output.txt", "w") as file:
         for c in range(TotalCourseNum):
             course_name = CourseInfo[c].courseName
@@ -517,16 +529,14 @@ def generate_output(X, output_dir, course_instructor, config, IW, instructor_in_
                         if (IW[c][d][t] == 0):
                             meetIP = 'n'
                             if (CourseInfo[c].instructorId in instructor_in_insPref):
-                                InsNotMet.add(instructor_name)
+                                InsNotMet[instructor_name].add(course_name)
                         days.append(d)
                         slots.add(t)
             # If an instructor does not appear in the insPref file, we use '-'
             if (CourseInfo[c].instructorId not in instructor_in_insPref):
                 meetIP = '-'
                 NumCNoPref += 1
-            # If it is a TA session. We output "-" for instructor preference
-            # if (CourseInfo[c].isTASession == 1):
-            #     meetIP = '-'
+
             slots = list(slots)
             if (len(slots) > 1):
                 print('more than one session in a day')
@@ -567,13 +577,10 @@ def generate_output(X, output_dir, course_instructor, config, IW, instructor_in_
             file.write(formatted_output)
     return NumCNoPref, InsNotMet, BPNotMet
 
-def generateHeatMap(Y, output_dir, course_instructor, config, NonExemptedC, TotalNonExemptedHours):
-    CourseInfo = course_instructor[5]
-    TotalCourseNum = course_instructor[6]
+def generateHeatMap(Y, output_dir, config, NonExemptedC, TotalNonExemptedHours):
     start_slot = config['10PercRuleStartsAtid']
     start_time = time_transfer(config['10PercRuleStartsAt'])
     end_slot = config['10PercRuleEndsAtid']
-    totalSlot = end_slot - start_slot + 1
     target_value = math.floor(TotalNonExemptedHours * config['RulePercentage'])
     with open(output_dir+"heatMap.txt", "w") as file:
         file.write(f"\t\tM\tT\tW\tR\tF\tHourly total\tHourly Target\n")
@@ -590,7 +597,11 @@ def generateHeatMap(Y, output_dir, course_instructor, config, NonExemptedC, Tota
             file.write(formatted_output)
     return
 
-def printStandardOutput(course_instructor, NonExemptedC, TotalNonExemptedHours, IW_point, CW_point, NumCNoPref, InsNotMet, BPNotMet):
+def printStandardOutput(config, course_instructor, NonExemptedC, TotalNonExemptedHours, IW_point, CW_point, NumCNoPref, InsNotMet, BPNotMet, problem):
+    print(f"10%-rule-percentage={config['RulePercentage']}", file=sys.stderr)
+    print(f"must-follow-block-policy={config['must-follow-block-policy']}\n", file=sys.stderr)
+    print(f"Result: {pulp.LpStatus[problem.status]}", file=sys.stderr)
+    print(f"Objective value: {pulp.value(problem.objective)}", file=sys.stderr)
     print(f"IW points earned: {IW_point}", file=sys.stderr)
     print(f"CW points earned: {CW_point}", file=sys.stderr)
     print(f"", file=sys.stderr)
@@ -601,32 +612,18 @@ def printStandardOutput(course_instructor, NonExemptedC, TotalNonExemptedHours, 
     ExemptedCName = [courseID2Name[course_id] for course_id in ExemptedC]
     print(f"Total Number of Course: {course_instructor[6]}", file=sys.stderr)
     print(f"Exempted Courses List: {ExemptedCName}", file=sys.stderr)
-    #print(f"Non-Exempted Courses List: {NonExemptedCName}", file=sys.stderr)
     print(f"Total Number of Non-Exempted Courses: {len(NonExemptedCName)}", file=sys.stderr)
-    print(f"Total Number of Non-Exempted Hours: {TotalNonExemptedHours}", file=sys.stderr)
+    print(f"Total Number of Non-Exempted Hours: {TotalNonExemptedHours}\n", file=sys.stderr)
     print(f"The number of courses for which the instructors are not listed in the instructorpref file: {NumCNoPref}", file=sys.stderr)
     print(f"The number of courses for which the instructors' preference are not met: {int(course_instructor[6] - IW_point - NumCNoPref)}", file=sys.stderr)
     if (len(InsNotMet) > 0):
-        print(f"Instructors whose preference are not met: {InsNotMet}", file=sys.stderr)
-    print(f"The number of courses that violate Block Policy: {len(BPNotMet)}", file=sys.stderr)
+        #pdb.set_trace()
+        print(f"Instructors whose preference are not met: {list(InsNotMet.keys())}", file=sys.stderr)
+        for i in InsNotMet.keys():
+            print(f"Instructor's name: {i}\tCourses that violate preference{InsNotMet[i]}", file=sys.stderr)
+    print(f"\nThe number of courses that violate Block Policy: {len(BPNotMet)}", file=sys.stderr)
     if (len(BPNotMet) > 0):
-        print(f"Courses that violate Block Policy: {BPNotMet}", file=sys.stderr)
-
-
-def computeCWIWPoint(course_instructor, config, X, IW, CW):
-    #Compute IW and CW points earned
-    TotalCourseNum = course_instructor[6]
-    totalSlot = config['SlotNumPerday']
-    CW_point = 0
-    IW_point = 0
-    for c in range(TotalCourseNum):
-        for d in range(5):
-            for t in range(totalSlot):
-                CW_point += CW[c][d][t] *  X[c][d][t].varValue
-                IW_point += IW[c][d][t] *  X[c][d][t].varValue
-
-    return IW_point, CW_point
-                
+        print(f"Courses that violate Block Policy: {BPNotMet}", file=sys.stderr)               
 
 def main():
     config_file = sys.argv[1]
@@ -640,16 +637,16 @@ def main():
     instructorPref_file = config['InstructorPref']
     IW, SameDayPairs, instructor_in_insPref = read_instructorPref(instructorPref_file, course_instructor, config)
     CW = createCW(course_instructor, config)
-    X, Y = ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs)
+    X, Y, problem = ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs)
     output_dir = config['outputDir']
     # Create a new directory because it does not exist
     isExist = os.path.exists(output_dir)
     if not isExist:
         os.makedirs(output_dir)
     NumCNoPref, InsNotMet, BPNotMet = generate_output(X, output_dir, course_instructor, config, IW, instructor_in_insPref)
-    generateHeatMap(Y, output_dir, course_instructor, config, NonExemptedC, TotalNonExemptedHours)
+    generateHeatMap(Y, output_dir, config, NonExemptedC, TotalNonExemptedHours)
     IW_point, CW_point = computeCWIWPoint(course_instructor, config, X, IW, CW)
-    printStandardOutput(course_instructor, NonExemptedC, TotalNonExemptedHours, IW_point, CW_point, NumCNoPref, InsNotMet, BPNotMet)
+    printStandardOutput(config, course_instructor, NonExemptedC, TotalNonExemptedHours, IW_point, CW_point, NumCNoPref, InsNotMet, BPNotMet, problem)
     
 
 if __name__ == "__main__":
