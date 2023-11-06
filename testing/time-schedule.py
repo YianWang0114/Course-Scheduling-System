@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 import pulp
 import os
+import csv
 
 class Course:
     #def __init__(self, instructorId=None, mustOnDays=None, mustStartSlot=None, mustEndSlot=None, lengPerSession=None, sessionsPerWeek=None, largeClass=None, exempted=None, isTASession=None, mustBeOnSameDay=None, mustOnWhichDay=None, slotNum=None):
@@ -346,7 +347,7 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
     l2 = config['InstructorPrefWeight']
     # Create the ILP problem
     problem = pulp.LpProblem("ILP_Maximization_Problem", pulp.LpMaximize)
-
+    
     # Initialize variable X and Y (three dimensional array)
     X = [[[pulp.LpVariable(f"X_{c}_{d}_{t}", 0, 1, cat=pulp.LpBinary) for t in range(totalSlot)] for d in range(5)] for c in range(TotalCourseNum)]
     Y = [[[pulp.LpVariable(f"Y_{c}_{d}_{t}", 0, 1, cat=pulp.LpBinary) for t in range(totalSlot)] for d in range(5)] for c in range(TotalCourseNum)]
@@ -539,8 +540,7 @@ def generate_output(X, output_dir, course_instructor, config, IW, instructor_in_
 
             slots = list(slots)
             if (len(slots) > 1):
-                print('more than one session in a day')
-                pdb.set_trace()
+                sys.exit('more than one session in a day')  
             else:
                 course_start = timeSlotId2ISlot(start_time, slots[0])
 
@@ -604,7 +604,6 @@ def printStandardOutput(config, course_instructor, NonExemptedC, TotalNonExempte
     print(f"Objective value: {pulp.value(problem.objective)}", file=sys.stderr)
     print(f"IW points earned: {IW_point}", file=sys.stderr)
     print(f"CW points earned: {CW_point}", file=sys.stderr)
-    print(f"", file=sys.stderr)
     courseID2Name = course_instructor[1]
     NonExemptedCName = [courseID2Name[course_id] for course_id in NonExemptedC]
     TotalC = list(range(course_instructor[6]))
@@ -624,6 +623,46 @@ def printStandardOutput(config, course_instructor, NonExemptedC, TotalNonExempte
     print(f"\nThe number of courses that violate Block Policy: {len(BPNotMet)}", file=sys.stderr)
     if (len(BPNotMet) > 0):
         print(f"Courses that violate Block Policy: {BPNotMet}", file=sys.stderr)               
+
+def generateCSV(output_dir, X, course_instructor, config, NonExemptedC):
+    InstructorId2Name = course_instructor[3]
+    CourseInfo = course_instructor[5]
+    TotalCourseNum = course_instructor[6]
+    start_time = time_transfer(config['InstructDayStartsAt'])
+    totalSlot = config['SlotNumPerday']
+    fields = ['Course', 'Instructor', '', '','','Days','Start','End','Notes','']
+    rows = []
+    for c in NonExemptedC:
+        course_name = CourseInfo[c].courseName
+        if (CourseInfo[c].instructorId != -1):
+                instructor_name = InstructorId2Name[CourseInfo[c].instructorId]
+        else:
+            instructor_name = '-'  
+        days = []
+        slots = set()     
+        for d in range(5):
+            for t in range(totalSlot):
+                if (X[c][d][t].varValue >= 1):
+                    days.append(d)
+                    slots.add(t)
+        slots = list(slots)
+        if (len(slots) > 1):
+            sys.exit('more than one session in a day')
+        else:
+            course_start = timeSlotId2ISlot(start_time, slots[0])
+        session_length = CourseInfo[c].lengPerSession
+        course_end = (time_transfer(course_start) + timedelta(minutes=session_length)).strftime('%H:%M')
+        teaching_days = ' '.join(intlist2days(days))
+        #pdb.set_trace()
+        rows.append(['LING '+course_name, instructor_name, '', '', '', teaching_days, course_start.replace(':',''), course_end.replace(':',''), '', ''])
+    with open(output_dir+"heatmap.csv", 'w') as csvfile:  
+        # creating a csv writer object  
+        csvwriter = csv.writer(csvfile)  
+        csvwriter.writerow('')
+        # writing the fields  
+        csvwriter.writerow(fields)                
+        # writing the data rows  
+        csvwriter.writerows(rows) 
 
 def main():
     config_file = sys.argv[1]
@@ -647,7 +686,7 @@ def main():
     generateHeatMap(Y, output_dir, config, NonExemptedC, TotalNonExemptedHours)
     IW_point, CW_point = computeCWIWPoint(course_instructor, config, X, IW, CW)
     printStandardOutput(config, course_instructor, NonExemptedC, TotalNonExemptedHours, IW_point, CW_point, NumCNoPref, InsNotMet, BPNotMet, problem)
-    
+    generateCSV(output_dir, X, course_instructor, config, NonExemptedC)
 
 if __name__ == "__main__":
     main()

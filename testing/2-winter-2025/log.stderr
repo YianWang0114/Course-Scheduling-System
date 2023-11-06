@@ -1,13 +1,18 @@
+10%-rule-percentage=0.12
+must-follow-block-policy=1
+
 Result: Optimal
 Objective value: 16.0
 IW points earned: 16.0
-CW points earned: 28.0
-
+CW points earned: 24.0
 Total Number of Course: 38
 Exempted Courses List: ['571', '572', '575-Xia']
 Total Number of Non-Exempted Courses: 37
 Total Number of Non-Exempted Hours: 107.0
+
 The number of courses for which the instructors are not listed in the instructorpref file: 21
 The number of courses for which the instructors' preference are not met: 1
-Instructors whose preference are not met: {'Ferjan-Ramirez'}
+Instructors whose preference are not met: ['Ferjan-Ramirez']
+Instructor's name: Ferjan-Ramirez	Courses that violate preference{'580-Fer'}
+
 The number of courses that violate Block Policy: 0

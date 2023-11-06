@@ -347,7 +347,7 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
     l2 = config['InstructorPrefWeight']
     # Create the ILP problem
     problem = pulp.LpProblem("ILP_Maximization_Problem", pulp.LpMaximize)
-
+    
     # Initialize variable X and Y (three dimensional array)
     X = [[[pulp.LpVariable(f"X_{c}_{d}_{t}", 0, 1, cat=pulp.LpBinary) for t in range(totalSlot)] for d in range(5)] for c in range(TotalCourseNum)]
     Y = [[[pulp.LpVariable(f"Y_{c}_{d}_{t}", 0, 1, cat=pulp.LpBinary) for t in range(totalSlot)] for d in range(5)] for c in range(TotalCourseNum)]

@@ -13,7 +13,7 @@ BlockSchedulingEndsAt = 14:30
 # Right now, the percentage is 12%
 10PercRuleStartsAt = 8:30
 10PercRuleEndsAt = 18:20
-RulePercentage = 0.14 
+RulePercentage = 0.12 
 
 # block scheduling requires the following starting time:
 50-min-class-start-time = 8:30 9:30 10:30 11:30 12:30 13:30
