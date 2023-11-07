@@ -2,7 +2,41 @@ Welcome to the CBC MILP Solver
 Version: 2.10.3 
 Build Date: Dec 15 2019 
 
-command line - /home2/fxia/anaconda3/lib/python3.8/site-packages/pulp/solverdir/cbc/linux/64/cbc /tmp/18d8c799e7e24d34888be2c316942d7c-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/18d8c799e7e24d34888be2c316942d7c-pulp.sol (default strategy 1)
+command line - /home2/wangyian/miniconda3/lib/python3.9/site-packages/pulp/solverdir/cbc/linux/64/cbc /tmp/e98242df53d84557b34c0c5ec4b93ec7-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/e98242df53d84557b34c0c5ec4b93ec7-pulp.sol (default strategy 1)
+At line 2 NAME          MODEL
+At line 3 ROWS
+At line 27655 COLUMNS
+At line 102594 RHS
+At line 130245 BOUNDS
+At line 138246 ENDATA
+Problem MODEL has 27650 rows, 8000 columns and 74155 elements
+Coin0008I MODEL read with 0 errors
+seconds was changed from 1e+100 to 15
+Option for timeMode changed from cpu to elapsed
+Presolve 4019 (-23631) rows, 2408 (-5592) columns and 12804 (-61351) elements
+Perturbing problem by 0.001% of 0.5 - largest nonzero change 0.00099218063 ( 0.19843613%) - largest zero change 0.00098928847
+0  Obj 1 Primal inf 64.352021 (49) Dual inf 40.130182 (81)
+155  Obj 10.970489 Primal inf 306.20923 (277)
+310  Obj 10.961013 Primal inf 255.38774 (290)
+465  Obj 10.955849 Primal inf 295.209 (244)
+620  Obj 10.953179 Primal inf 143.72759 (169)
+775  Obj 10.949174 Primal inf 127.69886 (140)
+930  Obj 10.944954 Primal inf 158.67228 (141)
+1085  Obj 10.943165 Primal inf 109.58457 (129)
+1240  Obj 10.94188 Primal inf 54.275902 (72)
+1395  Obj 10.940953 Primal inf 54.542032 (96)
+1526  Obj 10.940783
+Optimal - objective value 11
+After Postsolve, objective 11, infeasibilities - dual 0 (0), primal 0 (0)
+Optimal objective 11 - 1526 iterations time 0.062, Presolve 0.02
+Option for printingOptions changed from normal to all
+Total time (CPU seconds):       0.11   (Wallclock seconds):       0.12
+
+Welcome to the CBC MILP Solver 
+Version: 2.10.3 
+Build Date: Dec 15 2019 
+
+command line - /home2/wangyian/miniconda3/lib/python3.9/site-packages/pulp/solverdir/cbc/linux/64/cbc /tmp/0511a397dc774d38a57e5346bfeb527c-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/0511a397dc774d38a57e5346bfeb527c-pulp.sol (default strategy 1)
 At line 2 NAME          MODEL
 At line 3 ROWS
 At line 27655 COLUMNS
@@ -147,22 +181,22 @@ Cbc0014I Cut generator 3 (Clique) - 0 row cuts average 0.0 elements, 0 column cu
 Cbc0014I Cut generator 4 (MixedIntegerRounding2) - 2 row cuts average 193.5 elements, 0 column cuts (0 active)  in 0.007 seconds - new frequency is -100
 Cbc0014I Cut generator 5 (FlowCover) - 4 row cuts average 43.5 elements, 0 column cuts (0 active)  in 0.003 seconds - new frequency is -100
 Cbc0014I Cut generator 6 (TwoMirCuts) - 43 row cuts average 148.2 elements, 0 column cuts (0 active)  in 0.021 seconds - new frequency is -100
-Cbc0010I After 0 nodes, 1 on tree, 1e+50 best solution, best possible -11 (1.52 seconds)
+Cbc0010I After 0 nodes, 1 on tree, 1e+50 best solution, best possible -11 (1.53 seconds)
 Cbc0010I After 100 nodes, 53 on tree, 1e+50 best solution, best possible -11 (3.65 seconds)
 Cbc0010I After 200 nodes, 79 on tree, 1e+50 best solution, best possible -11 (3.91 seconds)
 Cbc0010I After 300 nodes, 117 on tree, 1e+50 best solution, best possible -11 (4.16 seconds)
 Cbc0010I After 400 nodes, 157 on tree, 1e+50 best solution, best possible -11 (4.45 seconds)
 Cbc0010I After 500 nodes, 196 on tree, 1e+50 best solution, best possible -11 (4.78 seconds)
-Cbc0010I After 600 nodes, 233 on tree, 1e+50 best solution, best possible -11 (5.24 seconds)
-Cbc0010I After 700 nodes, 274 on tree, 1e+50 best solution, best possible -11 (5.63 seconds)
+Cbc0010I After 600 nodes, 233 on tree, 1e+50 best solution, best possible -11 (5.25 seconds)
+Cbc0010I After 700 nodes, 274 on tree, 1e+50 best solution, best possible -11 (5.64 seconds)
 Cbc0010I After 800 nodes, 314 on tree, 1e+50 best solution, best possible -11 (6.04 seconds)
 Cbc0004I Integer solution of -11 found after 40839 iterations and 877 nodes (6.38 seconds)
-Cbc0001I Search completed - best objective -10.9999999999999, took 40839 iterations and 877 nodes (6.39 seconds)
+Cbc0001I Search completed - best objective -10.9999999999999, took 40839 iterations and 877 nodes (6.38 seconds)
 Cbc0032I Strong branching done 1884 times (41097 iterations), fathomed 4 nodes and fixed 30 variables
 Cbc0035I Maximum depth 61, 0 variables fixed on reduced cost
 Cuts at root node changed objective from -11 to -11
 Probing was tried 10 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.037 seconds)
-Gomory was tried 160 times and created 72 cuts of which 0 were active after adding rounds of cuts (0.104 seconds)
+Gomory was tried 160 times and created 72 cuts of which 0 were active after adding rounds of cuts (0.103 seconds)
 Knapsack was tried 10 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.011 seconds)
 Clique was tried 10 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.001 seconds)
 MixedIntegerRounding2 was tried 10 times and created 2 cuts of which 0 were active after adding rounds of cuts (0.007 seconds)
@@ -175,9 +209,9 @@ Result - Optimal solution found
 Objective value:                11.00000000
 Enumerated nodes:               877
 Total iterations:               40839
-Time (CPU seconds):             6.40
-Time (Wallclock seconds):       6.43
+Time (CPU seconds):             6.38
+Time (Wallclock seconds):       6.42
 
 Option for printingOptions changed from normal to all
-Total time (CPU seconds):       6.45   (Wallclock seconds):       6.48
+Total time (CPU seconds):       6.42   (Wallclock seconds):       6.48
 
