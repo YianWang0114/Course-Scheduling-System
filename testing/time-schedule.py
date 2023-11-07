@@ -616,7 +616,6 @@ def printStandardOutput(config, course_instructor, NonExemptedC, TotalNonExempte
     print(f"The number of courses for which the instructors are not listed in the instructorpref file: {NumCNoPref}", file=sys.stderr)
     print(f"The number of courses for which the instructors' preference are not met: {int(course_instructor[6] - IW_point - NumCNoPref)}", file=sys.stderr)
     if (len(InsNotMet) > 0):
-        #pdb.set_trace()
         print(f"Instructors whose preference are not met: {list(InsNotMet.keys())}", file=sys.stderr)
         for i in InsNotMet.keys():
             print(f"Instructor's name: {i}\tCourses that violate preference{InsNotMet[i]}", file=sys.stderr)
