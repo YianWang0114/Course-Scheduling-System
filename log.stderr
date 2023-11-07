@@ -1,0 +1,34 @@
+Log file generate at 2023-11-06 22:48:45.790431
+config file=config
+courseInstructor file=inputs/2024-2025/fall2024/CourseInstructor
+courseInfo file=inputs/CourseInfo
+conflict file=inputs/ConflictCourse
+instructorPref file=inputs/2024-2025/InstructorPref
+
+Warning: TA4 doesn't appear in the instructor preference file
+Warning: TA3 doesn't appear in the instructor preference file
+Warning: TA5 doesn't appear in the instructor preference file
+Warning: TA8 doesn't appear in the instructor preference file
+Warning: TA2 doesn't appear in the instructor preference file
+Warning: TA9 doesn't appear in the instructor preference file
+Warning: McGarrity doesn't appear in the instructor preference file
+Warning: lingColloq doesn't appear in the instructor preference file
+Warning: TA1 doesn't appear in the instructor preference file
+Warning: proseminar doesn't appear in the instructor preference file
+10%-rule-percentage=0.12
+must-follow-block-policy=1
+
+Result: Optimal
+Objective value: 41.0
+Upper bound: 45.000000004
+IW points earned: 16.0
+CW points earned: 25.0
+Total Number of Course: 34
+Exempted Courses List: ['570', '571', '575-Ben']
+Total Number of Non-Exempted Courses: 31
+Total Number of Non-Exempted Hours: 75.0
+
+The number of courses for which the instructors are not listed in the instructorpref file: 18
+The number of courses for which the instructors' preference are not met: 0
+
+The number of courses that violate Block Policy: 0

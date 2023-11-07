@@ -202,6 +202,7 @@ def read_courseInfo(file_name, course_instructor):
             if (ten_percent_rule_exempted == 0): # if a course is not exempted
                 NonExemptedC.append(CourseName2Id[course_name_before_slash])
                 TotalNonExemptedHours += cur_course.slotNum * num_sessions_per_week / 2
+                NonExemptedC.sort()
 
     return CourseInfo, NonExemptedC, TotalNonExemptedHours
 
