@@ -1,31 +1,31 @@
-Log file generate at 2023-11-06 19:16:47.255681
+Log file generate at 2023-11-07 09:41:35.199168
 config file=config
 courseInstructor file=./CoursesThisQuarter
 courseInfo file=./CourseInfo
 conflict file=./ConflictCourses
 instructorPref file=./InstructorPref
 
-Warning: TA2 doesn't appear in the instructor preference file
-Warning: lingColloq doesn't appear in the instructor preference file
 Warning: TA3 doesn't appear in the instructor preference file
-Warning: TA1 doesn't appear in the instructor preference file
+Warning: lingColloq doesn't appear in the instructor preference file
 Warning: TA4 doesn't appear in the instructor preference file
+Warning: LaPierre doesn't appear in the instructor preference file
+Warning: TA2 doesn't appear in the instructor preference file
+Warning: TA1 doesn't appear in the instructor preference file
+Warning: TA8 doesn't appear in the instructor preference file
+Warning: Dobao doesn't appear in the instructor preference file
 Warning: TA5 doesn't appear in the instructor preference file
+Warning: Rozelle doesn't appear in the instructor preference file
 Warning: McGarrity doesn't appear in the instructor preference file
 Warning: Levow doesn't appear in the instructor preference file
-Warning: LaPierre doesn't appear in the instructor preference file
 Warning: proseminar doesn't appear in the instructor preference file
-Warning: Dobao doesn't appear in the instructor preference file
-Warning: Rozelle doesn't appear in the instructor preference file
-Warning: TA8 doesn't appear in the instructor preference file
 10%-rule-percentage=0.12
 must-follow-block-policy=1
 
 Result: Optimal
 Objective value: 16.0
-Upper bound: 15.99999999
+Upper bound: 15.999999996
 IW points earned: 16.0
-CW points earned: 24.0
+CW points earned: 25.0
 Total Number of Course: 38
 Exempted Courses List: ['571', '572', '575-Xia']
 Total Number of Non-Exempted Courses: 37

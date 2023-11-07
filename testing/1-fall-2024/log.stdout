@@ -2,7 +2,7 @@ Welcome to the CBC MILP Solver
 Version: 2.10.3 
 Build Date: Dec 15 2019 
 
-command line - /home2/wangyian/miniconda3/lib/python3.9/site-packages/pulp/solverdir/cbc/linux/64/cbc /tmp/c51602755669455886ffc16ce15cd0e7-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/c51602755669455886ffc16ce15cd0e7-pulp.sol (default strategy 1)
+command line - /home2/wangyian/miniconda3/lib/python3.9/site-packages/pulp/solverdir/cbc/linux/64/cbc /tmp/f748985784334292b5e93547de9986d9-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/f748985784334292b5e93547de9986d9-pulp.sol (default strategy 1)
 At line 2 NAME          MODEL
 At line 3 ROWS
 At line 23307 COLUMNS
@@ -36,7 +36,7 @@ Welcome to the CBC MILP Solver
 Version: 2.10.3 
 Build Date: Dec 15 2019 
 
-command line - /home2/wangyian/miniconda3/lib/python3.9/site-packages/pulp/solverdir/cbc/linux/64/cbc /tmp/86ecedf16f794e979b390eadd0343492-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/86ecedf16f794e979b390eadd0343492-pulp.sol (default strategy 1)
+command line - /home2/wangyian/miniconda3/lib/python3.9/site-packages/pulp/solverdir/cbc/linux/64/cbc /tmp/cc3f28b4a57449dd820606cfb3d20828-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/cc3f28b4a57449dd820606cfb3d20828-pulp.sol (default strategy 1)
 At line 2 NAME          MODEL
 At line 3 ROWS
 At line 23307 COLUMNS
@@ -143,8 +143,8 @@ Cbc0014I Cut generator 4 (MixedIntegerRounding2) - 0 row cuts average 0.0 elemen
 Cbc0014I Cut generator 5 (FlowCover) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
 Cbc0014I Cut generator 6 (TwoMirCuts) - 54 row cuts average 67.4 elements, 0 column cuts (0 active)  in 0.019 seconds - new frequency is 1
 Cbc0010I After 0 nodes, 1 on tree, -41 best solution, best possible -42 (1.16 seconds)
-Cbc0016I Integer solution of -42 found by strong branching after 205 iterations and 3 nodes (1.32 seconds)
-Cbc0001I Search completed - best objective -42.0000000000002, took 205 iterations and 3 nodes (1.32 seconds)
+Cbc0016I Integer solution of -42 found by strong branching after 205 iterations and 3 nodes (1.31 seconds)
+Cbc0001I Search completed - best objective -42.0000000000002, took 205 iterations and 3 nodes (1.31 seconds)
 Cbc0032I Strong branching done 74 times (1124 iterations), fathomed 1 nodes and fixed 0 variables
 Cbc0035I Maximum depth 2, 13 variables fixed on reduced cost
 Cuts at root node changed objective from -42.25 to -42
@@ -162,9 +162,9 @@ Result - Optimal solution found
 Objective value:                42.00000000
 Enumerated nodes:               3
 Total iterations:               205
-Time (CPU seconds):             1.34
+Time (CPU seconds):             1.33
 Time (Wallclock seconds):       1.35
 
 Option for printingOptions changed from normal to all
-Total time (CPU seconds):       1.39   (Wallclock seconds):       1.40
+Total time (CPU seconds):       1.38   (Wallclock seconds):       1.40
 

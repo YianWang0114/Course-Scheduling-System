@@ -418,7 +418,7 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
                 problem += Y[c1][d][t] + Y[c2][d][t] <= 1
 
     # Constraint 6: Meet the 10%-rule requirement
-    target = config['RulePercentage'] * TotalNonExemptedHours
+    target = math.ceil(config['RulePercentage'] * TotalNonExemptedHours)
     for t in range(config['10PercRuleStartsAtid'], config['10PercRuleEndsAtid'] + 1, 2):
         t1 = pulp.lpSum(Y[c][d][t] for c in NonExemptedC for d in range(5))
         t2 = pulp.lpSum(Y[c][d][t + 1] for c in NonExemptedC for d in range(5))
@@ -561,7 +561,7 @@ def LP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, T
                 problem += Y[c1][d][t] + Y[c2][d][t] <= 1
 
     # Constraint 6: Meet the 10%-rule requirement
-    target = config['RulePercentage'] * TotalNonExemptedHours
+    target = math.ceil(config['RulePercentage'] * TotalNonExemptedHours)
     for t in range(config['10PercRuleStartsAtid'], config['10PercRuleEndsAtid'] + 1, 2):
         t1 = pulp.lpSum(Y[c][d][t] for c in NonExemptedC for d in range(5))
         t2 = pulp.lpSum(Y[c][d][t + 1] for c in NonExemptedC for d in range(5))
@@ -732,7 +732,7 @@ def generateHeatMap(Y, output_dir, config, NonExemptedC, TotalNonExemptedHours):
     start_slot = config['10PercRuleStartsAtid']
     start_time = time_transfer(config['10PercRuleStartsAt'])
     end_slot = config['10PercRuleEndsAtid']
-    target_value = math.floor(TotalNonExemptedHours * config['RulePercentage'])
+    target_value = math.ceil(TotalNonExemptedHours * config['RulePercentage'])
     with open(output_dir+"heatMap.txt", "w") as file:
         file.write(f"\t\tM\tT\tW\tR\tF\tHourly total\tHourly Target\n")
         for i in range(start_slot, end_slot + 1, 2):
