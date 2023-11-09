@@ -284,12 +284,14 @@ def read_instructorPref(file_name, course_instructor, config):
                     for t in range(prefStartSlot, prefEndSlot - math.ceil(CourseInfo[c].lengPerSession/30) + 1):
                         IW[c][d][t] = 1 / CourseInfo[c].sessionsPerWeek
                         if (1 / CourseInfo[c].sessionsPerWeek < 0):
+                            print(f"CourseInfo for {CourseInfo[c].courseName} fail to find")
                             sys.exit('CourseInfo fail to find')
                             
     # For TA sessions or guest lecturer's sessions that we can't find insturctors' pref, we print a warning
     instructor_notIn_insPref = set()
     for c in range(TotalCourseNum):
         if (CourseInfo[c].sessionsPerWeek < 0):
+            print(f"{CourseInfo[c].courseName} has incorrect session num. Please check CourseInfo file")
             sys.exit("incorrect session Num")
         if (CourseInfo[c].instructorId not in instructor_in_insPref):
             instructor_notIn_insPref.add(InstructorId2Name[CourseInfo[c].instructorId])

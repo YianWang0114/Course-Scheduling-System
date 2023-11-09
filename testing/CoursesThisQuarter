@@ -6,25 +6,23 @@
 
 233        Evans          MWF  8:30  9:20    
 
-234        TBA1           -    -    15:20 
-
-242        TBA2           -    -    15:20
+234        Wassink           -    -    15:20 
 
 269        McGarrity      -    -    15:20 
 
-432/532    Evans          -    -    16:20  
+432/532    Evans          -    -    15:20  
 
-450/550    Hargus         -    -    16:20      
+450/550    Hargus         -    -    15:20      
 
-451/551    Hargus         -    -    17:20 
+451/551    Hargus         -    -    15:20 
 
-452/552    LaPierre       -    -    16:20  
+452/552    LaPierre       -    -    15:20  
 
 461        Citko          -    -    16:20 
 
-462        Citko          -    -    17:20 
+462        Citko          -    -    16:20 
 
-471        Chai           -    -    17:20 
+471        Chai           -    -    16:20 
 
 535        Wassink        -    -    16:20 
 
@@ -40,7 +38,13 @@
 
 575-Ste    Steinert-Threlkeld  -    15:30 17:50
 
+575-guest2 guest2            -   15:30  17:50
+
+575-guest3 guest3          -   15:30  17:50
+
 580-Lap    LaPierre        -   15:30  17:50
+
+580-TBA    TBA2            -   15:30  17:50
 
 599A       lingColloq    F   15:30  17:50 
 
@@ -49,7 +53,7 @@
 
 ### TA sessions
 
-## 200 has 9 sessions, 6 TAs, must meet on TR
+## 200 has 9 sessions, 5 TAs, must meet on TR
 200AA      TA1           TR  -   15:20
 200AB      TA1           TR  -   15:20
 
@@ -81,4 +85,4 @@
 269AC      TA8           R   -   15:20
 
 ## Does 472 have a TA session, if so, on which day?
-#
+472AA      TA9           -   -   15:20

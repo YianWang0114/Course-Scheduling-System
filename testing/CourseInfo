@@ -103,9 +103,11 @@
 
 572       80 2   0 1   0
 
+575-guest1 140 1   0 1   0
+
 575-Xia  140 1   0 1   0  # 575 are all exempted from 10% rule?
 
-575-Unk  140 1   0 1   0
+580-TBA  140 1   0 0   0 
 
 580-Har  140 1   0 0   0
 
@@ -138,6 +140,10 @@
 
 573       80 2   0  1   0
 
+575-guest2 140 1 0  1   0
+
+575-guest3 140 1 0  1   0
+
 575-Lev  140 1   0  1   0
 
 575-Ste  140 1   0  1   0
@@ -156,6 +162,6 @@
 
 
 ## TA sessions
-472-TA    50 1   0  0   1   ## need to check frequency and length
+472AA    50 1   0  0   1   ## need to check frequency and length
 
 

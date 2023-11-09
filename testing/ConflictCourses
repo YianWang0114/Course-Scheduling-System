@@ -7,7 +7,7 @@
 # are taught by the same instructor; those pairs will be added automatically
 # to ConflictPairs.
 
-450/550 566 567 570 571 572 573 575-Xia 575-Ben 575-Levow 575-Ste
+450/550 566 567 570 571 572 573 575-guest1 575-guest2 575-guest3 575-Xia 575-Ben 575-Levow 575-Ste
 
 450/550 461
 
@@ -19,6 +19,9 @@
 599A 575-Xia
 599A 575-Lev
 599A 575-Ste
+599A 575-guest1
+599A 575-guest2
+599A 575-guest3
 599A 580-Cit
 599A 580-Che
 599A 580-Fer
@@ -26,6 +29,9 @@
 599A 580-Hed
 599A 580-Ogi
 599A 580-Lap
+599A 580-Wri
+599A 580-Eva
+599A 580-Was
 
 599A 599B
 
@@ -61,4 +67,4 @@
 269 269AA 269AB 269AC
 
 ## 472 and its TA sessions
-472  472-TA
+472  472-AA
