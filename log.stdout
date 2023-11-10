@@ -2,7 +2,7 @@ Welcome to the CBC MILP Solver
 Version: 2.10.3 
 Build Date: Dec 15 2019 
 
-command line - /home2/wangyian/miniconda3/lib/python3.9/site-packages/pulp/solverdir/cbc/linux/64/cbc /tmp/9aae6c0cec564ac7ae597f3284ad49b6-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/9aae6c0cec564ac7ae597f3284ad49b6-pulp.sol (default strategy 1)
+command line - /home2/wangyian/miniconda3/lib/python3.9/site-packages/pulp/solverdir/cbc/linux/64/cbc /tmp/46a9a7e604634211b61af42c3334b698-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/46a9a7e604634211b61af42c3334b698-pulp.sol (default strategy 1)
 At line 2 NAME          MODEL
 At line 3 ROWS
 At line 21277 COLUMNS
@@ -36,7 +36,7 @@ Welcome to the CBC MILP Solver
 Version: 2.10.3 
 Build Date: Dec 15 2019 
 
-command line - /home2/wangyian/miniconda3/lib/python3.9/site-packages/pulp/solverdir/cbc/linux/64/cbc /tmp/615cb1358bb44897b2df20940595702b-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/615cb1358bb44897b2df20940595702b-pulp.sol (default strategy 1)
+command line - /home2/wangyian/miniconda3/lib/python3.9/site-packages/pulp/solverdir/cbc/linux/64/cbc /tmp/4320eff962a54c3abcccd4d5d6122a74-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/4320eff962a54c3abcccd4d5d6122a74-pulp.sol (default strategy 1)
 At line 2 NAME          MODEL
 At line 3 ROWS
 At line 21277 COLUMNS
@@ -96,8 +96,8 @@ Cbc0038I Pass  30: suminf.    7.50000 (20) obj. -40.25 iterations 61
 Cbc0038I No solution found this major pass
 Cbc0038I Before mini branch and bound, 1207 integers at bound fixed and 0 continuous
 Cbc0038I Full problem 1448 rows 1399 columns, reduced to 240 rows 184 columns
-Cbc0038I Mini branch and bound did not improve solution (0.43 seconds)
-Cbc0038I After 0.43 seconds - Feasibility pump exiting - took 0.19 seconds
+Cbc0038I Mini branch and bound did not improve solution (0.42 seconds)
+Cbc0038I After 0.42 seconds - Feasibility pump exiting - took 0.19 seconds
 Cbc0012I Integer solution of -41 found by DiveCoefficient after 299 iterations and 0 nodes (0.50 seconds)
 Cbc0031I 7 added rows had average density of 298.14286
 Cbc0013I At root node, 7 cuts changed objective from -42 to -41 in 4 passes
@@ -129,5 +129,5 @@ Time (CPU seconds):             0.52
 Time (Wallclock seconds):       0.54
 
 Option for printingOptions changed from normal to all
-Total time (CPU seconds):       0.57   (Wallclock seconds):       0.59
+Total time (CPU seconds):       0.56   (Wallclock seconds):       0.58
 
