@@ -1,25 +1,26 @@
-Log file generate at 2023-11-12 17:40:10.448141
+Log file generate at 2023-11-12 20:37:04.780031
 config file=config
 courseInstructor file=./CoursesThisQuarter
 courseInfo file=./CourseInfo
 conflict file=./ConflictCourses
 
-450/550, 566 are conflicted
-450/550, 570 are conflicted
-450/550, 571 are conflicted
-450/550, 575-Ben are conflicted
-566, 570 are conflicted
-566, 571 are conflicted
-566, 575-Ben are conflicted due to same instructor
-570, 571 are conflicted
-570, 575-Ben are conflicted
-571, 575-Ben are conflicted
+450/550, 573 are conflicted
+450/550, 575-guest2 are conflicted
+450/550, 575-guest3 are conflicted
+450/550, 575-Ste are conflicted
+573, 575-guest2 are conflicted
+573, 575-guest3 are conflicted
+573, 575-Ste are conflicted
+575-guest2, 575-guest3 are conflicted
+575-Ste, 575-guest2 are conflicted
+575-Ste, 575-guest3 are conflicted
 450/550, 461 are conflicted
-450/550, 507 are conflicted
-575-Ben, 599A are conflicted
-580-Cit, 599A are conflicted
-580-Che, 599A are conflicted
-580-Ogi, 599A are conflicted
+575-Lev, 599A are conflicted
+575-Ste, 599A are conflicted
+575-guest2, 599A are conflicted
+575-guest3, 599A are conflicted
+580-Lap, 599A are conflicted
+580-Wri, 599A are conflicted
 580-TBA, 599A are conflicted
 599A, 599B are conflicted
 200, 599B are conflicted
@@ -60,6 +61,16 @@ conflict file=./ConflictCourses
 233AF, 233AG are conflicted due to same instructor
 233AF, 233AH are conflicted due to same instructor
 233AG, 233AH are conflicted due to same instructor
+269, 599B are conflicted
+599B, 269AA are conflicted
+599B, 269AB are conflicted
+599B, 269AC are conflicted
+269, 269AA are conflicted
+269, 269AB are conflicted
+269, 269AC are conflicted
+269AA, 269AB are conflicted due to same instructor
+269AA, 269AC are conflicted due to same instructor
+269AB, 269AC are conflicted due to same instructor
 200, 200AA are conflicted
 200, 200AB are conflicted
 200AA, 200AB are conflicted due to same instructor
@@ -85,13 +96,20 @@ conflict file=./ConflictCourses
 233AF, 233AG are conflicted due to same instructor
 233AF, 233AH are conflicted due to same instructor
 233AG, 233AH are conflicted due to same instructor
-450/550, 450AA are conflicted
-200, 441/541 are conflicted due to same instructor
-233, 433/533 are conflicted due to same instructor
-432/532, 450/550 are conflicted due to same instructor
-461, 507 are conflicted due to same instructor
-478/578, 580-Ogi are conflicted due to same instructor
-566, 575-Ben are conflicted due to same instructor
+269, 269AA are conflicted
+269, 269AB are conflicted
+269, 269AC are conflicted
+269AA, 269AB are conflicted due to same instructor
+269AA, 269AC are conflicted due to same instructor
+269AB, 269AC are conflicted due to same instructor
+472, 472AA are conflicted
+200, 269 are conflicted due to same instructor
+233, 432/532 are conflicted due to same instructor
+234, 535 are conflicted due to same instructor
+450/550, 451/551 are conflicted due to same instructor
+452/552, 580-Lap are conflicted due to same instructor
+461, 462 are conflicted due to same instructor
+573, 575-Lev are conflicted due to same instructor
 200AA, 200AB are conflicted due to same instructor
 200AC, 200AD are conflicted due to same instructor
 200AE, 200AF are conflicted due to same instructor
@@ -102,35 +120,44 @@ conflict file=./ConflictCourses
 233AF, 233AG are conflicted due to same instructor
 233AF, 233AH are conflicted due to same instructor
 233AG, 233AH are conflicted due to same instructor
+269AA, 269AB are conflicted due to same instructor
+269AA, 269AC are conflicted due to same instructor
+269AB, 269AC are conflicted due to same instructor
 
 instructorPref file=./InstructorPref
 
-Warning: TA2 doesn't appear in the instructor preference file
 Warning: TA8 doesn't appear in the instructor preference file
-Warning: TA10 doesn't appear in the instructor preference file
-Warning: TA1 doesn't appear in the instructor preference file
 Warning: lingColloq doesn't appear in the instructor preference file
-Warning: proseminar doesn't appear in the instructor preference file
-Warning: TA3 doesn't appear in the instructor preference file
+Warning: TA1 doesn't appear in the instructor preference file
 Warning: TA5 doesn't appear in the instructor preference file
-Warning: McGarrity doesn't appear in the instructor preference file
-Warning: TBA doesn't appear in the instructor preference file
-Warning: TA4 doesn't appear in the instructor preference file
+Warning: Levow doesn't appear in the instructor preference file
+Warning: guest3 doesn't appear in the instructor preference file
+Warning: proseminar doesn't appear in the instructor preference file
 Warning: TA9 doesn't appear in the instructor preference file
+Warning: TA6 doesn't appear in the instructor preference file
+Warning: TA7 doesn't appear in the instructor preference file
+Warning: TA4 doesn't appear in the instructor preference file
+Warning: TBA doesn't appear in the instructor preference file
+Warning: McGarrity doesn't appear in the instructor preference file
+Warning: LaPierre doesn't appear in the instructor preference file
+Warning: guest2 doesn't appear in the instructor preference file
+Warning: TA3 doesn't appear in the instructor preference file
+Warning: Chai doesn't appear in the instructor preference file
+Warning: TA2 doesn't appear in the instructor preference file
 10%-rule-percentage=0.12
 must-follow-block-policy=1
 
 Result: Optimal
-Objective value: 45.0
-Upper bound: 45.999999989
-IW points earned: 16.0
-CW points earned: 29.0
-Total Number of Course: 36
-Exempted Courses List: ['570', '571', '575-Ben']
-Total Number of Non-Exempted Courses: 34
-Total Number of Non-Exempted Hours: 81.0
+Objective value: 12.0
+Upper bound: 12.0
+IW points earned: 12.0
+CW points earned: 28.0
+Total Number of Course: 43
+Exempted Courses List: ['573', '575-Lev', '575-Ste', '575-guest2', '575-guest3']
+Total Number of Non-Exempted Courses: 40
+Total Number of Non-Exempted Hours: 96.5
 
-The number of courses for which the instructors are not listed in the instructorpref file: 20
+The number of courses for which the instructors are not listed in the instructorpref file: 31
 The number of courses for which the instructors' preference are not met: 0
 
 The number of courses that violate Block Policy: 0

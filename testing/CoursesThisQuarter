@@ -4,7 +4,7 @@
 
 200        McGarrity      MWF 14:30 15:20
 
-233        Evans          MWF  8:30  9:20    
+233        Evans          MWF  -    15:20    
 
 234        Wassink           -    -    15:20 
 
@@ -24,15 +24,13 @@
 
 471        Chai           -    -    16:20 
 
-535        Wassink        -    -    16:20 
+535        Wassink        -    -    15:20 
 
 472        Bender         -    -    16:20  
 
-520        Cheng          -    -    16:20 
+520        Cheng          -    -    15:20 
 
-573        Levow          -    -    16:20 
-
-575-Ben    Bender         -    15:30  17:50
+573        Levow          -    -    15:20 
 
 575-Lev    Levow          -    15:30  17:50
 
@@ -44,11 +42,13 @@
 
 580-Lap    LaPierre        -   15:30  17:50
 
-580-TBA    TBA2            -   15:30  17:50
+580-Wri    Wright            -   15:30  17:50
+
+580-TBA    TBA               -   15:30  17:50
 
 599A       lingColloq    F   15:30  17:50 
 
-599B       proseminar    -   -      17:50 
+599B       proseminar    -   -      16:20 
 
 
 ### TA sessions
@@ -64,8 +64,8 @@
 200AE      TA3           TR  -   15:20
 200AF      TA3           TR  -   15:20
 
-200AG      TA4           TR  -   - 
-200AH      TA4           TR  -   -
+200AG      TA4           TR  -   16:20 
+200AH      TA4           TR  -   16:20  
 
 200AI      TA5           TR  -   15:20
 
@@ -75,14 +75,14 @@
 233AD      TA8           R   -   15:20
 233AE      TA8           R   -   15:20
 
-233AF      TA9           R   -   - 
-233AG      TA9           R   -   - 
-233AH      TA9           R   -   - 
+233AF      TA9           R   -   16:20 
+233AG      TA9           R   -   16:20 
+233AH      TA9           R   -   16:20 
 
 ## 269 has 3 sessions, 1 TA, must meet on R
-269AA      TA8           R   -   15:20
-269AB      TA8           R   -   15:20
-269AC      TA8           R   -   15:20
+269AA      TA6           R   -   15:20
+269AB      TA6           R   -   15:20
+269AC      TA6           R   -   15:20
 
 ## Does 472 have a TA session, if so, on which day?
-472AA      TA9           -   -   15:20
+472AA      TA7           -   -   15:20

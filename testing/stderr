@@ -1,8 +1,0 @@
-Traceback (most recent call last):
-  File "/projects/assigned/course-scheduling/Course-Scheduling-System/testing/time-schedule.py", line 656, in <module>
-    main()
-  File "/projects/assigned/course-scheduling/Course-Scheduling-System/testing/time-schedule.py", line 635, in main
-    course_instructor = read_courseInstructor(courseInstructor_file, config)
-  File "/projects/assigned/course-scheduling/Course-Scheduling-System/testing/time-schedule.py", line 112, in read_courseInstructor
-    with open(filename, "r") as file:
-FileNotFoundError: [Errno 2] No such file or directory: 'inputs/2024-2025/fall2024/CourseInstructor'

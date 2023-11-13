@@ -1,6 +1,6 @@
-# (course name, instructor name, must on days, must start time, must end time)
+# The format of each line is: (course name, instructor name, must on days, must start time, must end time)
 
-# this file is used to set X and to expand conflicting course pairs
+# this file is used to set matrix X and to expand conflicting course pairs
 
 200        Ferjan-Ramirez MWF  8:30 9:20
 
@@ -36,6 +36,8 @@
 
 580-Ogi    Ogihara       -   15:30  17:50   
 
+580-TBA    TBA           -   15:30  17:50
+
 599A       lingColloq    F   15:30  17:50 
 
 599B       proseminar    -   -      - 
@@ -43,7 +45,7 @@
 
 ### TA sessions
 
-## 200 has 9 sessions, 6 TAs, must meet on TR
+## 200 has 9 sessions, 5 TAs, must meet on TR
 200AA      TA1           TR  -   15:20
 200AB      TA1           TR  -   15:20
 
@@ -72,3 +74,5 @@
 
 
 ## Does 450 have 1 TA session? If so, on what day?
+450AA      TA10          -   -   15:20
+
