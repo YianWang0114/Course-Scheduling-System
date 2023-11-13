@@ -48,7 +48,6 @@ def intlist2days(intlist):
     return [day_mapping[day] for day in intlist if day in day_mapping]
 
 def read_config(file_name):
-    print(f"config file={file_name}", file=sys.stderr)
     # Initialize a dictionary to store course information
     config = {}
     with open(file_name, "r") as file:
@@ -111,7 +110,6 @@ def useDefaultPath(config):
         config["outputDir"] = config['DefaultOutputDir']
 
 def read_courseInstructor(file_name, config):
-    print(f"courseInstructor file={file_name}", file=sys.stderr)
     CourseName2Id = {}
     CourseId2Name = []
     InstructorName2Id = {}
@@ -173,7 +171,6 @@ def read_courseInstructor(file_name, config):
     return course_instructor
 
 def read_courseInfo(file_name, course_instructor):
-    print(f"courseInfo file={file_name}", file=sys.stderr)
     TotalNonExemptedHours = 0
     NonExemptedC = []
     CourseName2Id = course_instructor[0]
@@ -205,15 +202,14 @@ def read_courseInfo(file_name, course_instructor):
             cur_course.isTASession = is_a_TA_session
             cur_course.slotNum = math.ceil(length_per_session/30)
 
-            if (ten_percent_rule_exempted == 0): # if a course is not exempted
+            # NonExemptedC should not have duplicate element 
+            if (ten_percent_rule_exempted == 0 and CourseName2Id[course_name_before_slash] not in NonExemptedC): # if a course is not exempted
                 NonExemptedC.append(CourseName2Id[course_name_before_slash])
                 TotalNonExemptedHours += cur_course.slotNum * num_sessions_per_week / 2
                 NonExemptedC.sort()
-
     return NonExemptedC, TotalNonExemptedHours
 
 def read_conflict(file_name, course_instructor):
-    print(f"conflict file={file_name}", file=sys.stderr)
     CourseName2Id = course_instructor[0]
     Instructor2Courses = course_instructor[4]
     conflict_course_pairs = []
@@ -244,14 +240,16 @@ def print_conflictPairs(conflict_course_pairs, course_instructor):
     CourseInfo = course_instructor[5]
     print(f'', file=sys.stderr)
     for (c1,c2) in conflict_course_pairs:
+        if (CourseInfo[c1].instructorId != CourseInfo[c2].instructorId):
+            print(f'{CourseInfo[c1].courseName}, {CourseInfo[c2].courseName} are conflicted', file=sys.stderr)
+
+    print(f'', file=sys.stderr)
+    for (c1,c2) in conflict_course_pairs:
         if (CourseInfo[c1].instructorId == CourseInfo[c2].instructorId):
             print(f'{CourseInfo[c1].courseName}, {CourseInfo[c2].courseName} are conflicted due to same instructor', file=sys.stderr)
-        else:
-            print(f'{CourseInfo[c1].courseName}, {CourseInfo[c2].courseName} are conflicted', file=sys.stderr)
     print(f'', file=sys.stderr)
 
 def read_instructorPref(file_name, course_instructor, config):
-    print(f"instructorPref file={file_name}\n", file=sys.stderr)
     SameDayPairs = set()
     InstructorName2Id = course_instructor[2]
     InstructorId2Name = course_instructor[3]
@@ -678,7 +676,7 @@ def generate_output(X, output_dir, course_instructor, config, IW, instructor_in_
                         if (IW[c][d][t] == 0):
                             meetIP = 'n'
                             if (CourseInfo[c].instructorId in instructor_in_insPref):
-                                InsNotMet[instructor_name].add(course_name)
+                                InsNotMet[CourseInfo[c].instructorId].add(course_name)
                         days.append(d)
                         slots.add(t)
             # If an instructor does not appear in the insPref file, we use '-'
@@ -862,7 +860,7 @@ def generateCSV2(output_dir, X, course_instructor, config, NonExemptedC, InsNotM
             course_name, instructor_name, session_length, meetBP, meetIP, teaching_days, course_start, course_end = createCSVrow(CourseInfo, c, config, InstructorId2Name, totalSlot, X, start_time, BPNotMet, InsNotMet, instructor_in_insPref)
             rows.append(['LING '+course_name, instructor_name, session_length, meetBP, meetIP, teaching_days, course_start.replace(':',''), course_end.replace(':',''), CourseInfo[c].exempted, ''])
 
-    with open(output_dir+"heatMap2.csv", 'w') as csvfile:  
+    with open(output_dir+"heatMap-all.csv", 'w') as csvfile:  
         # creating a csv writer object  
         csvwriter = csv.writer(csvfile)  
         csvwriter.writerow('') 
@@ -874,14 +872,19 @@ def main():
     print(f"Log file generate at {current_time}", file=sys.stderr)
     config_file = sys.argv[1]
     config = read_config(config_file)
-    courseInstructor_file = config['CourseInstructor']
-    course_instructor = read_courseInstructor(courseInstructor_file, config)
     courseInfo_file = config['CourseInfo']
-    NonExemptedC, TotalNonExemptedHours = read_courseInfo(courseInfo_file, course_instructor)
+    courseInstructor_file = config['CourseInstructor']
     conflict_file = config['ConflictCourse']
+    instructorPref_file = config['InstructorPref']
+    print(f"config file={config_file}", file=sys.stderr)
+    print(f"courseInstructor file={courseInfo_file}", file=sys.stderr)
+    print(f"courseInfo file={courseInfo_file}", file=sys.stderr)
+    print(f"conflict file={conflict_file}", file=sys.stderr)
+    print(f"instructorPref file={instructorPref_file}", file=sys.stderr)
+    course_instructor = read_courseInstructor(courseInstructor_file, config)
+    NonExemptedC, TotalNonExemptedHours = read_courseInfo(courseInfo_file, course_instructor)
     conflict_course_pairs = read_conflict(conflict_file, course_instructor)
     print_conflictPairs(conflict_course_pairs, course_instructor)
-    instructorPref_file = config['InstructorPref']
     IW, SameDayPairs, instructor_in_insPref = read_instructorPref(instructorPref_file, course_instructor, config)
     CW = createCW(course_instructor, config)
     upper_bound = LP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs)

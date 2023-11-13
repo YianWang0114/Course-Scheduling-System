@@ -1,8 +1,9 @@
-Log file generate at 2023-11-12 17:40:10.448141
+Log file generate at 2023-11-13 13:38:27.129700
 config file=config
-courseInstructor file=./CoursesThisQuarter
+courseInstructor file=./CourseInfo
 courseInfo file=./CourseInfo
 conflict file=./ConflictCourses
+instructorPref file=./InstructorPref
 
 450/550, 566 are conflicted
 450/550, 570 are conflicted
@@ -103,20 +104,18 @@ conflict file=./ConflictCourses
 233AF, 233AH are conflicted due to same instructor
 233AG, 233AH are conflicted due to same instructor
 
-instructorPref file=./InstructorPref
-
+Warning: TBA doesn't appear in the instructor preference file
+Warning: lingColloq doesn't appear in the instructor preference file
+Warning: TA1 doesn't appear in the instructor preference file
+Warning: TA4 doesn't appear in the instructor preference file
+Warning: TA5 doesn't appear in the instructor preference file
+Warning: TA3 doesn't appear in the instructor preference file
+Warning: TA9 doesn't appear in the instructor preference file
 Warning: TA2 doesn't appear in the instructor preference file
+Warning: McGarrity doesn't appear in the instructor preference file
 Warning: TA8 doesn't appear in the instructor preference file
 Warning: TA10 doesn't appear in the instructor preference file
-Warning: TA1 doesn't appear in the instructor preference file
-Warning: lingColloq doesn't appear in the instructor preference file
 Warning: proseminar doesn't appear in the instructor preference file
-Warning: TA3 doesn't appear in the instructor preference file
-Warning: TA5 doesn't appear in the instructor preference file
-Warning: McGarrity doesn't appear in the instructor preference file
-Warning: TBA doesn't appear in the instructor preference file
-Warning: TA4 doesn't appear in the instructor preference file
-Warning: TA9 doesn't appear in the instructor preference file
 10%-rule-percentage=0.12
 must-follow-block-policy=1
 
@@ -127,8 +126,8 @@ IW points earned: 16.0
 CW points earned: 29.0
 Total Number of Course: 36
 Exempted Courses List: ['570', '571', '575-Ben']
-Total Number of Non-Exempted Courses: 34
-Total Number of Non-Exempted Hours: 81.0
+Total Number of Non-Exempted Courses: 33
+Total Number of Non-Exempted Hours: 78.5
 
 The number of courses for which the instructors are not listed in the instructorpref file: 20
 The number of courses for which the instructors' preference are not met: 0
