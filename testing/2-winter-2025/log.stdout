@@ -2,7 +2,7 @@ Welcome to the CBC MILP Solver
 Version: 2.10.3 
 Build Date: Dec 15 2019 
 
-command line - /home2/wangyian/miniconda3/lib/python3.9/site-packages/pulp/solverdir/cbc/linux/64/cbc /tmp/43b9f1a42bbc4aed8668dad2ec4a2211-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/43b9f1a42bbc4aed8668dad2ec4a2211-pulp.sol (default strategy 1)
+command line - /home2/wangyian/miniconda3/lib/python3.9/site-packages/pulp/solverdir/cbc/linux/64/cbc /tmp/311001ab2e2444f3a770a44b93062678-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/311001ab2e2444f3a770a44b93062678-pulp.sol (default strategy 1)
 At line 2 NAME          MODEL
 At line 3 ROWS
 At line 25550 COLUMNS
@@ -27,7 +27,7 @@ Perturbing problem by 0.001% of 0.57735027 - largest nonzero change 0.0009864973
 1374  Obj 15.928066
 Optimal - objective value 16
 After Postsolve, objective 16, infeasibilities - dual 0 (0), primal 0 (0)
-Optimal objective 16 - 1374 iterations time 0.042, Presolve 0.01
+Optimal objective 16 - 1374 iterations time 0.042, Presolve 0.02
 Option for printingOptions changed from normal to all
 Total time (CPU seconds):       0.09   (Wallclock seconds):       0.10
 
@@ -35,7 +35,7 @@ Welcome to the CBC MILP Solver
 Version: 2.10.3 
 Build Date: Dec 15 2019 
 
-command line - /home2/wangyian/miniconda3/lib/python3.9/site-packages/pulp/solverdir/cbc/linux/64/cbc /tmp/fcd0c4ec119148b198b1e9edba8a62fc-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/fcd0c4ec119148b198b1e9edba8a62fc-pulp.sol (default strategy 1)
+command line - /home2/wangyian/miniconda3/lib/python3.9/site-packages/pulp/solverdir/cbc/linux/64/cbc /tmp/84857022f8d1410da8fd06206cb384c9-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/84857022f8d1410da8fd06206cb384c9-pulp.sol (default strategy 1)
 At line 2 NAME          MODEL
 At line 3 ROWS
 At line 25550 COLUMNS
@@ -79,7 +79,7 @@ Cbc0038I Before mini branch and bound, 2160 integers at bound fixed and 0 contin
 Cbc0038I Mini branch and bound did not improve solution (0.38 seconds)
 Cbc0038I After 0.38 seconds - Feasibility pump exiting with objective of -16 - took 0.09 seconds
 Cbc0012I Integer solution of -16 found by feasibility pump after 0 iterations and 0 nodes (0.38 seconds)
-Cbc0001I Search completed - best objective -16, took 0 iterations and 0 nodes (0.38 seconds)
+Cbc0001I Search completed - best objective -16, took 0 iterations and 0 nodes (0.39 seconds)
 Cbc0035I Maximum depth 0, 0 variables fixed on reduced cost
 Cuts at root node changed objective from -16 to -16
 Probing was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
@@ -96,9 +96,9 @@ Result - Optimal solution found
 Objective value:                16.00000000
 Enumerated nodes:               0
 Total iterations:               0
-Time (CPU seconds):             0.40
-Time (Wallclock seconds):       0.42
+Time (CPU seconds):             0.41
+Time (Wallclock seconds):       0.43
 
 Option for printingOptions changed from normal to all
-Total time (CPU seconds):       0.45   (Wallclock seconds):       0.47
+Total time (CPU seconds):       0.46   (Wallclock seconds):       0.48
 

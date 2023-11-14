@@ -1,4 +1,4 @@
-Log file generate at 2023-11-13 14:18:30.267850
+Log file generate at 2023-11-13 14:36:16.055729
 config file=config
 courseInstructor file=./CourseInfo
 courseInfo file=./CourseInfo
@@ -87,21 +87,21 @@ instructorPref file=./InstructorPref
 269AA, 269AC are conflicted due to same instructor
 269AB, 269AC are conflicted due to same instructor
 
-Warning: Rozelle doesn't appear in the instructor preference file
-Warning: lingColloq doesn't appear in the instructor preference file
-Warning: TA2 doesn't appear in the instructor preference file
-Warning: McGarrity doesn't appear in the instructor preference file
 Warning: TA3 doesn't appear in the instructor preference file
-Warning: TA5 doesn't appear in the instructor preference file
-Warning: guest1 doesn't appear in the instructor preference file
-Warning: TA1 doesn't appear in the instructor preference file
-Warning: proseminar doesn't appear in the instructor preference file
-Warning: Dobao doesn't appear in the instructor preference file
-Warning: TA8 doesn't appear in the instructor preference file
-Warning: LaPierre doesn't appear in the instructor preference file
+Warning: lingColloq doesn't appear in the instructor preference file
+Warning: Rozelle doesn't appear in the instructor preference file
 Warning: TA4 doesn't appear in the instructor preference file
+Warning: TA1 doesn't appear in the instructor preference file
+Warning: TA5 doesn't appear in the instructor preference file
+Warning: McGarrity doesn't appear in the instructor preference file
+Warning: LaPierre doesn't appear in the instructor preference file
+Warning: TA2 doesn't appear in the instructor preference file
 Warning: Levow doesn't appear in the instructor preference file
+Warning: Dobao doesn't appear in the instructor preference file
+Warning: guest1 doesn't appear in the instructor preference file
+Warning: proseminar doesn't appear in the instructor preference file
 Warning: TBA doesn't appear in the instructor preference file
+Warning: TA8 doesn't appear in the instructor preference file
 10%-rule-percentage=0.12
 must-follow-block-policy=1
 

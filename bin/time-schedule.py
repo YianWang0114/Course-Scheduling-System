@@ -24,11 +24,13 @@ class Course:
 
 def time_transfer(time_string):
     #This function transfer time from string to datetime object
+    #Input: "10:30" -> Output: 
     time = datetime.strptime(time_string, '%H:%M')
     return time 
 
 def timeSlotName2Id(start, timeSlotName):
     #This function transfer time from datetime object to slotid
+    #Input -> Output
     id = (timeSlotName - start).total_seconds() / 60 / 30
     return id
 
@@ -176,6 +178,9 @@ def read_courseInfo(file_name, course_instructor):
     CourseName2Id = course_instructor[0]
     CourseInfo = course_instructor[5]
     # Read the CourseInfo file
+
+    # Give a warning message if a course appear multiple times in courseInfo
+    # Ignore the second time
     with open(file_name, "r") as file:
         for line in file:
             # Ignore empty lines and lines starting with "#"
@@ -212,7 +217,7 @@ def read_courseInfo(file_name, course_instructor):
 def read_conflict(file_name, course_instructor):
     CourseName2Id = course_instructor[0]
     Instructor2Courses = course_instructor[4]
-    conflict_course_pairs = []
+    conflict_course_pairs = [] 
     with open(file_name, "r") as file:
         for line in file:
             # Ignore empty lines and lines starting with "#"
@@ -223,10 +228,13 @@ def read_conflict(file_name, course_instructor):
             # Adding conflicted pairs from conflicted files
             course_ids = [CourseName2Id[course.split('/')[0]] for course in courses if course.split('/')[0] in CourseName2Id]
             for i in range(len(course_ids)-1):
+                #print out the course name for i
                 for j in range(i + 1, len(course_ids)):
+                    #print out the course name for j
                     conflict_course_pairs.append((min(course_ids[i], course_ids[j]), max(course_ids[i], course_ids[j])))
 
-    # Adding conflicted pairs from same instructors
+    # Adding conflicted pairs from same instructors 
+    # (print out instructor's name)
     for key in Instructor2Courses.keys():
         if (key != -1 and len(Instructor2Courses[key]) > 1):
             course_ids = Instructor2Courses[key]
@@ -389,7 +397,8 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
         for d in range(5):
             problem += pulp.lpSum(X[c][d][t] for t in range(totalSlot)) <= 1
 
-    #Constraint 3: Non-TA courses that meet twice per week
+    # Constraint 3: Each non-TA course that meets twice per week must be taught on MW or TR
+    # Only for non-TA session 
     for c in range(TotalCourseNum):
         if CourseInfo[c].sessionsPerWeek == 2:
             for t in range(totalSlot):
@@ -403,7 +412,7 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
                 problem += pulp.lpSum(X[c][1][t] for t in range(totalSlot)) >= 1
                 problem += pulp.lpSum(X[c][3][t] for t in range(totalSlot)) >= 1
     
-    # Constraint 4: Non-TA courses that meet three times per week
+    # Constraint 4: Non-TA courses that meet three times per week must be taught on MWF
     for c in range(TotalCourseNum):
         if CourseInfo[c].sessionsPerWeek == 3:
             # must meet on M, W, F
