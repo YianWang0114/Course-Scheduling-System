@@ -1,8 +1,8 @@
 GLPSOL: GLPK LP/MIP Solver, v4.65
 Parameter(s) specified in the command line:
- --cpxlp /tmp/fd1f4fe7441d4db5b2e67251bce0c4ac-pulp.lp -o /tmp/fd1f4fe7441d4db5b2e67251bce0c4ac-pulp.sol
+ --cpxlp /tmp/f0af6d0af14d400a9dc9aee66f323e7c-pulp.lp -o /tmp/f0af6d0af14d400a9dc9aee66f323e7c-pulp.sol
  --tmlim 15
-Reading problem data from '/tmp/fd1f4fe7441d4db5b2e67251bce0c4ac-pulp.lp'...
+Reading problem data from '/tmp/f0af6d0af14d400a9dc9aee66f323e7c-pulp.lp'...
 24354 rows, 7200 columns, 65785 non-zeros
 35419 lines were read
 GLPK Simplex Optimizer, v4.65
@@ -20,12 +20,12 @@ Size of triangular part is 4168
 OPTIMAL LP SOLUTION FOUND
 Time used:   0.1 secs
 Memory used: 17.0 Mb (17857800 bytes)
-Writing basic solution to '/tmp/fd1f4fe7441d4db5b2e67251bce0c4ac-pulp.sol'...
+Writing basic solution to '/tmp/f0af6d0af14d400a9dc9aee66f323e7c-pulp.sol'...
 GLPSOL: GLPK LP/MIP Solver, v4.65
 Parameter(s) specified in the command line:
- --cpxlp /tmp/d0630418de5240db9014766cc6b3583b-pulp.lp -o /tmp/d0630418de5240db9014766cc6b3583b-pulp.sol
+ --cpxlp /tmp/54b789879c4d4c42a78efd86d43305cd-pulp.lp -o /tmp/54b789879c4d4c42a78efd86d43305cd-pulp.sol
  --tmlim 15
-Reading problem data from '/tmp/d0630418de5240db9014766cc6b3583b-pulp.lp'...
+Reading problem data from '/tmp/54b789879c4d4c42a78efd86d43305cd-pulp.lp'...
 24354 rows, 7200 columns, 65785 non-zeros
 7200 integer variables, all of which are binary
 35419 lines were read
@@ -54,10 +54,10 @@ Long-step dual simplex will be used
 +  1115: mip =     not found yet <=              +inf        (1; 0)
 +  2419: >>>>>   4.400000000e+01 <=   4.600000000e+01   4.5% (45; 5)
 +  3117: >>>>>   4.500000000e+01 <=   4.600000000e+01   2.2% (60; 49)
-+ 17346: mip =   4.500000000e+01 <=   4.600000000e+01   2.2% (87; 371)
-+ 32346: mip =   4.500000000e+01 <=   4.600000000e+01   2.2% (116; 746)
-+ 44410: mip =   4.500000000e+01 <=   4.600000000e+01   2.2% (125; 1073)
++ 17578: mip =   4.500000000e+01 <=   4.600000000e+01   2.2% (87; 377)
++ 32868: mip =   4.500000000e+01 <=   4.600000000e+01   2.2% (113; 764)
++ 45607: mip =   4.500000000e+01 <=   4.600000000e+01   2.2% (125; 1115)
 TIME LIMIT EXCEEDED; SEARCH TERMINATED
 Time used:   15.1 secs
 Memory used: 16.1 Mb (16893960 bytes)
-Writing MIP solution to '/tmp/d0630418de5240db9014766cc6b3583b-pulp.sol'...
+Writing MIP solution to '/tmp/54b789879c4d4c42a78efd86d43305cd-pulp.sol'...

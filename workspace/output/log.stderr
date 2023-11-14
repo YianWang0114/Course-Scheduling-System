@@ -1,13 +1,11 @@
-Log file generate at 2023-11-13 20:25:21.856513
-python version: 3.9.15 (main, Nov 24 2022, 14:31:59) 
-[GCC 11.2.0]
+Log file generate at 2023-11-14 10:29:45.481793
+python version: 3.10.13 | packaged by conda-forge | (main, Oct 26 2023, 18:07:37) [GCC 12.3.0]
 pulp version: 2.7.0
 config file=config
 courseInstructor file=./CourseInfo
 courseInfo file=./CourseInfo
 conflict file=./ConflictCourses
 instructorPref file=./InstructorPref
-Warning: 580-TBA appears multiple times in courseInfo
 
 450/550, 566 are conflicted
 450/550, 570 are conflicted
@@ -109,24 +107,24 @@ Warning: 580-TBA appears multiple times in courseInfo
 233AF, 233AH are conflicted due to same instructor
 233AG, 233AH are conflicted due to same instructor
 
-Warning: TA4 doesn't appear in the instructor preference file
-Warning: TA5 doesn't appear in the instructor preference file
-Warning: TA8 doesn't appear in the instructor preference file
-Warning: McGarrity doesn't appear in the instructor preference file
-Warning: lingColloq doesn't appear in the instructor preference file
-Warning: TA10 doesn't appear in the instructor preference file
-Warning: proseminar doesn't appear in the instructor preference file
 Warning: TA9 doesn't appear in the instructor preference file
-Warning: TA1 doesn't appear in the instructor preference file
+Warning: McGarrity doesn't appear in the instructor preference file
+Warning: TA5 doesn't appear in the instructor preference file
+Warning: TA10 doesn't appear in the instructor preference file
+Warning: lingColloq doesn't appear in the instructor preference file
+Warning: TA8 doesn't appear in the instructor preference file
+Warning: TA4 doesn't appear in the instructor preference file
+Warning: proseminar doesn't appear in the instructor preference file
 Warning: TA2 doesn't appear in the instructor preference file
 Warning: TBA doesn't appear in the instructor preference file
 Warning: TA3 doesn't appear in the instructor preference file
+Warning: TA1 doesn't appear in the instructor preference file
 10%-rule-percentage=0.12
 must-follow-block-policy=1
 
 Result: Optimal
 Objective value: 45.0
-Upper bound: 45.999999989
+Upper bound: 46.00000059999999
 IW points earned: 16.0
 CW points earned: 29.0
 Total Number of Course: 36
