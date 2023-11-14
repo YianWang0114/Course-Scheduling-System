@@ -404,7 +404,7 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
     # Constraint 3: Each non-TA course that meets twice per week must be taught on MW or TR
     # Only for non-TA session 
     for c in range(TotalCourseNum):
-        if CourseInfo[c].sessionsPerWeek == 2:
+        if CourseInfo[c].sessionsPerWeek == 2: #and CourseInfo[c].isTASession == 0:
             for t in range(totalSlot):
                 problem += X[c][1][t] == X[c][3][t]   # T and R have the same schedule
                 problem += X[c][0][t] == X[c][2][t]   # M and W have the same schedule
@@ -499,7 +499,10 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
                             problem += X[c][d][t] <= 0
 
     pulp.LpSolverDefault.timeLimit = 15 #Set the time limit for pulp solver
-    problem.solve()
+    solver = pulp.getSolver('GLPK_CMD', timeLimit=15)
+    #pdb.set_trace()
+    #solver = pulp.getSolver('COIN_CMD', timeLimit=15)
+    problem.solve(solver)
     if (pulp.LpStatus[problem.status] != 'Optimal'):
         sys.exit("Pulp fail to find an optimal solution.")  
     return X, Y, problem
@@ -641,6 +644,8 @@ def LP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, T
                             problem += X[c][d][t] <= 0
 
     pulp.LpSolverDefault.timeLimit = 15
+    solver = pulp.getSolver('GLPK_CMD', timeLimit=15)
+    # solver = pulp.getSolver('COIN_CMD', timeLimit=15)
     problem.solve()
     if (pulp.LpStatus[problem.status] != 'Optimal'):
         sys.exit("Pulp fail to find an optimal solution for LP.")  
@@ -699,6 +704,8 @@ def generate_output(X, output_dir, course_instructor, config, IW, instructor_in_
 
             slots = list(slots)
             if (len(slots) > 1):
+                #print('more than one session in a day')
+                #pdb.set_trace()
                 sys.exit('more than one session in a day')  
             else:
                 course_start = timeSlotId2ISlot(start_time, slots[0])
@@ -764,6 +771,7 @@ def generateHeatMap(Y, output_dir, config, NonExemptedC, TotalNonExemptedHours):
     return
 
 def printStandardOutput(config, course_instructor, NonExemptedC, TotalNonExemptedHours, IW_point, CW_point, NumCNoPref, InsNotMet, BPNotMet, problem, upper_bound):
+    InstructorId2Name = course_instructor[3]
     print(f"10%-rule-percentage={config['RulePercentage']}", file=sys.stderr)
     print(f"must-follow-block-policy={config['must-follow-block-policy']}\n", file=sys.stderr)
     print(f"Result: {pulp.LpStatus[problem.status]}", file=sys.stderr)
@@ -783,9 +791,9 @@ def printStandardOutput(config, course_instructor, NonExemptedC, TotalNonExempte
     print(f"The number of courses for which the instructors are not listed in the instructorpref file: {NumCNoPref}", file=sys.stderr)
     print(f"The number of courses for which the instructors' preference are not met: {int(course_instructor[6] - IW_point - NumCNoPref)}", file=sys.stderr)
     if (len(InsNotMet) > 0):
-        print(f"Instructors whose preference are not met: {list(InsNotMet.keys())}", file=sys.stderr)
+        print(f"Instructors whose preference are not met: ", file=sys.stderr)
         for i in InsNotMet.keys():
-            print(f"Instructor's name: {i}\tCourses that violate preference{InsNotMet[i]}", file=sys.stderr)
+            print(f"Instructor's name: {InstructorId2Name[i]}\tCourses that violate preference{InsNotMet[i]}", file=sys.stderr)
     print(f"\nThe number of courses that violate Block Policy: {len(BPNotMet)}", file=sys.stderr)
     if (len(BPNotMet) > 0):
         print(f"Courses that violate Block Policy: {BPNotMet}", file=sys.stderr)               
