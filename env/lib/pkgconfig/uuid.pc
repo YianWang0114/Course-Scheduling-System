@@ -1,0 +1,11 @@
+prefix=/projects/assigned/course-scheduling/Course-Scheduling-System/env
+exec_prefix=/projects/assigned/course-scheduling/Course-Scheduling-System/env
+libdir=/projects/assigned/course-scheduling/Course-Scheduling-System/env/lib
+includedir=/projects/assigned/course-scheduling/Course-Scheduling-System/env/include
+
+Name: uuid
+Description: Universally unique id library
+Version: 2.38.1
+Requires:
+Cflags: -I${includedir}/uuid
+Libs: -L${libdir} -luuid

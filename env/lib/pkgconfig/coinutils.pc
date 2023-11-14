@@ -1,0 +1,13 @@
+prefix=/projects/assigned/course-scheduling/Course-Scheduling-System/env
+exec_prefix=/projects/assigned/course-scheduling/Course-Scheduling-System/env
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include/coin
+
+Name: CoinUtils
+Description: COIN-OR Utilities
+URL: https://projects.coin-or.org/CoinUtils
+Version: 2.11.9
+Libs: -L${libdir} -lCoinUtils 
+Libs.private: -lbz2 -lz -L/projects/assigned/course-scheduling/Course-Scheduling-System/env/lib -llapack -L/projects/assigned/course-scheduling/Course-Scheduling-System/env/lib -lblas -lm 
+Cflags: -I${includedir}
+Requires.private: 

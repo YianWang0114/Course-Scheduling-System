@@ -1,0 +1,1 @@
+-L/projects/assigned/course-scheduling/Course-Scheduling-System/env/lib -lClpSolver -lClp

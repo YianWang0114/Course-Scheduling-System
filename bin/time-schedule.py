@@ -177,6 +177,7 @@ def read_courseInfo(file_name, course_instructor):
     NonExemptedC = []
     CourseName2Id = course_instructor[0]
     CourseInfo = course_instructor[5]
+    TotalC = []
     # Read the CourseInfo file
 
     # Give a warning message if a course appear multiple times in courseInfo
@@ -198,7 +199,10 @@ def read_courseInfo(file_name, course_instructor):
             large_class = int(values[3])
             ten_percent_rule_exempted = int(values[4])
             is_a_TA_session = int(values[5])
-
+            if (CourseName2Id[course_name_before_slash] in TotalC):
+                print(f'Warning: {course_name} appears multiple times in courseInfo', file=sys.stderr)
+                continue
+            TotalC.append(CourseName2Id[course_name_before_slash])
             cur_course = CourseInfo[CourseName2Id[course_name_before_slash]]
             cur_course.lengPerSession = length_per_session
             cur_course.sessionsPerWeek = num_sessions_per_week
@@ -668,7 +672,7 @@ def generate_output(X, output_dir, course_instructor, config, IW, instructor_in_
     InsNotMet = defaultdict(set)
     BPNotMet = set()
 
-    with open(output_dir+"output.txt", "w") as file:
+    with open(output_dir+"schedule.txt", "w") as file:
         for c in range(TotalCourseNum):
             course_name = CourseInfo[c].courseName
             if (CourseInfo[c].instructorId != -1):
@@ -835,7 +839,7 @@ def generateCSV(output_dir, X, course_instructor, config, NonExemptedC, InsNotMe
         course_name, instructor_name, session_length, meetBP, meetIP, teaching_days, course_start, course_end = createCSVrow(CourseInfo, c, config, InstructorId2Name, totalSlot, X, start_time, BPNotMet, InsNotMet, instructor_in_insPref)
         rows.append(['LING '+course_name, instructor_name, session_length, meetBP, meetIP, teaching_days, course_start.replace(':',''), course_end.replace(':',''), '', ''])
 
-    with open(output_dir+"heatMap.csv", 'w') as csvfile:  
+    with open(output_dir+"schedule-nonEx.csv", 'w') as csvfile:  
         # creating a csv writer object  
         csvwriter = csv.writer(csvfile)  
         csvwriter.writerow('') 
@@ -869,7 +873,7 @@ def generateCSV2(output_dir, X, course_instructor, config, NonExemptedC, InsNotM
             course_name, instructor_name, session_length, meetBP, meetIP, teaching_days, course_start, course_end = createCSVrow(CourseInfo, c, config, InstructorId2Name, totalSlot, X, start_time, BPNotMet, InsNotMet, instructor_in_insPref)
             rows.append(['LING '+course_name, instructor_name, session_length, meetBP, meetIP, teaching_days, course_start.replace(':',''), course_end.replace(':',''), CourseInfo[c].exempted, ''])
 
-    with open(output_dir+"heatMap-all.csv", 'w') as csvfile:  
+    with open(output_dir+"schedule.csv", 'w') as csvfile:  
         # creating a csv writer object  
         csvwriter = csv.writer(csvfile)  
         csvwriter.writerow('') 
@@ -879,6 +883,8 @@ def generateCSV2(output_dir, X, course_instructor, config, NonExemptedC, InsNotM
 def main():
     current_time = datetime.now()
     print(f"Log file generate at {current_time}", file=sys.stderr)
+    print(f"python version: {sys.version}",  file=sys.stderr)
+    print(f"pulp version: {pulp.__version__}",  file=sys.stderr)
     config_file = sys.argv[1]
     config = read_config(config_file)
     courseInfo_file = config['CourseInfo']

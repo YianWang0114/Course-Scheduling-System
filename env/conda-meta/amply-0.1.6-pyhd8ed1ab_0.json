@@ -1,0 +1,137 @@
+{
+  "build": "pyhd8ed1ab_0",
+  "build_number": 0,
+  "channel": "https://conda.anaconda.org/conda-forge/noarch",
+  "constrains": [],
+  "depends": [
+    "docutils >=0.3",
+    "pyparsing",
+    "python >=3.4"
+  ],
+  "extracted_package_dir": "/home2/wangyian/miniconda3/pkgs/amply-0.1.6-pyhd8ed1ab_0",
+  "features": "",
+  "files": [
+    "lib/python3.10/site-packages/amply-0.1.6.dist-info/AUTHORS",
+    "lib/python3.10/site-packages/amply-0.1.6.dist-info/INSTALLER",
+    "lib/python3.10/site-packages/amply-0.1.6.dist-info/LICENSE",
+    "lib/python3.10/site-packages/amply-0.1.6.dist-info/METADATA",
+    "lib/python3.10/site-packages/amply-0.1.6.dist-info/RECORD",
+    "lib/python3.10/site-packages/amply-0.1.6.dist-info/REQUESTED",
+    "lib/python3.10/site-packages/amply-0.1.6.dist-info/WHEEL",
+    "lib/python3.10/site-packages/amply-0.1.6.dist-info/direct_url.json",
+    "lib/python3.10/site-packages/amply-0.1.6.dist-info/top_level.txt",
+    "lib/python3.10/site-packages/amply/__init__.py",
+    "lib/python3.10/site-packages/amply/amply.py",
+    "lib/python3.10/site-packages/amply/__pycache__/__init__.cpython-310.pyc",
+    "lib/python3.10/site-packages/amply/__pycache__/amply.cpython-310.pyc"
+  ],
+  "fn": "amply-0.1.6-pyhd8ed1ab_0.conda",
+  "license": "EPL-2.0",
+  "link": {
+    "source": "/home2/wangyian/miniconda3/pkgs/amply-0.1.6-pyhd8ed1ab_0",
+    "type": 1
+  },
+  "md5": "a45a9cc65a438f465845ebff49c6fbf9",
+  "name": "amply",
+  "noarch": "python",
+  "package_tarball_full_path": "/home2/wangyian/miniconda3/pkgs/amply-0.1.6-pyhd8ed1ab_0.conda",
+  "package_type": "noarch_python",
+  "paths_data": {
+    "paths": [
+      {
+        "_path": "site-packages/amply-0.1.6.dist-info/AUTHORS",
+        "path_type": "hardlink",
+        "sha256": "bb9a80782df08e06f62c8530c039aa78ff9303ad6ab6a1184eda4621153dfb2c",
+        "sha256_in_prefix": "bb9a80782df08e06f62c8530c039aa78ff9303ad6ab6a1184eda4621153dfb2c",
+        "size_in_bytes": 233
+      },
+      {
+        "_path": "site-packages/amply-0.1.6.dist-info/INSTALLER",
+        "path_type": "hardlink",
+        "sha256": "d0edee15f91b406f3f99726e44eb990be6e34fd0345b52b910c568e0eef6a2a8",
+        "sha256_in_prefix": "d0edee15f91b406f3f99726e44eb990be6e34fd0345b52b910c568e0eef6a2a8",
+        "size_in_bytes": 5
+      },
+      {
+        "_path": "site-packages/amply-0.1.6.dist-info/LICENSE",
+        "path_type": "hardlink",
+        "sha256": "0435570a20c5b24623b98cbcd0b4d0340d5550007388cda4c6b198b0cfa14a86",
+        "sha256_in_prefix": "0435570a20c5b24623b98cbcd0b4d0340d5550007388cda4c6b198b0cfa14a86",
+        "size_in_bytes": 11320
+      },
+      {
+        "_path": "site-packages/amply-0.1.6.dist-info/METADATA",
+        "path_type": "hardlink",
+        "sha256": "60b01ca23a72eee0a81bb76d12832df808d5fff3404cd244a8d5e91ab513cf09",
+        "sha256_in_prefix": "60b01ca23a72eee0a81bb76d12832df808d5fff3404cd244a8d5e91ab513cf09",
+        "size_in_bytes": 15673
+      },
+      {
+        "_path": "site-packages/amply-0.1.6.dist-info/RECORD",
+        "path_type": "hardlink",
+        "sha256": "3dda55a56986025450eef16892d22c8602428663b48608cfbfd79de9502fc904",
+        "sha256_in_prefix": "3dda55a56986025450eef16892d22c8602428663b48608cfbfd79de9502fc904",
+        "size_in_bytes": 969
+      },
+      {
+        "_path": "site-packages/amply-0.1.6.dist-info/REQUESTED",
+        "path_type": "hardlink",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "sha256_in_prefix": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_in_bytes": 0
+      },
+      {
+        "_path": "site-packages/amply-0.1.6.dist-info/WHEEL",
+        "path_type": "hardlink",
+        "sha256": "a6472d658cd44b8018567e9d27eef7ebb389662bc5d9ef1103d6ff6418e27f5f",
+        "sha256_in_prefix": "a6472d658cd44b8018567e9d27eef7ebb389662bc5d9ef1103d6ff6418e27f5f",
+        "size_in_bytes": 92
+      },
+      {
+        "_path": "site-packages/amply-0.1.6.dist-info/direct_url.json",
+        "path_type": "hardlink",
+        "sha256": "1c0889ac7a97c12a5559ed74d00cab16a2935ffb4347624e21c595158fae6457",
+        "sha256_in_prefix": "1c0889ac7a97c12a5559ed74d00cab16a2935ffb4347624e21c595158fae6457",
+        "size_in_bytes": 101
+      },
+      {
+        "_path": "site-packages/amply-0.1.6.dist-info/top_level.txt",
+        "path_type": "hardlink",
+        "sha256": "6af168ea58794721622426c7ade8e9d3e1130184084ca49ac495a05477ca2fb6",
+        "sha256_in_prefix": "6af168ea58794721622426c7ade8e9d3e1130184084ca49ac495a05477ca2fb6",
+        "size_in_bytes": 6
+      },
+      {
+        "_path": "site-packages/amply/__init__.py",
+        "path_type": "hardlink",
+        "sha256": "3a929ed9498ca9b501e940d14d50ec2ebe7da7a6ee5084e310fc17fff2ddacf5",
+        "sha256_in_prefix": "3a929ed9498ca9b501e940d14d50ec2ebe7da7a6ee5084e310fc17fff2ddacf5",
+        "size_in_bytes": 72
+      },
+      {
+        "_path": "site-packages/amply/amply.py",
+        "path_type": "hardlink",
+        "sha256": "cfb11db9f8e744c50c3f0b8e196b30f50b37400a2ea0a2b06ca9b891fd6560d0",
+        "sha256_in_prefix": "cfb11db9f8e744c50c3f0b8e196b30f50b37400a2ea0a2b06ca9b891fd6560d0",
+        "size_in_bytes": 22357
+      },
+      {
+        "_path": "lib/python3.10/site-packages/amply/__pycache__/__init__.cpython-310.pyc",
+        "path_type": "pyc_file"
+      },
+      {
+        "_path": "lib/python3.10/site-packages/amply/__pycache__/amply.cpython-310.pyc",
+        "path_type": "pyc_file"
+      }
+    ],
+    "paths_version": 1
+  },
+  "requested_spec": "None",
+  "sha256": "b3b91fb90123d572cf7524ba5cd112d5d952abbdfcc77048cf4c926a5267b512",
+  "size": 21871,
+  "subdir": "noarch",
+  "timestamp": 1687675666679,
+  "track_features": "",
+  "url": "https://conda.anaconda.org/conda-forge/noarch/amply-0.1.6-pyhd8ed1ab_0.conda",
+  "version": "0.1.6"
+}

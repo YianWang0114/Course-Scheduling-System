@@ -1,0 +1,36 @@
+{
+  "build": "0_metapackage",
+  "build_number": 0,
+  "channel": "https://conda.anaconda.org/conda-forge/noarch",
+  "constrains": [],
+  "depends": [
+    "coin-or-cbc 2.10.10.*"
+  ],
+  "extracted_package_dir": "/home2/wangyian/miniconda3/pkgs/coincbc-2.10.10-0_metapackage",
+  "features": "",
+  "files": [],
+  "fn": "coincbc-2.10.10-0_metapackage.conda",
+  "license": "EPL-2.0",
+  "license_family": "OTHER",
+  "link": {
+    "source": "/home2/wangyian/miniconda3/pkgs/coincbc-2.10.10-0_metapackage",
+    "type": 1
+  },
+  "md5": "f1170e44b26962b3e8adade2dd0f3902",
+  "name": "coincbc",
+  "noarch": "generic",
+  "package_tarball_full_path": "/home2/wangyian/miniconda3/pkgs/coincbc-2.10.10-0_metapackage.conda",
+  "package_type": "noarch_generic",
+  "paths_data": {
+    "paths": [],
+    "paths_version": 1
+  },
+  "requested_spec": "None",
+  "sha256": "560e66dd145e165bf02b3c84945a052f6fbb93573f173f44be292b9a9a56a8d5",
+  "size": 12031,
+  "subdir": "noarch",
+  "timestamp": 1681912572079,
+  "track_features": "",
+  "url": "https://conda.anaconda.org/conda-forge/noarch/coincbc-2.10.10-0_metapackage.conda",
+  "version": "2.10.10"
+}

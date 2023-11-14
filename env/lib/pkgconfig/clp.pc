@@ -1,0 +1,13 @@
+prefix=/projects/assigned/course-scheduling/Course-Scheduling-System/env
+exec_prefix=/projects/assigned/course-scheduling/Course-Scheduling-System/env
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include/coin
+
+Name: CLP
+Description: COIN-OR Linear Programming Solver
+URL: https://projects.coin-or.org/Clp
+Version: 1.17.8
+Libs: -L${libdir} -lClpSolver -lClp 
+Libs.private: -lreadline -lncurses  
+Cflags: -I${includedir}
+Requires.private: coinutils 

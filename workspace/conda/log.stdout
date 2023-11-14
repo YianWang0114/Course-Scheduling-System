@@ -1,0 +1,63 @@
+GLPSOL: GLPK LP/MIP Solver, v4.65
+Parameter(s) specified in the command line:
+ --cpxlp /tmp/fd1f4fe7441d4db5b2e67251bce0c4ac-pulp.lp -o /tmp/fd1f4fe7441d4db5b2e67251bce0c4ac-pulp.sol
+ --tmlim 15
+Reading problem data from '/tmp/fd1f4fe7441d4db5b2e67251bce0c4ac-pulp.lp'...
+24354 rows, 7200 columns, 65785 non-zeros
+35419 lines were read
+GLPK Simplex Optimizer, v4.65
+24354 rows, 7200 columns, 65785 non-zeros
+Preprocessing...
+4187 rows, 2359 columns, 13119 non-zeros
+Scaling...
+ A: min|aij| =  5.000e-01  max|aij| =  5.000e+00  ratio =  1.000e+01
+Problem data seem to be well scaled
+Constructing initial basis...
+Size of triangular part is 4168
+      0: obj =   2.600000000e+01 inf =   7.725e+02 (265)
+    852: obj =   3.600000000e+01 inf =   1.520e-13 (0) 5
+*  1113: obj =   4.600000000e+01 inf =   3.551e-14 (0) 2
+OPTIMAL LP SOLUTION FOUND
+Time used:   0.1 secs
+Memory used: 17.0 Mb (17857800 bytes)
+Writing basic solution to '/tmp/fd1f4fe7441d4db5b2e67251bce0c4ac-pulp.sol'...
+GLPSOL: GLPK LP/MIP Solver, v4.65
+Parameter(s) specified in the command line:
+ --cpxlp /tmp/d0630418de5240db9014766cc6b3583b-pulp.lp -o /tmp/d0630418de5240db9014766cc6b3583b-pulp.sol
+ --tmlim 15
+Reading problem data from '/tmp/d0630418de5240db9014766cc6b3583b-pulp.lp'...
+24354 rows, 7200 columns, 65785 non-zeros
+7200 integer variables, all of which are binary
+35419 lines were read
+GLPK Integer Optimizer, v4.65
+24354 rows, 7200 columns, 65785 non-zeros
+7200 integer variables, all of which are binary
+Preprocessing...
+1248 hidden packing inequaliti(es) were detected
+8 hidden covering inequaliti(es) were detected
+4187 rows, 2359 columns, 13119 non-zeros
+2359 integer variables, all of which are binary
+Scaling...
+ A: min|aij| =  5.000e-01  max|aij| =  5.000e+00  ratio =  1.000e+01
+Problem data seem to be well scaled
+Constructing initial basis...
+Size of triangular part is 4168
+Solving LP relaxation...
+GLPK Simplex Optimizer, v4.65
+4187 rows, 2359 columns, 13119 non-zeros
+      0: obj =   2.600000000e+01 inf =   7.725e+02 (265)
+    852: obj =   3.600000000e+01 inf =   1.369e-13 (0) 5
+*  1115: obj =   4.600000000e+01 inf =   8.284e-15 (0) 2
+OPTIMAL LP SOLUTION FOUND
+Integer optimization begins...
+Long-step dual simplex will be used
++  1115: mip =     not found yet <=              +inf        (1; 0)
++  2419: >>>>>   4.400000000e+01 <=   4.600000000e+01   4.5% (45; 5)
++  3117: >>>>>   4.500000000e+01 <=   4.600000000e+01   2.2% (60; 49)
++ 17346: mip =   4.500000000e+01 <=   4.600000000e+01   2.2% (87; 371)
++ 32346: mip =   4.500000000e+01 <=   4.600000000e+01   2.2% (116; 746)
++ 44410: mip =   4.500000000e+01 <=   4.600000000e+01   2.2% (125; 1073)
+TIME LIMIT EXCEEDED; SEARCH TERMINATED
+Time used:   15.1 secs
+Memory used: 16.1 Mb (16893960 bytes)
+Writing MIP solution to '/tmp/d0630418de5240db9014766cc6b3583b-pulp.sol'...

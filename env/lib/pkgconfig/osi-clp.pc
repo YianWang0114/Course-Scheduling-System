@@ -1,0 +1,13 @@
+prefix=/projects/assigned/course-scheduling/Course-Scheduling-System/env
+exec_prefix=/projects/assigned/course-scheduling/Course-Scheduling-System/env
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include/coin
+
+Name: OsiClp
+Description: COIN-OR Open Solver Interface for CLP
+URL: https://projects.coin-or.org/Osi
+Version: 1.17.8
+Libs: -L${libdir} -lOsiClp
+Libs.private: 
+Cflags: -I${includedir}
+Requires.private: clp osi 
