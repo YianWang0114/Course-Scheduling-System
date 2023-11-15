@@ -1,4 +1,4 @@
-Log file generate at 2023-11-14 11:14:28.864421
+Log file generate at 2023-11-14 19:24:12.544038
 python version: 3.10.13 | packaged by conda-forge | (main, Oct 26 2023, 18:07:37) [GCC 12.3.0]
 pulp version: 2.7.0
 config file=config
@@ -7,22 +7,16 @@ courseInfo file=./CourseInfo
 conflict file=./ConflictCourses
 instructorPref file=./InstructorPref
 
-450/550, 566 are conflicted
-450/550, 570 are conflicted
-450/550, 571 are conflicted
-450/550, 575-Ben are conflicted
-566, 570 are conflicted
-566, 571 are conflicted
-570, 571 are conflicted
-570, 575-Ben are conflicted
-571, 575-Ben are conflicted
-450/550, 461 are conflicted
-450/550, 507 are conflicted
-441/541, 450/550 are conflicted
-575-Ben, 599A are conflicted
-580-Cit, 599A are conflicted
-580-Che, 599A are conflicted
-580-Ogi, 599A are conflicted
+571, 572 are conflicted
+571, 575-guest1 are conflicted
+571, 575-Xia are conflicted
+572, 575-guest1 are conflicted
+575-Xia, 575-guest1 are conflicted
+575-Xia, 599A are conflicted
+575-guest1, 599A are conflicted
+580-Fer, 599A are conflicted
+580-Har, 599A are conflicted
+580-Hed, 599A are conflicted
 580-TBA, 599A are conflicted
 599A, 599B are conflicted
 200, 599B are conflicted
@@ -40,20 +34,13 @@ instructorPref file=./InstructorPref
 599B, 200AF are conflicted
 200, 200AE are conflicted
 200, 200AF are conflicted
-233, 599B are conflicted
-599B, 233AA are conflicted
-599B, 233AD are conflicted
-599B, 233AE are conflicted
-233, 233AA are conflicted
-233, 233AD are conflicted
-233, 233AE are conflicted
-233, 599B are conflicted
-599B, 233AF are conflicted
-599B, 233AG are conflicted
-599B, 233AH are conflicted
-233, 233AF are conflicted
-233, 233AG are conflicted
-233, 233AH are conflicted
+269, 599B are conflicted
+599B, 269AA are conflicted
+599B, 269AB are conflicted
+599B, 269AC are conflicted
+269, 269AA are conflicted
+269, 269AB are conflicted
+269, 269AC are conflicted
 200, 200AA are conflicted
 200, 200AB are conflicted
 200, 200AC are conflicted
@@ -63,78 +50,72 @@ instructorPref file=./InstructorPref
 200, 200AG are conflicted
 200, 200AH are conflicted
 200, 200AI are conflicted
-233, 233AA are conflicted
-233, 233AD are conflicted
-233, 233AE are conflicted
-233, 233AF are conflicted
-233, 233AG are conflicted
-233, 233AH are conflicted
-450/550, 450AA are conflicted
+269, 269AA are conflicted
+269, 269AB are conflicted
+269, 269AC are conflicted
 
-566, 575-Ben are conflicted due to same instructor
-432/532, 450/550 are conflicted due to same instructor
+572, 575-Xia are conflicted due to same instructor
 200AA, 200AB are conflicted due to same instructor
 200AC, 200AD are conflicted due to same instructor
 200AE, 200AF are conflicted due to same instructor
-233AA, 233AD are conflicted due to same instructor
-233AA, 233AE are conflicted due to same instructor
-233AD, 233AE are conflicted due to same instructor
-233AF, 233AG are conflicted due to same instructor
-233AF, 233AH are conflicted due to same instructor
-233AG, 233AH are conflicted due to same instructor
+269AA, 269AB are conflicted due to same instructor
+269AA, 269AC are conflicted due to same instructor
+269AB, 269AC are conflicted due to same instructor
 200AA, 200AB are conflicted due to same instructor
 200AC, 200AD are conflicted due to same instructor
 200AE, 200AF are conflicted due to same instructor
 200AG, 200AH are conflicted due to same instructor
-233AA, 233AD are conflicted due to same instructor
-233AA, 233AE are conflicted due to same instructor
-233AD, 233AE are conflicted due to same instructor
-233AF, 233AG are conflicted due to same instructor
-233AF, 233AH are conflicted due to same instructor
-233AG, 233AH are conflicted due to same instructor
-200, 441/541 are conflicted due to same instructor
-233, 433/533 are conflicted due to same instructor
-432/532, 450/550 are conflicted due to same instructor
-461, 507 are conflicted due to same instructor
-478/578, 580-Ogi are conflicted due to same instructor
-566, 575-Ben are conflicted due to same instructor
+269AA, 269AB are conflicted due to same instructor
+269AA, 269AC are conflicted due to same instructor
+269AB, 269AC are conflicted due to same instructor
+200, 269 are conflicted due to same instructor
+212, 580-Fer are conflicted due to same instructor
+234, 451/551 are conflicted due to same instructor
+400, 442/542 are conflicted due to same instructor
+412, 479/579 are conflicted due to same instructor
+461, 580-Hed are conflicted due to same instructor
+430, 534 are conflicted due to same instructor
+481/581, 580-Har are conflicted due to same instructor
+572, 575-Xia are conflicted due to same instructor
 200AA, 200AB are conflicted due to same instructor
 200AC, 200AD are conflicted due to same instructor
 200AE, 200AF are conflicted due to same instructor
 200AG, 200AH are conflicted due to same instructor
-233AA, 233AD are conflicted due to same instructor
-233AA, 233AE are conflicted due to same instructor
-233AD, 233AE are conflicted due to same instructor
-233AF, 233AG are conflicted due to same instructor
-233AF, 233AH are conflicted due to same instructor
-233AG, 233AH are conflicted due to same instructor
+269AA, 269AB are conflicted due to same instructor
+269AA, 269AC are conflicted due to same instructor
+269AB, 269AC are conflicted due to same instructor
 
-Warning: McGarrity doesn't appear in the instructor preference file
-Warning: TA10 doesn't appear in the instructor preference file
+Warning: LaPierre doesn't appear in the instructor preference file
 Warning: TA3 doesn't appear in the instructor preference file
-Warning: TBA doesn't appear in the instructor preference file
+Warning: proseminar doesn't appear in the instructor preference file
+Warning: Dobao doesn't appear in the instructor preference file
+Warning: TA1 doesn't appear in the instructor preference file
 Warning: lingColloq doesn't appear in the instructor preference file
-Warning: TA4 doesn't appear in the instructor preference file
 Warning: TA5 doesn't appear in the instructor preference file
 Warning: TA8 doesn't appear in the instructor preference file
-Warning: TA1 doesn't appear in the instructor preference file
-Warning: TA9 doesn't appear in the instructor preference file
-Warning: proseminar doesn't appear in the instructor preference file
+Warning: Levow doesn't appear in the instructor preference file
 Warning: TA2 doesn't appear in the instructor preference file
+Warning: TBA doesn't appear in the instructor preference file
+Warning: Rozelle doesn't appear in the instructor preference file
+Warning: McGarrity doesn't appear in the instructor preference file
+Warning: guest1 doesn't appear in the instructor preference file
+Warning: TA4 doesn't appear in the instructor preference file
 10%-rule-percentage=0.12
 must-follow-block-policy=1
 
 Result: Optimal
-Objective value: 43.0
-Upper bound: 43.50000070000001
+Objective value: 16.0
+Upper bound: 15.999996999999997
 IW points earned: 16.0
-CW points earned: 27.0
-Total Number of Course: 36
-Exempted Courses List: ['570', '571', '575-Ben']
-Total Number of Non-Exempted Courses: 33
-Total Number of Non-Exempted Hours: 78.5
+CW points earned: 26.0
+Total Number of Course: 40
+Exempted Courses List: ['571', '572', '575-Xia', '575-guest1']
+Total Number of Non-Exempted Courses: 36
+Total Number of Non-Exempted Hours: 102.5
 
-The number of courses for which the instructors are not listed in the instructorpref file: 20
-The number of courses for which the instructors' preference are not met: 0
+The number of courses for which the instructors are not listed in the instructorpref file: 23
+The number of courses for which the instructors' preference are not met: 1
+Instructors whose preference are not met: 
+Instructor's name: Ferjan-Ramirez	Courses that violate preference{'580-Fer'}
 
 The number of courses that violate Block Policy: 0
