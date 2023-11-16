@@ -415,7 +415,7 @@ def addSessionC(problem, TotalCourseNum, CourseInfo, totalSlot, X):
 def addTwiceAWeekC(problem, TotalCourseNum, CourseInfo, totalSlot, X):
     # Constraint 3: Each non-TA course that meets twice per week must be taught on MW or TR
     for c in range(TotalCourseNum):
-        if CourseInfo[c].sessionsPerWeek == 2 and CourseInfo[c].isTASession == 0: 
+        if CourseInfo[c].sessionsPerWeek == 2: # and CourseInfo[c].isTASession == 0: 
             for t in range(totalSlot):
                 problem += X[c][1][t] == X[c][3][t]   # T and R have the same schedule
                 problem += X[c][0][t] == X[c][2][t]   # M and W have the same schedule
@@ -430,7 +430,7 @@ def addTwiceAWeekC(problem, TotalCourseNum, CourseInfo, totalSlot, X):
 def addThreeTimesAWeekC(problem, TotalCourseNum, CourseInfo, totalSlot, X):
     # Constraint 4: Non-TA courses that meet three times per week must be taught on MWF
     for c in range(TotalCourseNum):
-        if CourseInfo[c].sessionsPerWeek == 3 and CourseInfo[c].isTASession == 0:
+        if CourseInfo[c].sessionsPerWeek == 3: # and CourseInfo[c].isTASession == 0:
             # must meet on M, W, F
             problem += pulp.lpSum(X[c][0][t] for t in range(totalSlot)) == 1
             problem += pulp.lpSum(X[c][2][t] for t in range(totalSlot)) == 1
@@ -538,6 +538,7 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
     addConstraints(problem, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs, X, Y)
 
     pulp.LpSolverDefault.timeLimit = 15 #Set the time limit for pulp solver
+    #pdb.set_trace()
     #solver = pulp.getSolver('GLPK_CMD', timeLimit=15)
     solver = pulp.getSolver('COIN_CMD', timeLimit=15)
     problem.solve(solver)
@@ -569,7 +570,7 @@ def LP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, T
     pulp.LpSolverDefault.timeLimit = 15
     #solver = pulp.getSolver('GLPK_CMD', timeLimit=15)
     solver = pulp.getSolver('COIN_CMD', timeLimit=15)
-    problem.solve()
+    problem.solve(solver)
     if (pulp.LpStatus[problem.status] != 'Optimal'):
         sys.exit("Pulp fail to find an optimal solution for LP.")  
     upper_bound =pulp.value(problem.objective)
@@ -627,7 +628,8 @@ def generate_output(X, output_dir, course_instructor, config, IW, instructor_in_
 
             slots = list(slots)
             if (len(slots) > 1):
-                #print('more than one session in a day')
+                # print('more than one session in a day')
+                # pdb.set_trace()
                 sys.exit('more than one session in a day')  
             else:
                 course_start = timeSlotId2ISlot(start_time, slots[0])

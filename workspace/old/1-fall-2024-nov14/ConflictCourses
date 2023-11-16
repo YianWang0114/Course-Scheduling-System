@@ -7,10 +7,7 @@
 # are taught by the same instructor; those pairs will be added automatically
 # to ConflictPairs.
 
-
-566 570 571 572 573 575-guest1 575-guest2 575-guest3 575-Xia 575-Ben 575-Levow 575-Ste
-
-450/550 566 570 571 
+450/550 566 567 570 571 572 573 575-guest1 575-guest2 575-guest3 575-Xia 575-Ben 575-Levow 575-Ste
 
 450/550 461
 
@@ -19,6 +16,7 @@
 450/550 432/532
 
 450/550 441/541
+
 
 
 ## 599A is in conflict with all the seminars and 599B

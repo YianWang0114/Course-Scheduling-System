@@ -1,0 +1,162 @@
+Log file generate at 2023-11-15 07:29:35.113262
+python version: 3.10.13 | packaged by conda-forge | (main, Oct 26 2023, 18:07:37) [GCC 12.3.0]
+pulp version: 2.7.0
+config file=config
+courseInstructor file=./CourseInfo
+courseInfo file=./CourseInfo
+conflict file=./ConflictCourses
+instructorPref file=./InstructorPref
+
+573, 575-guest2 are conflicted
+573, 575-guest3 are conflicted
+573, 575-Ste are conflicted
+575-guest2, 575-guest3 are conflicted
+575-Ste, 575-guest2 are conflicted
+575-Ste, 575-guest3 are conflicted
+450/550, 461 are conflicted
+432/532, 450/550 are conflicted
+575-Lev, 599A are conflicted
+575-Ste, 599A are conflicted
+575-guest2, 599A are conflicted
+575-guest3, 599A are conflicted
+580-Lap, 599A are conflicted
+580-Wri, 599A are conflicted
+580-TBA, 599A are conflicted
+599A, 599B are conflicted
+200, 599B are conflicted
+599B, 200AA are conflicted
+599B, 200AB are conflicted
+200, 200AA are conflicted
+200, 200AB are conflicted
+200, 599B are conflicted
+599B, 200AC are conflicted
+599B, 200AD are conflicted
+200, 200AC are conflicted
+200, 200AD are conflicted
+200, 599B are conflicted
+599B, 200AE are conflicted
+599B, 200AF are conflicted
+200, 200AE are conflicted
+200, 200AF are conflicted
+233, 599B are conflicted
+599B, 233AA are conflicted
+599B, 233AD are conflicted
+599B, 233AE are conflicted
+233, 233AA are conflicted
+233, 233AD are conflicted
+233, 233AE are conflicted
+233, 599B are conflicted
+599B, 233AF are conflicted
+599B, 233AG are conflicted
+599B, 233AH are conflicted
+233, 233AF are conflicted
+233, 233AG are conflicted
+233, 233AH are conflicted
+269, 599B are conflicted
+599B, 269AA are conflicted
+599B, 269AB are conflicted
+599B, 269AC are conflicted
+269, 269AA are conflicted
+269, 269AB are conflicted
+269, 269AC are conflicted
+200, 200AA are conflicted
+200, 200AB are conflicted
+200, 200AC are conflicted
+200, 200AD are conflicted
+200, 200AE are conflicted
+200, 200AF are conflicted
+200, 200AG are conflicted
+200, 200AH are conflicted
+200, 200AI are conflicted
+233, 233AA are conflicted
+233, 233AD are conflicted
+233, 233AE are conflicted
+233, 233AF are conflicted
+233, 233AG are conflicted
+233, 233AH are conflicted
+269, 269AA are conflicted
+269, 269AB are conflicted
+269, 269AC are conflicted
+472, 472AA are conflicted
+
+200AA, 200AB are conflicted due to same instructor
+200AC, 200AD are conflicted due to same instructor
+200AE, 200AF are conflicted due to same instructor
+233AA, 233AD are conflicted due to same instructor
+233AA, 233AE are conflicted due to same instructor
+233AD, 233AE are conflicted due to same instructor
+233AF, 233AG are conflicted due to same instructor
+233AF, 233AH are conflicted due to same instructor
+233AG, 233AH are conflicted due to same instructor
+269AA, 269AB are conflicted due to same instructor
+269AA, 269AC are conflicted due to same instructor
+269AB, 269AC are conflicted due to same instructor
+200AA, 200AB are conflicted due to same instructor
+200AC, 200AD are conflicted due to same instructor
+200AE, 200AF are conflicted due to same instructor
+200AG, 200AH are conflicted due to same instructor
+233AA, 233AD are conflicted due to same instructor
+233AA, 233AE are conflicted due to same instructor
+233AD, 233AE are conflicted due to same instructor
+233AF, 233AG are conflicted due to same instructor
+233AF, 233AH are conflicted due to same instructor
+233AG, 233AH are conflicted due to same instructor
+269AA, 269AB are conflicted due to same instructor
+269AA, 269AC are conflicted due to same instructor
+269AB, 269AC are conflicted due to same instructor
+200, 269 are conflicted due to same instructor
+233, 432/532 are conflicted due to same instructor
+234, 535 are conflicted due to same instructor
+450/550, 451/551 are conflicted due to same instructor
+452/552, 580-Lap are conflicted due to same instructor
+461, 462 are conflicted due to same instructor
+573, 575-Lev are conflicted due to same instructor
+200AA, 200AB are conflicted due to same instructor
+200AC, 200AD are conflicted due to same instructor
+200AE, 200AF are conflicted due to same instructor
+200AG, 200AH are conflicted due to same instructor
+233AA, 233AD are conflicted due to same instructor
+233AA, 233AE are conflicted due to same instructor
+233AD, 233AE are conflicted due to same instructor
+233AF, 233AG are conflicted due to same instructor
+233AF, 233AH are conflicted due to same instructor
+233AG, 233AH are conflicted due to same instructor
+269AA, 269AB are conflicted due to same instructor
+269AA, 269AC are conflicted due to same instructor
+269AB, 269AC are conflicted due to same instructor
+
+Warning: TA6 doesn't appear in the instructor preference file
+Warning: guest3 doesn't appear in the instructor preference file
+Warning: Chai doesn't appear in the instructor preference file
+Warning: TA9 doesn't appear in the instructor preference file
+Warning: proseminar doesn't appear in the instructor preference file
+Warning: TA4 doesn't appear in the instructor preference file
+Warning: TA5 doesn't appear in the instructor preference file
+Warning: TA8 doesn't appear in the instructor preference file
+Warning: TA2 doesn't appear in the instructor preference file
+Warning: lingColloq doesn't appear in the instructor preference file
+Warning: TA1 doesn't appear in the instructor preference file
+Warning: McGarrity doesn't appear in the instructor preference file
+Warning: TA3 doesn't appear in the instructor preference file
+Warning: guest2 doesn't appear in the instructor preference file
+Warning: TBA doesn't appear in the instructor preference file
+Warning: Levow doesn't appear in the instructor preference file
+Warning: TA7 doesn't appear in the instructor preference file
+Warning: LaPierre doesn't appear in the instructor preference file
+10%-rule-percentage=0.12
+must-follow-block-policy=1
+
+Result: Optimal
+Objective value: 12.0
+Upper bound: 11.9999964
+IW points earned: 12.0
+CW points earned: 29.0
+Total Number of Course: 43
+Exempted Courses List: ['573', '575-Lev', '575-Ste', '575-guest2', '575-guest3']
+Total Number of Non-Exempted Courses: 38
+Total Number of Non-Exempted Hours: 91.0
+
+The number of courses for which the instructors are not listed in the instructorpref file: 31
+The number of courses for which the instructors' preference are not met: 0
+
+The number of courses that violate Block Policy: 0
