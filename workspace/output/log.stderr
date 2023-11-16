@@ -1,4 +1,4 @@
-Log file generate at 2023-11-15 09:58:00.525642
+Log file generate at 2023-11-16 10:30:37.289773
 python version: 3.10.13 | packaged by conda-forge | (main, Oct 26 2023, 18:07:37) [GCC 12.3.0]
 pulp version: 2.7.0
 config file=config
@@ -54,52 +54,52 @@ instructorPref file=./InstructorPref
 269, 269AB are conflicted
 269, 269AC are conflicted
 
-572, 575-Xia are conflicted due to same instructor
-200AA, 200AB are conflicted due to same instructor
-200AC, 200AD are conflicted due to same instructor
-200AE, 200AF are conflicted due to same instructor
-269AA, 269AB are conflicted due to same instructor
-269AA, 269AC are conflicted due to same instructor
-269AB, 269AC are conflicted due to same instructor
-200AA, 200AB are conflicted due to same instructor
-200AC, 200AD are conflicted due to same instructor
-200AE, 200AF are conflicted due to same instructor
-200AG, 200AH are conflicted due to same instructor
-269AA, 269AB are conflicted due to same instructor
-269AA, 269AC are conflicted due to same instructor
-269AB, 269AC are conflicted due to same instructor
-200, 269 are conflicted due to same instructor
-212, 580-Fer are conflicted due to same instructor
-234, 451/551 are conflicted due to same instructor
-400, 442/542 are conflicted due to same instructor
-412, 479/579 are conflicted due to same instructor
-461, 580-Hed are conflicted due to same instructor
-430, 534 are conflicted due to same instructor
-481/581, 580-Har are conflicted due to same instructor
-572, 575-Xia are conflicted due to same instructor
-200AA, 200AB are conflicted due to same instructor
-200AC, 200AD are conflicted due to same instructor
-200AE, 200AF are conflicted due to same instructor
-200AG, 200AH are conflicted due to same instructor
-269AA, 269AB are conflicted due to same instructor
-269AA, 269AC are conflicted due to same instructor
-269AB, 269AC are conflicted due to same instructor
+572, 575-Xia are conflicted because they are taught by Xia
+200AA, 200AB are conflicted because they are taught by TA1
+200AC, 200AD are conflicted because they are taught by TA2
+200AE, 200AF are conflicted because they are taught by TA3
+269AA, 269AB are conflicted because they are taught by TA8
+269AA, 269AC are conflicted because they are taught by TA8
+269AB, 269AC are conflicted because they are taught by TA8
+200AA, 200AB are conflicted because they are taught by TA1
+200AC, 200AD are conflicted because they are taught by TA2
+200AE, 200AF are conflicted because they are taught by TA3
+200AG, 200AH are conflicted because they are taught by TA4
+269AA, 269AB are conflicted because they are taught by TA8
+269AA, 269AC are conflicted because they are taught by TA8
+269AB, 269AC are conflicted because they are taught by TA8
+200, 269 are conflicted because they are taught by McGarrity
+212, 580-Fer are conflicted because they are taught by Ferjan-Ramirez
+234, 451/551 are conflicted because they are taught by LaPierre
+400, 442/542 are conflicted because they are taught by Cheng
+412, 479/579 are conflicted because they are taught by Ogihara
+461, 580-Hed are conflicted because they are taught by Hedding
+430, 534 are conflicted because they are taught by Wassink
+481/581, 580-Har are conflicted because they are taught by Hargus
+572, 575-Xia are conflicted because they are taught by Xia
+200AA, 200AB are conflicted because they are taught by TA1
+200AC, 200AD are conflicted because they are taught by TA2
+200AE, 200AF are conflicted because they are taught by TA3
+200AG, 200AH are conflicted because they are taught by TA4
+269AA, 269AB are conflicted because they are taught by TA8
+269AA, 269AC are conflicted because they are taught by TA8
+269AB, 269AC are conflicted because they are taught by TA8
 
+Warning: LaPierre doesn't appear in the instructor preference file
+Warning: guest1 doesn't appear in the instructor preference file
+Warning: TA4 doesn't appear in the instructor preference file
+Warning: TA1 doesn't appear in the instructor preference file
+Warning: lingColloq doesn't appear in the instructor preference file
+Warning: TA2 doesn't appear in the instructor preference file
+Warning: Dobao doesn't appear in the instructor preference file
 Warning: proseminar doesn't appear in the instructor preference file
 Warning: TA5 doesn't appear in the instructor preference file
-Warning: McGarrity doesn't appear in the instructor preference file
-Warning: TA3 doesn't appear in the instructor preference file
-Warning: Dobao doesn't appear in the instructor preference file
-Warning: Levow doesn't appear in the instructor preference file
-Warning: LaPierre doesn't appear in the instructor preference file
-Warning: TBA doesn't appear in the instructor preference file
-Warning: TA1 doesn't appear in the instructor preference file
-Warning: TA4 doesn't appear in the instructor preference file
-Warning: TA2 doesn't appear in the instructor preference file
 Warning: TA8 doesn't appear in the instructor preference file
-Warning: guest1 doesn't appear in the instructor preference file
 Warning: Rozelle doesn't appear in the instructor preference file
-Warning: lingColloq doesn't appear in the instructor preference file
+Warning: TA3 doesn't appear in the instructor preference file
+Warning: TBA doesn't appear in the instructor preference file
+Warning: McGarrity doesn't appear in the instructor preference file
+Warning: Levow doesn't appear in the instructor preference file
 10%-rule-percentage=0.12
 must-follow-block-policy=1
 

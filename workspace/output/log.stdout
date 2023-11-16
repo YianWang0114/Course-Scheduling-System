@@ -1,34 +1,34 @@
 GLPSOL: GLPK LP/MIP Solver, v4.65
 Parameter(s) specified in the command line:
- --cpxlp /tmp/5363195c3acf4fb385100eb261882ac3-pulp.lp -o /tmp/5363195c3acf4fb385100eb261882ac3-pulp.sol
+ --cpxlp /tmp/dcf4a06a3e494031bf60f36d029c6bd3-pulp.lp -o /tmp/dcf4a06a3e494031bf60f36d029c6bd3-pulp.sol
  --tmlim 15
-Reading problem data from '/tmp/5363195c3acf4fb385100eb261882ac3-pulp.lp'...
-27205 rows, 8000 columns, 73250 non-zeros
-39286 lines were read
+Reading problem data from '/tmp/dcf4a06a3e494031bf60f36d029c6bd3-pulp.lp'...
+26836 rows, 8000 columns, 72350 non-zeros
+38890 lines were read
 GLPK Simplex Optimizer, v4.65
-27205 rows, 8000 columns, 73250 non-zeros
+26836 rows, 8000 columns, 72350 non-zeros
 Preprocessing...
 ~     0: obj =   1.600000000e+01  infeas =  0.000e+00
 OPTIMAL SOLUTION FOUND BY LP PREPROCESSOR
 Time used:   0.0 secs
-Memory used: 18.1 Mb (18987028 bytes)
-Writing basic solution to '/tmp/5363195c3acf4fb385100eb261882ac3-pulp.sol'...
+Memory used: 17.9 Mb (18778196 bytes)
+Writing basic solution to '/tmp/dcf4a06a3e494031bf60f36d029c6bd3-pulp.sol'...
 Welcome to the CBC MILP Solver 
 Version: 2.10.10 
 Build Date: Apr 19 2023 
 
-command line - cbc /tmp/e8377c41d72d4d668961ac15b5cbaeec-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/e8377c41d72d4d668961ac15b5cbaeec-pulp.sol (default strategy 1)
+command line - cbc /tmp/641cdead4d664566b4828fe4c34358a0-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/641cdead4d664566b4828fe4c34358a0-pulp.sol (default strategy 1)
 At line 2 NAME          MODEL
 At line 3 ROWS
-At line 27210 COLUMNS
-At line 117487 RHS
-At line 144693 BOUNDS
-At line 152694 ENDATA
-Problem MODEL has 27205 rows, 8000 columns and 73250 elements
+At line 26841 COLUMNS
+At line 116218 RHS
+At line 143055 BOUNDS
+At line 151056 ENDATA
+Problem MODEL has 26836 rows, 8000 columns and 72350 elements
 Coin0008I MODEL read with 0 errors
 seconds was changed from 1e+100 to 15
 Option for timeMode changed from cpu to elapsed
-Continuous objective value is 16 - 0.01 seconds
+Continuous objective value is 16 - 0.08 seconds
 Cgl0002I 3928 variables fixed
 Cgl0004I processed model has 0 rows, 0 columns (0 integer (0 of which binary)) and 0 elements
 Cbc3007W No integer variables - nothing to do
@@ -47,9 +47,9 @@ Result - Optimal solution found
 Objective value:                16.00000000
 Enumerated nodes:               0
 Total iterations:               0
-Time (CPU seconds):             0.10
-Time (Wallclock seconds):       0.11
+Time (CPU seconds):             0.18
+Time (Wallclock seconds):       0.12
 
 Option for printingOptions changed from normal to all
-Total time (CPU seconds):       0.42   (Wallclock seconds):       0.23
+Total time (CPU seconds):       0.44   (Wallclock seconds):       0.22
 
