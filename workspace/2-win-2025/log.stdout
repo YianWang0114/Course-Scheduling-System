@@ -1,60 +1,84 @@
 GLPSOL: GLPK LP/MIP Solver, v4.65
 Parameter(s) specified in the command line:
- --cpxlp /tmp/54bf0efa6ad146578a1cb0faece5f68c-pulp.lp -o /tmp/54bf0efa6ad146578a1cb0faece5f68c-pulp.sol
+ --cpxlp /tmp/316e88ac3f774d42acd452eb90cf1924-pulp.lp -o /tmp/316e88ac3f774d42acd452eb90cf1924-pulp.sol
  --tmlim 15
-Reading problem data from '/tmp/54bf0efa6ad146578a1cb0faece5f68c-pulp.lp'...
-24900 rows, 8000 columns, 68475 non-zeros
-36871 lines were read
+Reading problem data from '/tmp/316e88ac3f774d42acd452eb90cf1924-pulp.lp'...
+25115 rows, 8000 columns, 68690 non-zeros
+37086 lines were read
 GLPK Simplex Optimizer, v4.65
-24900 rows, 8000 columns, 68475 non-zeros
+25115 rows, 8000 columns, 68690 non-zeros
 Preprocessing...
-5171 rows, 3281 columns, 17128 non-zeros
+4771 rows, 3171 columns, 15924 non-zeros
 Scaling...
  A: min|aij| =  5.000e-01  max|aij| =  5.000e+00  ratio =  1.000e+01
 Problem data seem to be well scaled
 Constructing initial basis...
-Size of triangular part is 5145
-      0: obj =   7.000000000e+00 inf =   8.845e+02 (314)
-   1493: obj =   1.400000000e+01 inf =   9.875e-15 (0) 10
-*  1575: obj =   1.600000000e+01 inf =   2.057e-13 (0) 1
+Size of triangular part is 4745
+      0: obj =   7.000000000e+00 inf =   8.925e+02 (314)
+   1461: obj =   1.411111111e+01 inf =   2.470e-15 (0) 11
+*  1513: obj =   1.600000000e+01 inf =   1.002e-14 (0)
 OPTIMAL LP SOLUTION FOUND
 Time used:   0.2 secs
-Memory used: 18.0 Mb (18884688 bytes)
-Writing basic solution to '/tmp/54bf0efa6ad146578a1cb0faece5f68c-pulp.sol'...
-GLPSOL: GLPK LP/MIP Solver, v4.65
-Parameter(s) specified in the command line:
- --cpxlp /tmp/c8f1d174e75848beabbb4c62b45b7fe5-pulp.lp -o /tmp/c8f1d174e75848beabbb4c62b45b7fe5-pulp.sol
- --tmlim 15
-Reading problem data from '/tmp/c8f1d174e75848beabbb4c62b45b7fe5-pulp.lp'...
-24900 rows, 8000 columns, 68475 non-zeros
-8000 integer variables, all of which are binary
-36871 lines were read
-GLPK Integer Optimizer, v4.65
-24900 rows, 8000 columns, 68475 non-zeros
-8000 integer variables, all of which are binary
-Preprocessing...
-2272 hidden packing inequaliti(es) were detected
-16 hidden covering inequaliti(es) were detected
-5171 rows, 3281 columns, 17128 non-zeros
-3281 integer variables, all of which are binary
-Scaling...
- A: min|aij| =  5.000e-01  max|aij| =  5.000e+00  ratio =  1.000e+01
-Problem data seem to be well scaled
-Constructing initial basis...
-Size of triangular part is 5145
-Solving LP relaxation...
-GLPK Simplex Optimizer, v4.65
-5171 rows, 3281 columns, 17128 non-zeros
-      0: obj =   7.000000000e+00 inf =   8.845e+02 (314)
-   1506: obj =   1.433333333e+01 inf =   1.277e-14 (0) 10
-*  1571: obj =   1.600000000e+01 inf =   2.445e-13 (0) 1
-OPTIMAL LP SOLUTION FOUND
-Integer optimization begins...
-Long-step dual simplex will be used
-+  1571: mip =     not found yet <=              +inf        (1; 0)
-+  2590: >>>>>   1.600000000e+01 <=   1.600000000e+01 < 0.1% (44; 6)
-+  2590: mip =   1.600000000e+01 <=     tree is empty   0.0% (0; 99)
-INTEGER OPTIMAL SOLUTION FOUND
-Time used:   2.7 secs
-Memory used: 17.1 Mb (17977072 bytes)
-Writing MIP solution to '/tmp/c8f1d174e75848beabbb4c62b45b7fe5-pulp.sol'...
+Memory used: 18.0 Mb (18836680 bytes)
+Writing basic solution to '/tmp/316e88ac3f774d42acd452eb90cf1924-pulp.sol'...
+Welcome to the CBC MILP Solver 
+Version: 2.10.10 
+Build Date: Apr 19 2023 
+
+command line - cbc /tmp/80e29f58bcba4d6b905ac865b1b73eba-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/80e29f58bcba4d6b905ac865b1b73eba-pulp.sol (default strategy 1)
+At line 2 NAME          MODEL
+At line 3 ROWS
+At line 25120 COLUMNS
+At line 110837 RHS
+At line 135953 BOUNDS
+At line 143954 ENDATA
+Problem MODEL has 25115 rows, 8000 columns and 68690 elements
+Coin0008I MODEL read with 0 errors
+seconds was changed from 1e+100 to 15
+Option for timeMode changed from cpu to elapsed
+Continuous objective value is 16 - 0.14 seconds
+Cgl0002I 3355 variables fixed
+Cgl0003I 440 fixed, 0 tightened bounds, 1719 strengthened rows, 736 substitutions
+Cgl0003I 0 fixed, 0 tightened bounds, 157 strengthened rows, 46 substitutions
+Cgl0003I 0 fixed, 0 tightened bounds, 337 strengthened rows, 0 substitutions
+Cgl0003I 0 fixed, 0 tightened bounds, 262 strengthened rows, 0 substitutions
+Cgl0003I 0 fixed, 0 tightened bounds, 161 strengthened rows, 0 substitutions
+Cgl0003I 11 fixed, 0 tightened bounds, 254 strengthened rows, 916 substitutions
+Cgl0003I 0 fixed, 0 tightened bounds, 180 strengthened rows, 89 substitutions
+Cgl0003I 6 fixed, 0 tightened bounds, 126 strengthened rows, 108 substitutions
+Cgl0003I 0 fixed, 0 tightened bounds, 88 strengthened rows, 0 substitutions
+Cgl0003I 0 fixed, 0 tightened bounds, 56 strengthened rows, 48 substitutions
+Cgl0003I 0 fixed, 0 tightened bounds, 17 strengthened rows, 0 substitutions
+Cgl0003I 0 fixed, 0 tightened bounds, 10 strengthened rows, 0 substitutions
+Cgl0004I processed model has 2272 rows, 2069 columns (2069 integer (1996 of which binary)) and 9772 elements
+Cutoff increment increased from 1e-05 to 0.9999
+Cbc0038I Initial state - 0 integers unsatisfied sum - 9.32587e-15
+Cbc0038I Solution found of 16
+Cbc0038I Cleaned solution of 16
+Cbc0038I Before mini branch and bound, 2069 integers at bound fixed and 0 continuous
+Cbc0038I Mini branch and bound did not improve solution (0.31 seconds)
+Cbc0038I After 0.31 seconds - Feasibility pump exiting with objective of 16 - took 0.00 seconds
+Cbc0012I Integer solution of 16 found by feasibility pump after 0 iterations and 0 nodes (0.31 seconds)
+Cbc0001I Search completed - best objective 16, took 0 iterations and 0 nodes (0.31 seconds)
+Cbc0035I Maximum depth 0, 0 variables fixed on reduced cost
+Cuts at root node changed objective from 16 to 16
+Probing was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+Gomory was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+Knapsack was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+Clique was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+MixedIntegerRounding2 was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+FlowCover was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+TwoMirCuts was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+ZeroHalf was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+
+Result - Optimal solution found
+
+Objective value:                16.00000000
+Enumerated nodes:               0
+Total iterations:               0
+Time (CPU seconds):             0.40
+Time (Wallclock seconds):       0.35
+
+Option for printingOptions changed from normal to all
+Total time (CPU seconds):       0.61   (Wallclock seconds):       0.43
+

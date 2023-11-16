@@ -1,70 +1,38 @@
 GLPSOL: GLPK LP/MIP Solver, v4.65
 Parameter(s) specified in the command line:
- --cpxlp /tmp/a3f579c46f314f41b7204b34cf0a03ad-pulp.lp -o /tmp/a3f579c46f314f41b7204b34cf0a03ad-pulp.sol
+ --cpxlp /tmp/5363195c3acf4fb385100eb261882ac3-pulp.lp -o /tmp/5363195c3acf4fb385100eb261882ac3-pulp.sol
  --tmlim 15
-Reading problem data from '/tmp/a3f579c46f314f41b7204b34cf0a03ad-pulp.lp'...
-24900 rows, 8000 columns, 68475 non-zeros
-36871 lines were read
+Reading problem data from '/tmp/5363195c3acf4fb385100eb261882ac3-pulp.lp'...
+27205 rows, 8000 columns, 73250 non-zeros
+39286 lines were read
 GLPK Simplex Optimizer, v4.65
-24900 rows, 8000 columns, 68475 non-zeros
+27205 rows, 8000 columns, 73250 non-zeros
 Preprocessing...
-5171 rows, 3281 columns, 17128 non-zeros
-Scaling...
- A: min|aij| =  5.000e-01  max|aij| =  5.000e+00  ratio =  1.000e+01
-Problem data seem to be well scaled
-Constructing initial basis...
-Size of triangular part is 5145
-      0: obj =   7.000000000e+00 inf =   8.925e+02 (314)
-   1426: obj =   1.525000000e+01 inf =   5.150e-15 (0) 10
-*  1459: obj =   1.600000000e+01 inf =   7.457e-15 (0)
-OPTIMAL LP SOLUTION FOUND
-Time used:   0.2 secs
-Memory used: 18.0 Mb (18884688 bytes)
-Writing basic solution to '/tmp/a3f579c46f314f41b7204b34cf0a03ad-pulp.sol'...
+~     0: obj =   1.600000000e+01  infeas =  0.000e+00
+OPTIMAL SOLUTION FOUND BY LP PREPROCESSOR
+Time used:   0.0 secs
+Memory used: 18.1 Mb (18987028 bytes)
+Writing basic solution to '/tmp/5363195c3acf4fb385100eb261882ac3-pulp.sol'...
 Welcome to the CBC MILP Solver 
 Version: 2.10.10 
 Build Date: Apr 19 2023 
 
-command line - cbc /tmp/ea65778f07a2468eb56eff13c917b1b7-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/ea65778f07a2468eb56eff13c917b1b7-pulp.sol (default strategy 1)
+command line - cbc /tmp/e8377c41d72d4d668961ac15b5cbaeec-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/e8377c41d72d4d668961ac15b5cbaeec-pulp.sol (default strategy 1)
 At line 2 NAME          MODEL
 At line 3 ROWS
-At line 24905 COLUMNS
-At line 110407 RHS
-At line 135308 BOUNDS
-At line 143309 ENDATA
-Problem MODEL has 24900 rows, 8000 columns and 68475 elements
+At line 27210 COLUMNS
+At line 117487 RHS
+At line 144693 BOUNDS
+At line 152694 ENDATA
+Problem MODEL has 27205 rows, 8000 columns and 73250 elements
 Coin0008I MODEL read with 0 errors
 seconds was changed from 1e+100 to 15
 Option for timeMode changed from cpu to elapsed
-Continuous objective value is 16 - 0.14 seconds
-Cgl0002I 3245 variables fixed
-Cgl0003I 440 fixed, 0 tightened bounds, 2086 strengthened rows, 736 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 118 strengthened rows, 74 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 529 strengthened rows, 0 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 306 strengthened rows, 0 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 249 strengthened rows, 0 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 208 strengthened rows, 0 substitutions
-Cgl0003I 12 fixed, 0 tightened bounds, 304 strengthened rows, 984 substitutions
-Cgl0003I 4 fixed, 0 tightened bounds, 69 strengthened rows, 97 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 115 strengthened rows, 97 substitutions
-Cgl0003I 12 fixed, 0 tightened bounds, 166 strengthened rows, 178 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 45 strengthened rows, 6 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 109 strengthened rows, 128 substitutions
-Cgl0003I 1 fixed, 0 tightened bounds, 60 strengthened rows, 0 substitutions
-Cgl0003I 9 fixed, 0 tightened bounds, 23 strengthened rows, 0 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 6 strengthened rows, 0 substitutions
-Cgl0004I processed model has 2360 rows, 2097 columns (2097 integer (2052 of which binary)) and 10507 elements
-Cutoff increment increased from 1e-05 to 0.9999
-Cbc0038I Initial state - 0 integers unsatisfied sum - 1.16573e-14
-Cbc0038I Solution found of 16
-Cbc0038I Cleaned solution of 16
-Cbc0038I Before mini branch and bound, 2097 integers at bound fixed and 0 continuous
-Cbc0038I Mini branch and bound did not improve solution (0.33 seconds)
-Cbc0038I After 0.33 seconds - Feasibility pump exiting with objective of 16 - took 0.00 seconds
-Cbc0012I Integer solution of 16 found by feasibility pump after 0 iterations and 0 nodes (0.33 seconds)
-Cbc0001I Search completed - best objective 16, took 0 iterations and 0 nodes (0.33 seconds)
-Cbc0035I Maximum depth 0, 0 variables fixed on reduced cost
-Cuts at root node changed objective from 16 to 16
+Continuous objective value is 16 - 0.01 seconds
+Cgl0002I 3928 variables fixed
+Cgl0004I processed model has 0 rows, 0 columns (0 integer (0 of which binary)) and 0 elements
+Cbc3007W No integer variables - nothing to do
+Cuts at root node changed objective from 16 to 1.79769e+308
 Probing was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
 Gomory was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
 Knapsack was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
@@ -79,9 +47,9 @@ Result - Optimal solution found
 Objective value:                16.00000000
 Enumerated nodes:               0
 Total iterations:               0
-Time (CPU seconds):             0.42
-Time (Wallclock seconds):       0.37
+Time (CPU seconds):             0.10
+Time (Wallclock seconds):       0.11
 
 Option for printingOptions changed from normal to all
-Total time (CPU seconds):       0.68   (Wallclock seconds):       0.45
+Total time (CPU seconds):       0.42   (Wallclock seconds):       0.23
 

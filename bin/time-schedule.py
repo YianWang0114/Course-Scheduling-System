@@ -73,7 +73,7 @@ def read_config(file_name):
 
     # Define keys that should be treated as floats, integers, or list
     float_keys = ["RulePercentage"]
-    int_keys = ["penalty-for-violating-block-policy", "UWPolicyWeight", "InstructorPrefWeight"]
+    int_keys = ["penalty-for-violating-block-policy", "same-day", "UWPolicyWeight", "InstructorPrefWeight"]
     list_keys = ["50-min-class-start-time", "80-min-class-start-time", "110-min-class-start-time", "170-min-class-start-time"]
 
     # Convert values to the appropriate data types
@@ -116,6 +116,7 @@ def read_courseInstructor(file_name, config):
     CourseId2Name = []
     InstructorName2Id = {}
     InstructorId2Name = []
+    # add comments here
     CourseInfo = [Course(-1, -1, -1, [], -1, -1, -1, -1, -1, -1, -1, -1) for _ in range(100)]
     Instructor2Courses = defaultdict(list)
     TotalCourseNum = 0
@@ -127,6 +128,7 @@ def read_courseInstructor(file_name, config):
                 continue
             # Split each line into its components
             values = line.strip().split()
+            # Check the length of values, if not 5 or 8, print warning and skip the line
             # Extract course name and instructor name
             course_name = values[0]
             course_name_before_slash = course_name.split('/')[0]
@@ -180,8 +182,6 @@ def read_courseInfo(file_name, course_instructor):
     TotalC = []
     # Read the CourseInfo file
 
-    # Give a warning message if a course appear multiple times in courseInfo
-    # Ignore the second time
     with open(file_name, "r") as file:
         for line in file:
             # Ignore empty lines and lines starting with "#"
@@ -363,22 +363,22 @@ def createCW(course_instructor, config):
                     
     return CW
 
-def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs):
+def addConstraints(problem, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs, X, Y):
     TotalCourseNum = course_instructor[6]
     CourseInfo = course_instructor[5]
     totalSlot = config['SlotNumPerday']
-    l1 = config['UWPolicyWeight']
-    l2 = config['InstructorPrefWeight']
-    # Create the ILP problem
-    problem = pulp.LpProblem("ILP_Maximization_Problem", pulp.LpMaximize)
-    
-    # Initialize variable X and Y (three dimensional array)
-    X = [[[pulp.LpVariable(f"X_{c}_{d}_{t}", 0, 1, cat=pulp.LpBinary) for t in range(totalSlot)] for d in range(5)] for c in range(TotalCourseNum)]
-    Y = [[[pulp.LpVariable(f"Y_{c}_{d}_{t}", 0, 1, cat=pulp.LpBinary) for t in range(totalSlot)] for d in range(5)] for c in range(TotalCourseNum)]
+    addConstraints1(problem, TotalCourseNum, CourseInfo, totalSlot, X, Y)
+    addConstraints2(problem, TotalCourseNum, CourseInfo, totalSlot, X)
+    addConstraints3(problem, TotalCourseNum, CourseInfo, totalSlot, X)
+    addConstraints4(problem, TotalCourseNum, CourseInfo, totalSlot, X)
+    addConstraints5(problem, conflict_course_pairs, totalSlot, Y)
+    addConstraints6(problem, config,TotalNonExemptedHours, NonExemptedC, Y)
+    addSamedayC(problem, config, SameDayPairs, CourseInfo, totalSlot, X)
+    addConstraints8(problem, TotalCourseNum, totalSlot, CourseInfo, config, X)
+    addConstraints9(problem, TotalCourseNum, totalSlot, CourseInfo, X)
+    addConstraints10(problem, TotalCourseNum, CourseInfo, config, X)
 
-    # objective function
-    problem +=  pulp.lpSum((l1 * CW[c][d][t] + l2 * IW[c][d][t]) * X[c][d][t] for c in range(TotalCourseNum) for d in range(5) for t in range(totalSlot))
-    
+def addConstraints1(problem, TotalCourseNum, CourseInfo, totalSlot, X, Y):
     # Constraint 1: Matrix Y must be consistent with Matrix X
     for c in range(TotalCourseNum):
         slotNum = CourseInfo[c].slotNum
@@ -387,7 +387,9 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
             for t in range(totalSlot):
                 for j in range(t, min(t + slotNum, totalSlot)):
                     problem += Y[c][d][j] >= X[c][d][t]
+    #return problem
 
+def addConstraints2(problem, TotalCourseNum, CourseInfo, totalSlot, X):
     # Constraint 2: Each course must meet the correct number of times per week
     for c in range(TotalCourseNum):
         sessionsPerWeek = CourseInfo[c].sessionsPerWeek
@@ -400,7 +402,9 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
         #Each course meet at most once per day
         for d in range(5):
             problem += pulp.lpSum(X[c][d][t] for t in range(totalSlot)) <= 1
+    #return problem
 
+def addConstraints3(problem, TotalCourseNum, CourseInfo, totalSlot, X):
     # Constraint 3: Each non-TA course that meets twice per week must be taught on MW or TR
     # Only for non-TA session 
     for c in range(TotalCourseNum):
@@ -415,7 +419,8 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
                 # must meet on T and R
                 problem += pulp.lpSum(X[c][1][t] for t in range(totalSlot)) >= 1
                 problem += pulp.lpSum(X[c][3][t] for t in range(totalSlot)) >= 1
-    
+
+def addConstraints4(problem, TotalCourseNum, CourseInfo, totalSlot, X):
     # Constraint 4: Non-TA courses that meet three times per week must be taught on MWF
     for c in range(TotalCourseNum):
         if CourseInfo[c].sessionsPerWeek == 3:
@@ -428,31 +433,38 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
                 problem += X[c][0][t] == X[c][2][t]   
                 problem += X[c][0][t] == X[c][4][t]   
 
+def addConstraints5(problem, conflict_course_pairs, totalSlot, Y):
     # Constraint 5: Conflicting courses should not overlap in time
     for (c1, c2) in conflict_course_pairs:
         for d in range(5):
             for t in range(totalSlot):
                 problem += Y[c1][d][t] + Y[c2][d][t] <= 1
 
+def addConstraints6(problem, config,TotalNonExemptedHours, NonExemptedC, Y):
     # Constraint 6: Meet the 10%-rule requirement
     target = math.ceil(config['RulePercentage'] * TotalNonExemptedHours)
     for t in range(config['10PercRuleStartsAtid'], config['10PercRuleEndsAtid'] + 1, 2):
         t1 = pulp.lpSum(Y[c][d][t] for c in NonExemptedC for d in range(5))
         t2 = pulp.lpSum(Y[c][d][t + 1] for c in NonExemptedC for d in range(5))
-        problem += (t1 + t2) / 2 <= target
+        problem += t1 + t2 <= 2 * target
 
-    # Constraint 7: The SameDay preferences are treated as hard constraints
-    for (c1, c2) in SameDayPairs:
-        assert (CourseInfo[c1].sessionsPerWeek <= CourseInfo[c2].sessionsPerWeek)
-        for d in range(5):
-            problem += pulp.lpSum(X[c1][d][t] for t in range(totalSlot)) <= pulp.lpSum(X[c2][d][t] for t in range(totalSlot))
-    
+def addSamedayC(problem, config, SameDayPairs, CourseInfo, totalSlot, X):
+    # Constraint 7: Whether SameDay preferences are treated as hard constraint is specified in config file
+    sameday = config['same-day']
+    if (sameday == 1):
+        for (c1, c2) in SameDayPairs:
+            assert (CourseInfo[c1].sessionsPerWeek <= CourseInfo[c2].sessionsPerWeek)
+            for d in range(5):
+                problem += pulp.lpSum(X[c1][d][t] for t in range(totalSlot)) <= pulp.lpSum(X[c2][d][t] for t in range(totalSlot))
+
+def addConstraints8(problem, TotalCourseNum, totalSlot, CourseInfo, config, X):
     # Constraint 8: X's time later than InstructDayEndsAt - course length should be set to 0
     for c in range(TotalCourseNum):
         for d in range(5):
             for t in range(totalSlot - CourseInfo[c].slotNum + 1, config['SlotNumPerday']):
                 problem += X[c][d][t] <= 0
-    
+
+def addConstraints9(problem, TotalCourseNum, totalSlot, CourseInfo, X):
     # Constraint 9: mustOnDays, mustStartSlot and mustEndSlot
     for c in range(TotalCourseNum):
         if (CourseInfo[c].mustOnDays != []):
@@ -468,11 +480,13 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
             for d in range(5):
                 for t in range(0, CourseInfo[c].mustStartSlot):
                     problem += X[c][d][t] == 0
+
         if (CourseInfo[c].mustEndSlot != -1):
             for d in range(5):
                 for t in range(CourseInfo[c].mustEndSlot - CourseInfo[c].slotNum + 2, totalSlot):
                     problem += X[c][d][t] == 0
 
+def addConstraints10(problem, TotalCourseNum, CourseInfo, config, X):
     # Constraint 10: If must-follow-block-policy is 1, we set corresponding X value
     BlockingSlot = list(range(config['BlockSchedulingStartsAtid'], config['BlockSchedulingEndsAtid'] + 1))
     if (config['must-follow-block-policy'] == '1'):
@@ -498,11 +512,29 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
                         if (t not in config['170-min-class-start-time']):
                             problem += X[c][d][t] <= 0
 
+def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs, output_dir):
+    TotalCourseNum = course_instructor[6]
+    totalSlot = config['SlotNumPerday']
+    l1 = config['UWPolicyWeight']
+    l2 = config['InstructorPrefWeight']
+    # Create the ILP problem
+    problem = pulp.LpProblem("ILP_Maximization_Problem", pulp.LpMaximize)
+    
+    # Initialize variable X and Y (three dimensional array)
+    X = [[[pulp.LpVariable(f"X_{c}_{d}_{t}", 0, 1, cat=pulp.LpBinary) for t in range(totalSlot)] for d in range(5)] for c in range(TotalCourseNum)]
+    Y = [[[pulp.LpVariable(f"Y_{c}_{d}_{t}", 0, 1, cat=pulp.LpBinary) for t in range(totalSlot)] for d in range(5)] for c in range(TotalCourseNum)]
+
+    # objective function
+    problem +=  pulp.lpSum((l1 * CW[c][d][t] + l2 * IW[c][d][t]) * X[c][d][t] for c in range(TotalCourseNum) for d in range(5) for t in range(totalSlot))
+    
+    #adding constraints
+    addConstraints(problem, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs, X, Y)
+
     pulp.LpSolverDefault.timeLimit = 15 #Set the time limit for pulp solver
-    solver = pulp.getSolver('GLPK_CMD', timeLimit=15)
-    #pdb.set_trace()
-    #solver = pulp.getSolver('COIN_CMD', timeLimit=15)
+    #solver = pulp.getSolver('GLPK_CMD', timeLimit=15)
+    solver = pulp.getSolver('COIN_CMD', timeLimit=15)
     problem.solve(solver)
+    problem.writeLP(output_dir+"my_problem.lp")
     if (pulp.LpStatus[problem.status] != 'Optimal'):
         sys.exit("Pulp fail to find an optimal solution.")  
     return X, Y, problem
@@ -524,128 +556,12 @@ def LP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, T
     # objective function
     problem +=  pulp.lpSum((l1 * CW[c][d][t] + l2 * IW[c][d][t]) * X[c][d][t] for c in range(TotalCourseNum) for d in range(5) for t in range(totalSlot))
     
-    # Constraint 1: Matrix Y must be consistent with Matrix X
-    for c in range(TotalCourseNum):
-        slotNum = CourseInfo[c].slotNum
-        for d in range(5):
-            problem += pulp.lpSum(X[c][d][t] for t in range(totalSlot)) * slotNum == pulp.lpSum(Y[c][d][t] for t in range(totalSlot))
-            for t in range(totalSlot):
-                for j in range(t, min(t + slotNum, totalSlot)):
-                    problem += Y[c][d][j] >= X[c][d][t]
-
-    # Constraint 2: Each course must meet the correct number of times per week
-    for c in range(TotalCourseNum):
-        sessionsPerWeek = CourseInfo[c].sessionsPerWeek
-        #If CoursesThisQuarter includes a course that is not in CourseInfo, exit.
-        if (sessionsPerWeek < 1):
-            sys.exit(f"course {CourseInfo[c].courseName} is not found in CourseInfo. Please either add the course to CourseInfo or remove it from '{config['CourseInstructor']}'")
-        #Total sessions taught in a week equal to sessionsPerWeek
-        problem += pulp.lpSum(X[c][d][t] for d in range(5) for t in range(totalSlot)) == sessionsPerWeek
-
-        #Each course meet at most once per day
-        for d in range(5):
-            problem += pulp.lpSum(X[c][d][t] for t in range(totalSlot)) <= 1
-
-    #Constraint 3: Non-TA courses that meet twice per week
-    for c in range(TotalCourseNum):
-        if CourseInfo[c].sessionsPerWeek == 2:
-            for t in range(totalSlot):
-                problem += X[c][1][t] == X[c][3][t]   # T and R have the same schedule
-                problem += X[c][0][t] == X[c][2][t]   # M and W have the same schedule
-            # not meet on Friday
-            problem += pulp.lpSum(X[c][4][t] for t in range(totalSlot)) == 0
-
-            if CourseInfo[c].largeClass == 1:
-                # must meet on T and R
-                problem += pulp.lpSum(X[c][1][t] for t in range(totalSlot)) >= 1
-                problem += pulp.lpSum(X[c][3][t] for t in range(totalSlot)) >= 1
-    
-    # Constraint 4: Non-TA courses that meet three times per week
-    for c in range(TotalCourseNum):
-        if CourseInfo[c].sessionsPerWeek == 3:
-            # must meet on M, W, F
-            problem += pulp.lpSum(X[c][0][t] for t in range(totalSlot)) >= 1
-            problem += pulp.lpSum(X[c][2][t] for t in range(totalSlot)) >= 1
-            problem += pulp.lpSum(X[c][4][t] for t in range(totalSlot)) >= 1
-            # M, W, and F have the same schedule
-            for t in range(totalSlot):
-                problem += X[c][0][t] == X[c][2][t]   
-                problem += X[c][0][t] == X[c][4][t]   
-
-    # Constraint 5: Conflicting courses should not overlap in time
-    for (c1, c2) in conflict_course_pairs:
-        for d in range(5):
-            for t in range(totalSlot):
-                problem += Y[c1][d][t] + Y[c2][d][t] <= 1
-
-    # Constraint 6: Meet the 10%-rule requirement
-    target = math.ceil(config['RulePercentage'] * TotalNonExemptedHours)
-    for t in range(config['10PercRuleStartsAtid'], config['10PercRuleEndsAtid'] + 1, 2):
-        t1 = pulp.lpSum(Y[c][d][t] for c in NonExemptedC for d in range(5))
-        t2 = pulp.lpSum(Y[c][d][t + 1] for c in NonExemptedC for d in range(5))
-        problem += (t1 + t2) / 2 <= target
-
-    # Constraint 7: The SameDay preferences are treated as hard constraints
-    for (c1, c2) in SameDayPairs:
-        assert (CourseInfo[c1].sessionsPerWeek <= CourseInfo[c2].sessionsPerWeek)
-        for d in range(5):
-            problem += pulp.lpSum(X[c1][d][t] for t in range(totalSlot)) <= pulp.lpSum(X[c2][d][t] for t in range(totalSlot))
-    
-    # Constraint 8: X's time later than InstructDayEndsAt - course length should be set to 0
-    for c in range(TotalCourseNum):
-        for d in range(5):
-            for t in range(totalSlot - CourseInfo[c].slotNum + 1, config['SlotNumPerday']):
-                problem += X[c][d][t] <= 0
-    
-    # Constraint 9: mustOnDays, mustStartSlot and mustEndSlot
-    for c in range(TotalCourseNum):
-        if (CourseInfo[c].mustOnDays != []):
-            # Course must be on specific days
-            d1 = CourseInfo[c].mustOnDays
-            for d in [0,1,2,3,4]:
-                if (d in d1):
-                    problem += pulp.lpSum(X[c][d][t] for t in range(totalSlot)) >= 1
-                else:
-                    problem += pulp.lpSum(X[c][d][t] for t in range(totalSlot)) == 0
-
-        if (CourseInfo[c].mustStartSlot != -1):
-            for d in range(5):
-                for t in range(0, CourseInfo[c].mustStartSlot):
-                    #if (t != CourseInfo[c].mustStartSlot):
-                    problem += X[c][d][t] == 0
-        if (CourseInfo[c].mustEndSlot != -1):
-            for d in range(5):
-                for t in range(CourseInfo[c].mustEndSlot - CourseInfo[c].slotNum + 2, totalSlot):
-                    problem += X[c][d][t] == 0
-
-    # Constraint 10: If must-follow-block-policy is 1, we set corresponding X value
-    BlockingSlot = list(range(config['BlockSchedulingStartsAtid'], config['BlockSchedulingEndsAtid'] + 1))
-    if (config['must-follow-block-policy'] == '1'):
-        for c in range(TotalCourseNum):
-            if (CourseInfo[c].lengPerSession == 50):
-                for d in range(5):
-                    for t in BlockingSlot:
-                        if (t not in config['50-min-class-start-time']):
-                            problem += X[c][d][t] <= 0
-            elif (CourseInfo[c].lengPerSession == 80):
-                for d in range(5):
-                    for t in BlockingSlot:
-                        if (t not in config['80-min-class-start-time']):
-                            problem += X[c][d][t] <= 0
-            elif (CourseInfo[c].lengPerSession == 110):
-                for d in range(5):
-                    for t in BlockingSlot:
-                        if (t not in config['110-min-class-start-time']):
-                            problem += X[c][d][t] <= 0
-            elif (CourseInfo[c].lengPerSession == 170):
-                for d in range(5):
-                    for t in BlockingSlot:
-                        if (t not in config['170-min-class-start-time']):
-                            problem += X[c][d][t] <= 0
+    #adding constraints
+    addConstraints(problem, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs, X, Y)
 
     pulp.LpSolverDefault.timeLimit = 15
-    solver = pulp.getSolver('GLPK_CMD', timeLimit=15)
-    # solver = pulp.getSolver('COIN_CMD', timeLimit=15)
+    #solver = pulp.getSolver('GLPK_CMD', timeLimit=15)
+    solver = pulp.getSolver('COIN_CMD', timeLimit=15)
     problem.solve()
     if (pulp.LpStatus[problem.status] != 'Optimal'):
         sys.exit("Pulp fail to find an optimal solution for LP.")  
@@ -705,7 +621,6 @@ def generate_output(X, output_dir, course_instructor, config, IW, instructor_in_
             slots = list(slots)
             if (len(slots) > 1):
                 #print('more than one session in a day')
-                #pdb.set_trace()
                 sys.exit('more than one session in a day')  
             else:
                 course_start = timeSlotId2ISlot(start_time, slots[0])
@@ -828,7 +743,7 @@ def createCSVrow(CourseInfo, c, config, InstructorId2Name, totalSlot, X, start_t
         meetBP = 'y'
 
     meetIP = 'y'
-    if (CourseInfo[c].instructorId in InsNotMet):
+    if (CourseInfo[c].instructorId in InsNotMet and course_name in InsNotMet[CourseInfo[c].instructorId]):
         meetIP = 'n'
     if (CourseInfo[c].instructorId not in instructor_in_insPref):
         meetIP = '-'
@@ -899,6 +814,7 @@ def main():
     courseInstructor_file = config['CourseInstructor']
     conflict_file = config['ConflictCourse']
     instructorPref_file = config['InstructorPref']
+    output_dir = config['outputDir']
     print(f"config file={config_file}", file=sys.stderr)
     print(f"courseInstructor file={courseInfo_file}", file=sys.stderr)
     print(f"courseInfo file={courseInfo_file}", file=sys.stderr)
@@ -911,8 +827,7 @@ def main():
     IW, SameDayPairs, instructor_in_insPref = read_instructorPref(instructorPref_file, course_instructor, config)
     CW = createCW(course_instructor, config)
     upper_bound = LP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs)
-    X, Y, problem = ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs)
-    output_dir = config['outputDir']
+    X, Y, problem = ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs, output_dir)
     # Create a new directory if it does not exist
     isExist = os.path.exists(output_dir)
     if not isExist:
