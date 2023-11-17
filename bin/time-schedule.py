@@ -538,7 +538,6 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
     addConstraints(problem, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs, X, Y)
 
     pulp.LpSolverDefault.timeLimit = 15 #Set the time limit for pulp solver
-    #pdb.set_trace()
     #solver = pulp.getSolver('GLPK_CMD', timeLimit=15)
     solver = pulp.getSolver('COIN_CMD', timeLimit=15)
     problem.solve(solver)
@@ -568,6 +567,7 @@ def LP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, T
     addConstraints(problem, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs, X, Y)
 
     pulp.LpSolverDefault.timeLimit = 15
+    #print(pulp.listSolvers(onlyAvailable=True))
     #solver = pulp.getSolver('GLPK_CMD', timeLimit=15)
     solver = pulp.getSolver('COIN_CMD', timeLimit=15)
     problem.solve(solver)

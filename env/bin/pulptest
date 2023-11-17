@@ -1,6 +1,4 @@
-#!/bin/sh
-'''exec' /projects/assigned/course-scheduling/Course-Scheduling-System/env/bin/python "$0" "$@"
-' '''
+#!/projects/assigned/course-scheduling/Course-Scheduling-System/env/bin/python3.10
 # -*- coding: utf-8 -*-
 import re
 import sys

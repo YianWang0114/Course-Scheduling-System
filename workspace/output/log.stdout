@@ -2,81 +2,45 @@ Welcome to the CBC MILP Solver
 Version: 2.10.10 
 Build Date: Apr 19 2023 
 
-command line - cbc /tmp/c58566e3ba0b4c008b49d3e5e15e3bfa-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/c58566e3ba0b4c008b49d3e5e15e3bfa-pulp.sol (default strategy 1)
+command line - cbc /tmp/9c75ddf1634d4663aa857b3db3e7a1b0-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/9c75ddf1634d4663aa857b3db3e7a1b0-pulp.sol (default strategy 1)
 At line 2 NAME          MODEL
 At line 3 ROWS
-At line 28528 COLUMNS
-At line 105342 RHS
-At line 133866 BOUNDS
-At line 142267 ENDATA
-Problem MODEL has 28523 rows, 8400 columns and 76035 elements
+At line 30583 COLUMNS
+At line 111447 RHS
+At line 142026 BOUNDS
+At line 150427 ENDATA
+Problem MODEL has 30578 rows, 8400 columns and 80085 elements
 Coin0008I MODEL read with 0 errors
 seconds was changed from 1e+100 to 15
 Option for timeMode changed from cpu to elapsed
-Presolve 3545 (-24978) rows, 2462 (-5938) columns and 11351 (-64684) elements
-Perturbing problem by 0.001% of 1 - largest nonzero change 0.00099044653 ( 0.19808931%) - largest zero change 0.00098999856
-0  Obj -0 Primal inf 119.88978 (76) Dual inf 42.142293 (71)
-145  Obj 10.969516 Primal inf 224.30471 (216)
-290  Obj 10.959384 Primal inf 209.41142 (275)
-435  Obj 10.954904 Primal inf 199.35699 (274)
-580  Obj 10.950789 Primal inf 204.37406 (245)
-725  Obj 10.946807 Primal inf 249.61368 (234)
-870  Obj 10.942949 Primal inf 426.82496 (152)
-1015  Obj 10.939952 Primal inf 195.48485 (169)
-1160  Obj 10.93815 Primal inf 403.62703 (133)
-1305  Obj 10.935504 Primal inf 104.29338 (135)
-1450  Obj 10.93255 Primal inf 101.88437 (72)
-1534  Obj 10.932319
+Presolve 0 (-30578) rows, 0 (-8400) columns and 0 (-80085) elements
+Empty problem - 0 rows, 0 columns and 0 elements
 Optimal - objective value 11
 After Postsolve, objective 11, infeasibilities - dual 0 (0), primal 0 (0)
-Optimal objective 11 - 1534 iterations time 0.132, Presolve 0.07
+Optimal objective 11 - 0 iterations time 0.082, Presolve 0.08
 Option for printingOptions changed from normal to all
-Total time (CPU seconds):       0.38   (Wallclock seconds):       0.15
+Total time (CPU seconds):       0.33   (Wallclock seconds):       0.12
 
 Welcome to the CBC MILP Solver 
 Version: 2.10.10 
 Build Date: Apr 19 2023 
 
-command line - cbc /tmp/1bef070908bb454982ee4c6bb8abd6a6-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/1bef070908bb454982ee4c6bb8abd6a6-pulp.sol (default strategy 1)
+command line - cbc /tmp/34895f90ae25495e86c13191bb41abb8-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/34895f90ae25495e86c13191bb41abb8-pulp.sol (default strategy 1)
 At line 2 NAME          MODEL
 At line 3 ROWS
-At line 28528 COLUMNS
-At line 122142 RHS
-At line 150666 BOUNDS
-At line 159067 ENDATA
-Problem MODEL has 28523 rows, 8400 columns and 76035 elements
+At line 30583 COLUMNS
+At line 128247 RHS
+At line 158826 BOUNDS
+At line 167227 ENDATA
+Problem MODEL has 30578 rows, 8400 columns and 80085 elements
 Coin0008I MODEL read with 0 errors
 seconds was changed from 1e+100 to 15
 Option for timeMode changed from cpu to elapsed
-Continuous objective value is 11 - 0.10 seconds
-Cgl0002I 3616 variables fixed
-Cgl0003I 466 fixed, 0 tightened bounds, 1430 strengthened rows, 816 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 390 strengthened rows, 36 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 190 strengthened rows, 0 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 126 strengthened rows, 0 substitutions
-Cgl0003I 2 fixed, 0 tightened bounds, 78 strengthened rows, 88 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 68 strengthened rows, 0 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 43 strengthened rows, 72 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 44 strengthened rows, 12 substitutions
-Cgl0003I 2 fixed, 0 tightened bounds, 14 strengthened rows, 184 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 11 strengthened rows, 0 substitutions
-Cgl0003I 0 fixed, 2 tightened bounds, 10 strengthened rows, 12 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 10 strengthened rows, 0 substitutions
-Cgl0004I processed model has 2122 rows, 1866 columns (1866 integer (1824 of which binary)) and 8624 elements
-Cbc0038I Initial state - 88 integers unsatisfied sum - 11.6667
-Cbc0038I Pass   1: suminf.    5.00000 (10) obj. 11 iterations 322
-Cbc0038I Pass   2: suminf.    5.00000 (10) obj. 11 iterations 222
-Cbc0038I Pass   3: suminf.    5.00000 (10) obj. 11 iterations 175
-Cbc0038I Pass   4: suminf.    0.00000 (0) obj. 11 iterations 360
-Cbc0038I Solution found of 11
-Cbc0038I Cleaned solution of 11
-Cbc0038I Before mini branch and bound, 1737 integers at bound fixed and 0 continuous
-Cbc0038I Mini branch and bound did not improve solution (0.35 seconds)
-Cbc0038I After 0.35 seconds - Feasibility pump exiting with objective of 11 - took 0.06 seconds
-Cbc0012I Integer solution of 11 found by feasibility pump after 0 iterations and 0 nodes (0.35 seconds)
-Cbc0001I Search completed - best objective 10.9999999999998, took 0 iterations and 0 nodes (0.35 seconds)
-Cbc0035I Maximum depth 0, 0 variables fixed on reduced cost
-Cuts at root node changed objective from 11 to 11
+Continuous objective value is 11 - 0.02 seconds
+Cgl0002I 4131 variables fixed
+Cgl0004I processed model has 0 rows, 0 columns (0 integer (0 of which binary)) and 0 elements
+Cbc3007W No integer variables - nothing to do
+Cuts at root node changed objective from 11 to 1.79769e+308
 Probing was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
 Gomory was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
 Knapsack was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
@@ -91,9 +55,9 @@ Result - Optimal solution found
 Objective value:                11.00000000
 Enumerated nodes:               0
 Total iterations:               0
-Time (CPU seconds):             0.41
-Time (Wallclock seconds):       0.39
+Time (CPU seconds):             0.10
+Time (Wallclock seconds):       0.12
 
 Option for printingOptions changed from normal to all
-Total time (CPU seconds):       0.68   (Wallclock seconds):       0.48
+Total time (CPU seconds):       0.43   (Wallclock seconds):       0.24
 
