@@ -23,33 +23,86 @@ class Course:
         self.slotNum = slotNum
 
 def time_transfer(time_string):
-    #This function transfer time from string to datetime object
-    #Input: "10:30" -> Output: 
+    '''
+    Usage: This function transfer time from string to datetime object
+
+    Inpurt:
+    time_string(string): A specific time in the 24-hour clock format represented as a string, e.g., "10:30"
+
+    Output: 
+    time(datetime): The corresponding datetime object, e.g., datetime.datetime(1900, 1, 1, 10, 30)
+    '''
     time = datetime.strptime(time_string, '%H:%M')
     return time 
 
 def timeSlotName2Id(start, timeSlotName):
-    #This function transfer time from datetime object to slotid
-    #Input -> Output
+    '''
+    Usage: This function transfer time from datetime object to slotid
+
+    Inpurt:
+    start(datetime): A datetime object corresponding to instructional day starting time, e.g., datetime.datetime(1900, 1, 1, 8, 30)
+    timeSlotName(datetime): A datetime object corresponding to a time you want to convert to slot id
+
+    Output: 
+    id(float): The corresponding slot id, e.g., 0,0. 
+
+    Note: output is a float number. Depending on usage, you need to choose whether to ceiling or floor it. 
+    '''
     id = (timeSlotName - start).total_seconds() / 60 / 30
     return id
 
 def timeSlotId2ISlot(start, timeSlotId):
-    #This function transfer time from slotId to string in "%H:%M" format
+    '''
+    Usage: This function transfer time from slotId to string in "%H:%M" format
+
+    Inpurt:
+    start(datetime): A datetime object corresponding to instructional day starting time, e.g., datetime.datetime(1900, 1, 1, 8, 30)
+    timeSlotId(int): A time slot, e.g., 12
+
+    Output: 
+    name(string): The corresponding time in "%H:%M" format, e.g., '14:30'
+    '''
     name = start + timedelta(minutes=timeSlotId * 30)
     return name.strftime('%H:%M')
 
 def days2listint(days):
-    #Maps days from 'MTWRF' to '01234'. Output is a list of int
+    '''
+    Usage: Maps days from 'MTWRF' to '01234'. 
+
+    Inpurt:
+    days(string): A string representing teaching days of a course, e.g., 'MWF'
+
+    Output: 
+    day_list(list): A list of int. e.g., [0,2,4] means a course is taught on Monday, Wednesday, and Friday
+    '''
     day_mapping = {'M': 0, 'T': 1, 'W': 2, 'R': 3, 'F': 4}
-    return [day_mapping[day] for day in days if day in day_mapping]
+    day_list = [day_mapping[day] for day in days if day in day_mapping]
+    return day_list
 
 def intlist2days(intlist):
-    #Maps days from '01234' to 'MTWRF'. Output is a list of string
+    '''
+    Usage: Maps teaching days from [0,2,4] to ['M', 'W', 'F']. 
+
+    Inpurt:
+    intlist(list): A list of int, e.g., [0,2,4]
+
+    Output: 
+    day_list(list): A list of string. e.g., ['M', 'W', 'F'] means a course is taught on Monday, Wednesday, and Friday
+    '''
     day_mapping = {0: 'M', 1: 'T', 2: 'W', 3: 'R', 4: 'F'}
-    return [day_mapping[day] for day in intlist if day in day_mapping]
+    day_list = [day_mapping[day] for day in intlist if day in day_mapping]
+    return day_list
 
 def read_config(file_name):
+    '''
+    Usage: Read the config file and store all the parameter. 
+
+    Inpurt:
+    file_name(string): config file's file name. e.g., 'config'
+
+    Output: 
+    config(dict): a dictionary that store all the information. 
+    '''
     # Initialize a dictionary to store course information
     config = {}
     with open(file_name, "r") as file:
