@@ -93,6 +93,50 @@ def intlist2days(intlist):
     day_list = [day_mapping[day] for day in intlist if day in day_mapping]
     return day_list
 
+def check_config(config):
+    '''
+    Usage: Check whether config file has all the parameter it should have. If not, exit with an error message.
+
+    Input:
+    config(dict): A dictionary that stores all the parameter we get from config file.
+    '''
+    parameter = ['UseDefaultPath', 'InstructDayStartsAt', 'InstructDayEndsAt', 'BlockSchedulingStartsAt', 'BlockSchedulingEndsAt',\
+        '10PercRuleStartsAt', '10PercRuleEndsAt', 'RulePercentage', '50-min-class-start-time', '80-min-class-start-time',\
+        '110-min-class-start-time', '170-min-class-start-time', 'must-follow-block-policy', 'penalty-for-violating-block-policy',\
+        'same-day', 'UWPolicyWeight', 'InstructorPrefWeight', 'DefaultCourseInfoFile', 'DefaultConflictCourseFile', 'DefaultInstructorPrefFile',\
+        'DefaultCoursesThisQuarterFile', 'DefaultOutputDir']
+    for i in parameter:
+        if i not in config:
+            sys.exit(f'{i} not in config file. Please modify.')
+    return
+
+def convert_key_type(config, start_time):
+    '''
+    Usage: Convert some keys from string to appropriate data types(int, float, list...).
+    
+    Input:
+    config(dict): A dictionary that stores all the parameter we get from config file.
+    start_time(datetime): A datetime object corresponding to instructional day starting time. e.g., datetime.datetime(1900, 1, 1, 8, 30)
+    '''
+
+    # Define keys that should be treated as floats, integers, or list
+    float_keys = ["RulePercentage", "penalty-for-violating-block-policy"]
+    int_keys = ["UseDefaultPath", "must-follow-block-policy" ,"same-day", "UWPolicyWeight", "InstructorPrefWeight"]
+    list_keys = ["50-min-class-start-time", "80-min-class-start-time", "110-min-class-start-time", "170-min-class-start-time"]
+
+    # Convert values to the appropriate data types
+    for key, value in config.items():
+        if key in float_keys:
+            config[key] = float(value)
+        elif key in int_keys:
+            config[key] = int(value)
+        elif key in list_keys:
+            new_list = []
+            for timeName in value.split():
+                slotId = math.floor(timeSlotName2Id(start_time, time_transfer(timeName)))
+                new_list.append(slotId)
+            config[key] = new_list
+
 def read_config(file_name):
     '''
     Usage: Read the config file and store all the parameter. 
@@ -120,28 +164,12 @@ def read_config(file_name):
             # Store the values in the dictionary
             config[key] = value
 
+    check_config(config) #Check if config file has all the parameters. If not, exits with an error message. 
     start_time = time_transfer(config['InstructDayStartsAt'])
     total_day_time = time_transfer(config['InstructDayEndsAt']) - start_time
     SlotNumPerday = math.ceil(total_day_time.total_seconds()/60/30) #A slot is 30 min
 
-    # Define keys that should be treated as floats, integers, or list
-    float_keys = ["RulePercentage"]
-    int_keys = ["penalty-for-violating-block-policy", "same-day", "UWPolicyWeight", "InstructorPrefWeight"]
-    list_keys = ["50-min-class-start-time", "80-min-class-start-time", "110-min-class-start-time", "170-min-class-start-time"]
-
-    # Convert values to the appropriate data types
-    for key, value in config.items():
-        if key in float_keys:
-            config[key] = float(value)
-        elif key in int_keys:
-            config[key] = int(value)
-        elif key in list_keys:
-            new_list = []
-            for timeName in value.split():
-                slotId = math.floor(timeSlotName2Id(start_time, time_transfer(timeName)))
-                new_list.append(slotId)
-            config[key] = new_list
-
+    convert_key_type(config, start_time) #Convert keys to appropriate data type.
     config['BlockSchedulingStartsAtid'] = math.floor(timeSlotName2Id(start_time, time_transfer(config['BlockSchedulingStartsAt'])))
     config['BlockSchedulingEndsAtid'] = math.floor(timeSlotName2Id(start_time, time_transfer(config['BlockSchedulingEndsAt']) - timedelta(hours=0, minutes=1)))
     config['10PercRuleStartsAtid'] = math.floor(timeSlotName2Id(start_time, time_transfer(config['10PercRuleStartsAt'])))
@@ -152,19 +180,44 @@ def read_config(file_name):
     return config
 
 def useDefaultPath(config):
+    '''
+    Usage: If "UseDefaultPath" is set to 1 in config file, use the default path instead.
+
+    Input:
+    config(dict): a dictionary that store all the information. 
+    '''
     # Use default file path if not specified by user in the config file
-    if ("CourseInfo" not in config or config['UseDefaultPath'] == '1'):
+    if ("CourseInfo" not in config or config['UseDefaultPath'] == 1):
         config['CourseInfo'] = config['DefaultCourseInfoFile']
-    if ("ConflictCourse" not in config or config['UseDefaultPath'] == '1'):
+    if ("ConflictCourse" not in config or config['UseDefaultPath'] == 1):
         config['ConflictCourse'] = config['DefaultConflictCourseFile']
-    if ("InstructorPref" not in config or config['UseDefaultPath'] == '1'):
-        config['InstructorPref'] = config['DefaultInstructorPrefFile' or config['UseDefaultPath'] == '1']
-    if ("CourseInstructor" not in config or config['UseDefaultPath'] == '1'):
+    if ("InstructorPref" not in config or config['UseDefaultPath'] == 1):
+        config['InstructorPref'] = config['DefaultInstructorPrefFile' or config['UseDefaultPath'] == 1]
+    if ("CourseInstructor" not in config or config['UseDefaultPath'] == 1):
         config['CourseInstructor'] = config['DefaultCoursesThisQuarterFile']
-    if ("outputDir" not in config or config['UseDefaultPath'] == '1'):
+    if ("outputDir" not in config or config['UseDefaultPath'] == 1):
         config["outputDir"] = config['DefaultOutputDir']
 
 def read_courseInstructor(file_name, config):
+    '''
+    Usage: Read the courseInstructor(courseThisQuarter) file and store all the parameter. 
+
+    Inpurt:
+    file_name(string): courseInstructor(courseThisQuarter) file's file name. e.g., './courseThisQuarter'
+
+    Output: 
+    course_instructor(list): 
+    course_instructor = [
+    CourseName2Id(dict): maps course names to course ids.
+    CourseId2Name(list): maps course ids to course names.
+    InstructorName2Id(dict): maps instructor names to instructor ids.
+    InstructorId2Name(list): maps instructor ids to instructor names.
+    Instructor2Courses(dict): stores the course(s) that an instructor teaches.
+    CourseInfo(list): CourseInfo[courseId] is a Course class that stores course information we read from CourseInfo and CourseThisQuarter.
+    TotalCourseNum(int): Total number of courses, including regular sessions and TA sessions.
+    ]
+    '''
+
     CourseName2Id = {}
     CourseId2Name = []
     InstructorName2Id = {}
