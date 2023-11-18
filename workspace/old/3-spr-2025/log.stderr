@@ -1,4 +1,4 @@
-Log file generate at 2023-11-17 10:26:30.279497
+Log file generate at 2023-11-16 12:32:33.904103
 python version: 3.10.13 | packaged by conda-forge | (main, Oct 26 2023, 18:07:37) [GCC 12.3.0]
 pulp version: 2.7.0
 config file=config
@@ -124,24 +124,24 @@ instructorPref file=./InstructorPref
 269AA, 269AC are conflicted because they are taught by TA6
 269AB, 269AC are conflicted because they are taught by TA6
 
-Warning: TA7 doesn't appear in the instructor preference file
-Warning: TA3 doesn't appear in the instructor preference file
-Warning: McGarrity doesn't appear in the instructor preference file
 Warning: TA2 doesn't appear in the instructor preference file
-Warning: TA1 doesn't appear in the instructor preference file
-Warning: TA9 doesn't appear in the instructor preference file
-Warning: TA4 doesn't appear in the instructor preference file
-Warning: TBA doesn't appear in the instructor preference file
-Warning: TA8 doesn't appear in the instructor preference file
-Warning: TA6 doesn't appear in the instructor preference file
-Warning: Chai doesn't appear in the instructor preference file
-Warning: proseminar doesn't appear in the instructor preference file
-Warning: LaPierre doesn't appear in the instructor preference file
 Warning: guest3 doesn't appear in the instructor preference file
-Warning: lingColloq doesn't appear in the instructor preference file
-Warning: TA5 doesn't appear in the instructor preference file
-Warning: guest2 doesn't appear in the instructor preference file
+Warning: proseminar doesn't appear in the instructor preference file
+Warning: TA3 doesn't appear in the instructor preference file
+Warning: TA9 doesn't appear in the instructor preference file
+Warning: TA8 doesn't appear in the instructor preference file
+Warning: Chai doesn't appear in the instructor preference file
 Warning: Levow doesn't appear in the instructor preference file
+Warning: LaPierre doesn't appear in the instructor preference file
+Warning: lingColloq doesn't appear in the instructor preference file
+Warning: TA6 doesn't appear in the instructor preference file
+Warning: TA5 doesn't appear in the instructor preference file
+Warning: TA1 doesn't appear in the instructor preference file
+Warning: TBA doesn't appear in the instructor preference file
+Warning: TA4 doesn't appear in the instructor preference file
+Warning: guest2 doesn't appear in the instructor preference file
+Warning: McGarrity doesn't appear in the instructor preference file
+Warning: TA7 doesn't appear in the instructor preference file
 10%-rule-percentage=0.12
 must-follow-block-policy=1
 
