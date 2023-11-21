@@ -198,11 +198,48 @@ def useDefaultPath(config):
     if ("outputDir" not in config or config['UseDefaultPath'] == 1):
         config["outputDir"] = config['DefaultOutputDir']
 
+def defineID(instructor_name, course_name_before_slash, InstructorName2Id, InstructorId2Name, CourseName2Id, CourseId2Name):
+    '''
+    Usage: if insturtcor already has an id, return the id; else, define a new id for him/her. Do the same for course.
+
+    Input:
+    instructor_name(string): name of an instructor, e.g., 'McGarrity'
+    course_name_before_slash(string): e.g., '200'
+    InstructorName2Id(dict): maps instructor names to instructor ids. e.g., {'McGarrity': 0}
+    InstructorId2Name(list): maps instructor ids to instructor names. e.g., ['McGarrity']
+    CourseName2Id(dict): maps course names to course ids.
+    CourseId2Name(list): maps course ids to course names.
+
+    Output:
+    instructor_id(int): e.g., 0
+    course_id(int):e.g., 0
+    '''
+    # Generate course and instructor IDs
+    if (instructor_name == '-'):
+        instructor_id = -1  # Default to -1 if no instructor specified
+    else:
+        if (instructor_name not in InstructorName2Id):
+            instructor_id = len(InstructorName2Id)
+            InstructorName2Id[instructor_name] = instructor_id
+            InstructorId2Name.append(instructor_name)
+            assert(len(InstructorName2Id) == len(InstructorId2Name)) # Make sure they are of equal length
+        else:
+            instructor_id = InstructorName2Id[instructor_name]
+
+    if (course_name_before_slash not in CourseName2Id):
+        course_id = len(CourseName2Id)
+        CourseName2Id[course_name_before_slash] = course_id
+        CourseId2Name.append(course_name_before_slash)
+        assert(len(CourseName2Id) == len(CourseId2Name)) # Make sure they are of equal length
+    else:
+        course_id = CourseName2Id[course_name_before_slash]
+    return instructor_id, course_id
+
 def read_courseInstructor(file_name, config):
     '''
     Usage: Read the courseInstructor(courseThisQuarter) file and store all the parameter. 
 
-    Inpurt:
+    Input:
     file_name(string): courseInstructor(courseThisQuarter) file's file name. e.g., './courseThisQuarter'
 
     Output: 
@@ -217,7 +254,6 @@ def read_courseInstructor(file_name, config):
     TotalCourseNum(int): Total number of courses, including regular sessions and TA sessions.
     ]
     '''
-
     CourseName2Id = {}
     CourseId2Name = []
     InstructorName2Id = {}
@@ -248,26 +284,7 @@ def read_courseInstructor(file_name, config):
             must_start_time = values[3]
             must_end_time = values[4]
             TotalCourseNum += 1
-
-            # Generate course and instructor IDs
-            if (instructor_name == '-'):
-                instructor_id = -1  # Default to -1 if no instructor specified
-            else:
-                if (instructor_name not in InstructorName2Id):
-                    instructor_id = len(InstructorName2Id)
-                    InstructorName2Id[instructor_name] = instructor_id
-                    InstructorId2Name.append(instructor_name)
-                    assert(len(InstructorName2Id) == len(InstructorId2Name)) # Make sure they are of equal length
-                else:
-                    instructor_id = InstructorName2Id[instructor_name]
-
-            if (course_name_before_slash not in CourseName2Id):
-                course_id = len(CourseName2Id)
-                CourseName2Id[course_name_before_slash] = course_id
-                CourseId2Name.append(course_name_before_slash)
-                assert(len(CourseName2Id) == len(CourseId2Name)) # Make sure they are of equal length
-            else:
-                course_id = CourseName2Id[course_name_before_slash]
+            instructor_id, course_id = defineID(instructor_name, course_name_before_slash, InstructorName2Id, InstructorId2Name, CourseName2Id, CourseId2Name)
 
             Instructor2Courses[instructor_id].append(course_id)
             cur_course = CourseInfo[course_id]
@@ -286,6 +303,17 @@ def read_courseInstructor(file_name, config):
     return course_instructor
 
 def read_courseInfo(file_name, course_instructor):
+    '''
+    Usage: Read the courseInfo file and store all the parameters. 
+
+    Input:
+    file_name(string): courseInfo file's file name. e.g., './courseInfo'
+    course_instructor(list): a list that stores all the information read from courseInstructor file
+
+    Output:
+    NonExemptedC(list): a list of course ids of non-exempted courses
+    TotalNonExemptedHours(float): total number of non-exempted hours
+    '''
     TotalNonExemptedHours = 0
     NonExemptedC = []
     CourseName2Id = course_instructor[0]
@@ -334,9 +362,19 @@ def read_courseInfo(file_name, course_instructor):
     return NonExemptedC, TotalNonExemptedHours
 
 def read_conflict(file_name, course_instructor):
+    '''
+    Usage: Read the conflict file and store all the parameters. 
+
+    Input:
+    file_name(string): conflict file's file name. e.g., './ConflictCourses'
+    course_instructor(list): a list that stores all the information read from courseInstructor file
+
+    Output:
+    conflict_course_pairs(set): a set of conflicted course pair, e.g., {(13, 14), (13, 17)}
+    '''
     CourseName2Id = course_instructor[0]
     Instructor2Courses = course_instructor[4]
-    conflict_course_pairs = [] 
+    conflict_course_pairs = set()
     with open(file_name, "r") as file:
         for line in file:
             # Ignore empty lines and lines starting with "#"
@@ -350,7 +388,7 @@ def read_conflict(file_name, course_instructor):
                 #print out the course name for i
                 for j in range(i + 1, len(course_ids)):
                     #print out the course name for j
-                    conflict_course_pairs.append((min(course_ids[i], course_ids[j]), max(course_ids[i], course_ids[j])))
+                    conflict_course_pairs.add((min(course_ids[i], course_ids[j]), max(course_ids[i], course_ids[j])))
 
     # Adding conflicted pairs from same instructors 
     # (print out instructor's name)
@@ -359,10 +397,18 @@ def read_conflict(file_name, course_instructor):
             course_ids = Instructor2Courses[key]
             for i in range(len(course_ids)-1):
                 for j in range(i + 1, len(course_ids)):
-                    conflict_course_pairs.append((min(course_ids[i], course_ids[j]), max(course_ids[i], course_ids[j])))
+                    conflict_course_pairs.add((min(course_ids[i], course_ids[j]), max(course_ids[i], course_ids[j])))
+
     return conflict_course_pairs
 
 def print_conflictPairs(conflict_course_pairs, course_instructor):
+    '''
+    Usage: Print our conflicted course pairs in stderr file
+
+    Input:
+    conflict_course_pairs(list): a list of conflicted course pair generated from read_conflit() function
+    course_instructor(list): a list that stores all the information read from courseInstructor file generated from read_courseInstructor() function
+    '''
     #print conflicted course pairs that are taught in this quarter in stderr
     InstructorId2Name = course_instructor[3]
     CourseInfo = course_instructor[5]
@@ -376,21 +422,70 @@ def print_conflictPairs(conflict_course_pairs, course_instructor):
         if (CourseInfo[c1].instructorId == CourseInfo[c2].instructorId):
             print(f'{CourseInfo[c1].courseName}, {CourseInfo[c2].courseName} are conflicted because they are taught by {InstructorId2Name[CourseInfo[c1].instructorId]}', file=sys.stderr)
     print(f'', file=sys.stderr)
+    return
+
+def setDefaultInsPref(prefStartTime, prefEndTime, prefDays, config):
+    '''
+    Usage: if a instructor does not have preference, set default value for him/her
+
+    Input: 
+    prefStartTime(string): prefered starting time for an instructor, could be '-' or a specific time, e.g., "9:30"
+    prefStartTime(string): prefered ending time for an instructor, could be '-' or a specific time, e.g., "14:30"
+    prefDays(string): prefered days for an instructor, e.g., 'TR'
+    config(dict): a dictionary that store all the information from config file.
+
+    Output:
+    prefStartSlot(int): prefered starting time's slotId, e.g., 0
+    prefEndSlot(int): prefered ending time's slotId, e.g., 19
+    prefDayList(list): prefered days' list, e.g., [1,3,4] which means M, W, and R are prefered.
+    '''
+    #Set default value
+    start_time = time_transfer(config['InstructDayStartsAt'])
+    if (prefStartTime == '-'):
+        prefStartSlot = 0
+    else:
+        prefStartSlot = math.floor(timeSlotName2Id(start_time, time_transfer(prefStartTime)))
+    if (prefEndTime == '-'):
+        prefEndSlot = config['SlotNumPerday'] - 1
+    else:
+        prefEndSlot = math.floor(timeSlotName2Id(start_time, time_transfer(prefEndTime)-timedelta(hours=0, minutes=1)))
+    if (prefDays == '-'):
+        prefDayList = [0,1,2,3,4]
+    else:
+        prefDayList = days2listint(prefDays)
+    return prefStartSlot, prefEndSlot, prefDayList
 
 def read_instructorPref(file_name, course_instructor, config):
+    '''
+    Usage: Read the instructor preference file and create matrix IW(instructor pref weight). 
+
+    Input:
+    file_name(string): instructor preference file's file name. e.g., './InstructorPref'.
+    course_instructor(list): a list that stores all the information read from courseInstructor file.
+    config(dict): a dictionary that store all the information read from config file. 
+
+    Output:
+    IW(list): Instructor preference weight matrix. IW[c][d][s] = 1/CourseInfo[c].sessionsPerWeek if the slot is prefered and = 0 otherwise; where c is courseId, d is day, s is slotId. 
+    SameDayPairs:  a set of course pairs that insrtuctors want them to be on the same day, e.g., {(16, 14), (8, 9), (4, 1), (5, 6)}.
+    instructor_in_insPref(list): a list of instructor id who appears in insturctorPref file. e.g., [7, 8, 5, 1, 3, 10, 2, 13]
+    '''
     SameDayPairs = set()
     InstructorName2Id = course_instructor[2]
     InstructorId2Name = course_instructor[3]
     Instructor2Courses = course_instructor[4]
     CourseInfo = course_instructor[5]
     TotalCourseNum = course_instructor[6]
-    start_time = time_transfer(config['InstructDayStartsAt'])
     IW = [[[0 for _ in range(config['SlotNumPerday'])] for _ in range(5)] for _ in range(TotalCourseNum)]
     instructor_in_insPref = [] 
+    line_number = 0
     with open(file_name, "r") as file:
         for line in file:
+            line_number += 1
             # Ignore empty lines and lines starting with "#"
             if not line.strip() or line.startswith("#"):
+                continue
+            if (len(line.split('#')[0].strip().split()) != 5):
+                print(f"Warning: Incorrect InstructorPref format for line {line_number}. Each row should have 5 columns.", file=sys.stderr)
                 continue
             instructor_name, prefDays, prefStartTime, prefEndTime, sameDay = line.strip().split()
 
@@ -408,19 +503,7 @@ def read_instructorPref(file_name, course_instructor, config):
                         else:
                             SameDayPairs.add((course_ids[j], course_ids[i]))  
 
-            #Set default value
-            if (prefStartTime == '-'):
-                prefStartSlot = 0
-            else:
-                prefStartSlot = math.floor(timeSlotName2Id(start_time, time_transfer(prefStartTime)))
-            if (prefEndTime == '-'):
-                prefEndSlot = config['SlotNumPerday'] - 1
-            else:
-                prefEndSlot = math.floor(timeSlotName2Id(start_time, time_transfer(prefEndTime)-timedelta(hours=0, minutes=1)))
-            if (prefDays == '-'):
-                prefDayList = [0,1,2,3,4]
-            else:
-                prefDayList = days2listint(prefDays)
+            prefStartSlot, prefEndSlot, prefDayList = setDefaultInsPref(prefStartTime, prefEndTime, prefDays, config)
 
             for c in course_ids:
                 for d in prefDayList:
@@ -429,11 +512,19 @@ def read_instructorPref(file_name, course_instructor, config):
                         if (1 / CourseInfo[c].sessionsPerWeek < 0):
                             sys.exit(f"CourseInfo for {CourseInfo[c].courseName} fail to find")
                             
-    insNotInPref(TotalCourseNum, CourseInfo, instructor_in_insPref, InstructorId2Name)             
+    insNotInPref(TotalCourseNum, CourseInfo, instructor_in_insPref, InstructorId2Name)          
     return IW, SameDayPairs, instructor_in_insPref
 
 def insNotInPref(TotalCourseNum, CourseInfo, instructor_in_insPref, InstructorId2Name):
-    # For TA sessions or guest lecturer's sessions that we can't find insturctors' pref, we print a warning
+    '''
+    Usage: For TA sessions or guest lecturer's sessions that we can't find insturctors' pref, we print a warning
+
+    Input:
+    TotalCourseNum(int): total number of course.
+    CourseInfo(list): CourseInfo[courseId] is a Course class that stores course information we read from CourseInfo and CourseThisQuarter.
+    instructor_in_insPref(list): instructor id for those who appear in instructor pref file.
+    InstructorId2Name(list): maps from Instructor id to Instructor name.
+    '''
     instructor_notIn_insPref = set()
     for c in range(TotalCourseNum):
         if (CourseInfo[c].sessionsPerWeek < 0):
@@ -445,6 +536,16 @@ def insNotInPref(TotalCourseNum, CourseInfo, instructor_in_insPref, InstructorId
         print(f"Warning: {i} doesn't appear in the instructor preference file", file=sys.stderr)
 
 def createCW(course_instructor, config):
+    '''
+    Usage: Create matrix CW (UW policy's weight)
+
+    Input:
+    course_instructor(list): a list that stores all the information we read from courseInstructor file.
+    config(dict): a dictionary that stores all the information we read from config file.
+
+    output:
+    CW(list): UW policy weight matrix. CW[c][d][s] where c is courseId, d is day, s is slotId. 
+    '''
     # Create matrix CW (UW policy's weight)
     CourseInfo = course_instructor[5]
     TotalCourseNum = course_instructor[6]
@@ -476,10 +577,23 @@ def createCW(course_instructor, config):
                     CW[CourseInfo[c].courseId][d][t] = config['penalty-for-violating-block-policy'] / CourseInfo[c].sessionsPerWeek
                 for t in config['170-min-class-start-time']:
                     CW[CourseInfo[c].courseId][d][t] = 1 / CourseInfo[c].sessionsPerWeek  
-                    
     return CW
 
 def addConstraints(problem, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs, X, Y):
+    '''
+    Usage: adding constraints for ILP 
+
+    Input:
+    problem(pulp): ILP problem we defined using pulp
+    course_instructor(list)
+    config(dict)
+    conflict_course_pairs(set)
+    NonExemptedC(list): e.g., [0, 1, 2, 3, 4, 5]
+    TotalNonExemptedHours(float): 
+    SameDayPairs(set)
+    X(list): variable X for our ILP problem. X[c][d][s] = 1 means course c start at slot s on day d.
+    Y(list): variable Y for our ILP problem. Y[c][d][s] = 1 means course c durates at slot s on day d.
+    '''
     TotalCourseNum = course_instructor[6]
     CourseInfo = course_instructor[5]
     totalSlot = config['SlotNumPerday']
@@ -495,7 +609,17 @@ def addConstraints(problem, course_instructor, config, conflict_course_pairs, No
     addBlockC(problem, TotalCourseNum, CourseInfo, config, X)
 
 def addMatrixYC(problem, TotalCourseNum, CourseInfo, totalSlot, X, Y):
-    # Constraint 1: Matrix Y must be consistent with Matrix X
+    '''
+    Usage: adding Constraint 1: Matrix Y must be consistent with Matrix X
+
+    Input:
+    problem(pulp)
+    TotalCourseNum(int)
+    CourseInfo(list)
+    totalSlot(int)
+    X(list)
+    Y(list)
+    '''
     for c in range(TotalCourseNum):
         slotNum = CourseInfo[c].slotNum
         for d in range(5):
@@ -505,7 +629,16 @@ def addMatrixYC(problem, TotalCourseNum, CourseInfo, totalSlot, X, Y):
                     problem += Y[c][d][j] >= X[c][d][t]
 
 def addSessionC(problem, TotalCourseNum, CourseInfo, totalSlot, X):
-    # Constraint 2: Each course must meet the correct number of times per week
+    '''
+    Usage: adding Constraint 2: Each course must meet the correct number of times per week
+
+    Input:
+    problem(pulp)
+    TotalCourseNum(int)
+    CourseInfo(list)
+    totalSlot(int)
+    X(list)
+    '''
     for c in range(TotalCourseNum):
         sessionsPerWeek = CourseInfo[c].sessionsPerWeek
         #If CoursesThisQuarter includes a course that is not in CourseInfo, exit.
@@ -519,9 +652,19 @@ def addSessionC(problem, TotalCourseNum, CourseInfo, totalSlot, X):
             problem += pulp.lpSum(X[c][d][t] for t in range(totalSlot)) <= 1
 
 def addTwiceAWeekC(problem, TotalCourseNum, CourseInfo, totalSlot, X):
-    # Constraint 3: Each non-TA course that meets twice per week must be taught on MW or TR
+    '''
+    Usage: adding Constraint 3: Each course that meets twice per week must be taught on MW or TR
+           (This should be for regular courses, but by coincident, it also works for TA session.)
+
+    Input:
+    problem(pulp)
+    TotalCourseNum(int)
+    CourseInfo(list)
+    totalSlot(int)
+    X(list)
+    '''
     for c in range(TotalCourseNum):
-        if CourseInfo[c].sessionsPerWeek == 2: # and CourseInfo[c].isTASession == 0: 
+        if CourseInfo[c].sessionsPerWeek == 2: 
             for t in range(totalSlot):
                 problem += X[c][1][t] == X[c][3][t]   # T and R have the same schedule
                 problem += X[c][0][t] == X[c][2][t]   # M and W have the same schedule
@@ -534,9 +677,18 @@ def addTwiceAWeekC(problem, TotalCourseNum, CourseInfo, totalSlot, X):
                 problem += pulp.lpSum(X[c][3][t] for t in range(totalSlot)) == 1
 
 def addThreeTimesAWeekC(problem, TotalCourseNum, CourseInfo, totalSlot, X):
-    # Constraint 4: Non-TA courses that meet three times per week must be taught on MWF
+    '''
+    Usage: adding Constraint 4: Courses that meet three times per week must be taught on MWF
+
+    Input:
+    problem(pulp)
+    TotalCourseNum(int)
+    CourseInfo(list)
+    totalSlot(int)
+    X(list)
+    '''
     for c in range(TotalCourseNum):
-        if CourseInfo[c].sessionsPerWeek == 3: # and CourseInfo[c].isTASession == 0:
+        if CourseInfo[c].sessionsPerWeek == 3: 
             # must meet on M, W, F
             problem += pulp.lpSum(X[c][0][t] for t in range(totalSlot)) == 1
             problem += pulp.lpSum(X[c][2][t] for t in range(totalSlot)) == 1
@@ -547,7 +699,15 @@ def addThreeTimesAWeekC(problem, TotalCourseNum, CourseInfo, totalSlot, X):
                 problem += X[c][0][t] == X[c][4][t]   
 
 def addConflictedC(problem, conflict_course_pairs, totalSlot, Y):
-    # Constraint 5: Conflicted courses should not overlap in time
+    '''
+    Usage: adding Constraint 5: Conflicted courses should not overlap in time
+
+    Input:
+    problem(pulp)
+    conflict_course_pairs(set)
+    totalSlot(int)
+    Y(list)
+    '''
     for (c1, c2) in conflict_course_pairs:
         for d in range(5):
             for t in range(totalSlot):
@@ -647,7 +807,7 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
     #solver = pulp.getSolver('GLPK_CMD', timeLimit=15)
     solver = pulp.getSolver('COIN_CMD', timeLimit=15)
     problem.solve(solver)
-    problem.writeLP(output_dir+"my_problem.lp")
+    #problem.writeLP(output_dir+"my_problem.lp")
     if (pulp.LpStatus[problem.status] != 'Optimal'):
         sys.exit("Pulp fail to find an optimal solution.")  
     return X, Y, problem
