@@ -2,92 +2,83 @@ Welcome to the CBC MILP Solver
 Version: 2.10.10 
 Build Date: Apr 19 2023 
 
-command line - cbc /tmp/2c744add35574109a9b225ee197be5fa-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/2c744add35574109a9b225ee197be5fa-pulp.sol (default strategy 1)
+command line - cbc /tmp/45fdbb6724dd4952b4900f56ffc65550-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/45fdbb6724dd4952b4900f56ffc65550-pulp.sol (default strategy 1)
 At line 2 NAME          MODEL
 At line 3 ROWS
-At line 32960 COLUMNS
-At line 119194 RHS
-At line 152150 BOUNDS
-At line 160751 ENDATA
-Problem MODEL has 32955 rows, 8600 columns and 85395 elements
+At line 25753 COLUMNS
+At line 95717 RHS
+At line 121466 BOUNDS
+At line 129467 ENDATA
+Problem MODEL has 25748 rows, 8000 columns and 69215 elements
 Coin0008I MODEL read with 0 errors
 seconds was changed from 1e+100 to 15
 Option for timeMode changed from cpu to elapsed
-Presolve 5144 (-27811) rows, 2550 (-6050) columns and 14659 (-70736) elements
-Perturbing problem by 0.001% of 1 - largest nonzero change 0.00099044653 ( 0.19808931%) - largest zero change 0.00099003601
-0  Obj -0 Primal inf 121.20585 (77) Dual inf 44.449621 (75)
-177  Obj 11.95466 Primal inf 332.01277 (266)
-354  Obj 11.945742 Primal inf 251.4519 (299)
-531  Obj 11.938761 Primal inf 222.49557 (261)
-708  Obj 11.93406 Primal inf 220.43074 (253)
-885  Obj 11.926805 Primal inf 206.7648 (177)
-1062  Obj 11.924566 Primal inf 735.74905 (244)
-1239  Obj 11.919947 Primal inf 144.02241 (152)
-1416  Obj 11.918325 Primal inf 173.93329 (169)
-1508  Obj 11.917617
-Optimal - objective value 12
-After Postsolve, objective 12, infeasibilities - dual 0 (0), primal 0 (0)
-Optimal objective 12 - 1508 iterations time 0.112, Presolve 0.07
+Presolve 4325 (-21423) rows, 2366 (-5634) columns and 12632 (-56583) elements
+Perturbing problem by 0.001% of 1 - largest nonzero change 0.00097166806 ( 0.19433361%) - largest zero change 0.000968859
+0  Obj 1 Primal inf 114.79164 (76) Dual inf 25.466659 (44)
+161  Obj 10.967114 Primal inf 290.27216 (264)
+322  Obj 10.960927 Primal inf 221.06909 (276)
+483  Obj 10.956329 Primal inf 183.89432 (279)
+644  Obj 10.954186 Primal inf 159.47342 (257)
+805  Obj 10.95085 Primal inf 219.62453 (230)
+966  Obj 10.947543 Primal inf 57.262978 (85)
+1127  Obj 10.946332 Primal inf 26.850445 (38)
+1169  Obj 10.946307
+Optimal - objective value 11
+After Postsolve, objective 11, infeasibilities - dual 0 (0), primal 0 (0)
+Optimal objective 11 - 1169 iterations time 0.132, Presolve 0.07
 Option for printingOptions changed from normal to all
-Total time (CPU seconds):       0.39   (Wallclock seconds):       0.17
+Total time (CPU seconds):       0.35   (Wallclock seconds):       0.13
 
 Welcome to the CBC MILP Solver 
 Version: 2.10.10 
 Build Date: Apr 19 2023 
 
-command line - cbc /tmp/ac3f2cbdb74347869fbab47fe5105693-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/ac3f2cbdb74347869fbab47fe5105693-pulp.sol (default strategy 1)
+command line - cbc /tmp/d6e1167194a04233be8e915516f69753-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/d6e1167194a04233be8e915516f69753-pulp.sol (default strategy 1)
 At line 2 NAME          MODEL
 At line 3 ROWS
-At line 32960 COLUMNS
-At line 136394 RHS
-At line 169350 BOUNDS
-At line 177951 ENDATA
-Problem MODEL has 32955 rows, 8600 columns and 85395 elements
+At line 25753 COLUMNS
+At line 111717 RHS
+At line 137466 BOUNDS
+At line 145467 ENDATA
+Problem MODEL has 25748 rows, 8000 columns and 69215 elements
 Coin0008I MODEL read with 0 errors
 seconds was changed from 1e+100 to 15
 Option for timeMode changed from cpu to elapsed
-Continuous objective value is 12 - 0.10 seconds
-Cgl0002I 3701 variables fixed
-Cgl0003I 466 fixed, 0 tightened bounds, 3124 strengthened rows, 816 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 1321 strengthened rows, 32 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 1997 strengthened rows, 0 substitutions
-Cgl0003I 6 fixed, 0 tightened bounds, 1412 strengthened rows, 42 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 671 strengthened rows, 0 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 944 strengthened rows, 0 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 645 strengthened rows, 0 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 303 strengthened rows, 0 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 91 strengthened rows, 0 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 9 strengthened rows, 0 substitutions
-Cgl0003I 0 fixed, 0 tightened bounds, 9 strengthened rows, 0 substitutions
-Cgl0004I processed model has 2349 rows, 2017 columns (2017 integer (1974 of which binary)) and 11088 elements
-Cbc0038I Initial state - 27 integers unsatisfied sum - 9
-Cbc0038I Pass   1: suminf.    7.00000 (21) obj. 12 iterations 343
-Cbc0038I Pass   2: suminf.    7.00000 (21) obj. 12 iterations 88
-Cbc0038I Pass   3: suminf.    9.00000 (27) obj. 12 iterations 395
-Cbc0038I Pass   4: suminf.    7.00000 (21) obj. 12 iterations 328
-Cbc0038I Pass   5: suminf.    4.66667 (14) obj. 12 iterations 19
-Cbc0038I Pass   6: suminf.    4.66667 (14) obj. 12 iterations 107
-Cbc0038I Pass   7: suminf.    7.00000 (21) obj. 12 iterations 161
-Cbc0038I Pass   8: suminf.    4.66667 (14) obj. 12 iterations 397
-Cbc0038I Pass   9: suminf.    4.66667 (14) obj. 12 iterations 312
-Cbc0038I Pass  10: suminf.    4.66667 (14) obj. 12 iterations 185
-Cbc0038I Pass  11: suminf.    4.66667 (14) obj. 12 iterations 329
-Cbc0038I Pass  12: suminf.    4.66667 (14) obj. 12 iterations 343
-Cbc0038I Pass  13: suminf.    4.66667 (14) obj. 12 iterations 287
-Cbc0038I Pass  14: suminf.    4.66667 (14) obj. 12 iterations 139
-Cbc0038I Pass  15: suminf.    4.66667 (14) obj. 12 iterations 311
-Cbc0038I Pass  16: suminf.    4.66667 (14) obj. 12 iterations 289
-Cbc0038I Pass  17: suminf.    4.66667 (14) obj. 12 iterations 165
-Cbc0038I Pass  18: suminf.    0.00000 (0) obj. 12 iterations 324
-Cbc0038I Solution found of 12
-Cbc0038I Cleaned solution of 12
-Cbc0038I Before mini branch and bound, 1957 integers at bound fixed and 0 continuous
-Cbc0038I Mini branch and bound did not improve solution (0.70 seconds)
-Cbc0038I After 0.70 seconds - Feasibility pump exiting with objective of 12 - took 0.30 seconds
-Cbc0012I Integer solution of 12 found by feasibility pump after 0 iterations and 0 nodes (0.70 seconds)
-Cbc0001I Search completed - best objective 11.9999999999998, took 0 iterations and 0 nodes (0.71 seconds)
+Continuous objective value is 11 - 0.11 seconds
+Cgl0002I 3506 variables fixed
+Cgl0003I 554 fixed, 0 tightened bounds, 2694 strengthened rows, 1080 substitutions
+Cgl0003I 4 fixed, 0 tightened bounds, 1337 strengthened rows, 44 substitutions
+Cgl0003I 0 fixed, 0 tightened bounds, 636 strengthened rows, 44 substitutions
+Cgl0003I 0 fixed, 0 tightened bounds, 990 strengthened rows, 0 substitutions
+Cgl0003I 32 fixed, 0 tightened bounds, 538 strengthened rows, 282 substitutions
+Cgl0003I 12 fixed, 0 tightened bounds, 92 strengthened rows, 2 substitutions
+Cgl0003I 12 fixed, 0 tightened bounds, 14 strengthened rows, 2 substitutions
+Cgl0003I 0 fixed, 0 tightened bounds, 14 strengthened rows, 2 substitutions
+Cgl0003I 28 fixed, 0 tightened bounds, 112 strengthened rows, 52 substitutions
+Cgl0003I 12 fixed, 0 tightened bounds, 50 strengthened rows, 0 substitutions
+Cgl0003I 12 fixed, 0 tightened bounds, 42 strengthened rows, 0 substitutions
+Cgl0003I 0 fixed, 0 tightened bounds, 18 strengthened rows, 0 substitutions
+Cgl0003I 0 fixed, 0 tightened bounds, 32 strengthened rows, 164 substitutions
+Cgl0003I 6 fixed, 0 tightened bounds, 31 strengthened rows, 6 substitutions
+Cgl0003I 0 fixed, 0 tightened bounds, 22 strengthened rows, 0 substitutions
+Cgl0003I 0 fixed, 0 tightened bounds, 22 strengthened rows, 0 substitutions
+Cgl0003I 0 fixed, 0 tightened bounds, 22 strengthened rows, 0 substitutions
+Cgl0003I 12 fixed, 0 tightened bounds, 22 strengthened rows, 0 substitutions
+Cgl0003I 0 fixed, 0 tightened bounds, 10 strengthened rows, 0 substitutions
+Cgl0004I processed model has 1634 rows, 1541 columns (1541 integer (1501 of which binary)) and 7473 elements
+Cbc0038I Initial state - 14 integers unsatisfied sum - 4.66667
+Cbc0038I Pass   1: suminf.    4.66667 (14) obj. 11 iterations 219
+Cbc0038I Pass   2: suminf.    0.00000 (0) obj. 11 iterations 95
+Cbc0038I Solution found of 11
+Cbc0038I Cleaned solution of 11
+Cbc0038I Before mini branch and bound, 1509 integers at bound fixed and 0 continuous
+Cbc0038I Mini branch and bound did not improve solution (0.33 seconds)
+Cbc0038I After 0.33 seconds - Feasibility pump exiting with objective of 11 - took 0.02 seconds
+Cbc0012I Integer solution of 11 found by feasibility pump after 0 iterations and 0 nodes (0.33 seconds)
+Cbc0001I Search completed - best objective 10.9999999999999, took 0 iterations and 0 nodes (0.33 seconds)
 Cbc0035I Maximum depth 0, 0 variables fixed on reduced cost
-Cuts at root node changed objective from 12 to 12
+Cuts at root node changed objective from 11 to 11
 Probing was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
 Gomory was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
 Knapsack was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
@@ -99,12 +90,12 @@ ZeroHalf was tried 0 times and created 0 cuts of which 0 were active after addin
 
 Result - Optimal solution found
 
-Objective value:                12.00000000
+Objective value:                11.00000000
 Enumerated nodes:               0
 Total iterations:               0
-Time (CPU seconds):             0.76
-Time (Wallclock seconds):       0.75
+Time (CPU seconds):             0.41
+Time (Wallclock seconds):       0.37
 
 Option for printingOptions changed from normal to all
-Total time (CPU seconds):       1.06   (Wallclock seconds):       0.86
+Total time (CPU seconds):       0.67   (Wallclock seconds):       0.45
 

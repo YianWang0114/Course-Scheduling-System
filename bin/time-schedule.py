@@ -9,18 +9,18 @@ import csv
 
 class Course:
     def __init__(self, courseId, courseName, instructorId, mustOnDays, mustStartSlot, mustEndSlot, lengPerSession, sessionsPerWeek, largeClass, exempted, isTASession, slotNum):
-        self.courseId = courseId
-        self.courseName = courseName
-        self.instructorId = instructorId
-        self.mustOnDays = mustOnDays
-        self.mustStartSlot = mustStartSlot
-        self.mustEndSlot = mustEndSlot
-        self.lengPerSession = lengPerSession
-        self.sessionsPerWeek = sessionsPerWeek
-        self.largeClass = largeClass
-        self.exempted = exempted 
-        self.isTASession = isTASession
-        self.slotNum = slotNum
+        self.courseId = courseId #int, e.g., 0
+        self.courseName = courseName #string e.g., '200'
+        self.instructorId = instructorId #int, e.g., 0
+        self.mustOnDays = mustOnDays #list of int, e.g., [1,3,5]
+        self.mustStartSlot = mustStartSlot #int, e.g., 0
+        self.mustEndSlot = mustEndSlot #int, e.g., 19
+        self.lengPerSession = lengPerSession #int, e.g., 110
+        self.sessionsPerWeek = sessionsPerWeek #int, e.g., 2
+        self.largeClass = largeClass #int, either 0 or 1
+        self.exempted = exempted #int, either 0 or 1
+        self.isTASession = isTASession #int, either 0 or 1
+        self.slotNum = slotNum #int, = ceiling(lengPerSession / 30)
 
 def time_transfer(time_string):
     '''
@@ -44,7 +44,7 @@ def timeSlotName2Id(start, timeSlotName):
     timeSlotName(datetime): A datetime object corresponding to a time you want to convert to slot id
 
     Output: 
-    id(float): The corresponding slot id, e.g., 0,0. 
+    id(float): The corresponding slot id, e.g., 0.33. #To do: give an float exampke 
 
     Note: output is a float number. Depending on usage, you need to choose whether to ceiling or floor it. 
     '''
@@ -788,11 +788,13 @@ def addMustTimeC(problem, TotalCourseNum, totalSlot, CourseInfo, X):
 
         if (CourseInfo[c].mustStartSlot != -1):
             for d in range(5):
+                # timeslot before must startslot is set to 0
                 for t in range(0, CourseInfo[c].mustStartSlot):
                     problem += X[c][d][t] == 0
 
         if (CourseInfo[c].mustEndSlot != -1):
             for d in range(5):
+                # timeslot after must endslot is set to 0
                 for t in range(CourseInfo[c].mustEndSlot - CourseInfo[c].slotNum + 2, totalSlot):
                     problem += X[c][d][t] == 0
 
