@@ -516,7 +516,7 @@ def read_conflict(file_name, course_instructor):
 
     CourseName2Id = course_instructor[0]
     Instructor2Courses = course_instructor[4]
-    conflict_course_pairs = []
+    conflict_course_pairs = set()
 
     with open(file_name, "r") as file:
         for line in file:
@@ -531,7 +531,7 @@ def read_conflict(file_name, course_instructor):
                 #print out the course name for i
                 for j in range(i + 1, len(course_ids)):
                     #print out the course name for j
-                    conflict_course_pairs.append((min(course_ids[i], course_ids[j]), max(course_ids[i], course_ids[j])))
+                    conflict_course_pairs.add((min(course_ids[i], course_ids[j]), max(course_ids[i], course_ids[j])))
 
     # Adding conflicted pairs from same instructors 
     for key in Instructor2Courses.keys():
@@ -540,7 +540,7 @@ def read_conflict(file_name, course_instructor):
             course_ids = Instructor2Courses[key]
             for i in range(len(course_ids)-1):
                 for j in range(i + 1, len(course_ids)):
-                    conflict_course_pairs.append((min(course_ids[i], course_ids[j]), max(course_ids[i], course_ids[j])))
+                    conflict_course_pairs.add((min(course_ids[i], course_ids[j]), max(course_ids[i], course_ids[j])))
 
     return conflict_course_pairs
 
@@ -1213,6 +1213,12 @@ def generate_output(X, output_dir, course_instructor, config, IW, instructor_in_
     InsNotMet(defaultdict): instructor who has a preference that are not met. 
         key is the instructor id and value is a set of course names that didn't meet preference. e.g., {8: {'520'}})
     BPNotMet(set): a set of course names that didn't meet block policy. e.g., {'234', '233AH'}
+
+    Format for schedule.txt file:
+    ###
+    200     	McGarrity           	MWF  	14:30   	15:20   	50   	-  	-  
+    233     	Evans               	MWF  	08:30   	09:20   	50   	y  	y  
+    ###
     '''
 
     InstructorId2Name = course_instructor[3]
@@ -1326,6 +1332,12 @@ def generateHeatMap(Y, output_dir, config, NonExemptedC, TotalNonExemptedHours):
     config(dict)
     NonExemptedC(list): a list of non-exempted course's course id
     TotalNonExemptedHours(float)
+
+    Format for headtmap.txt file:
+    ###
+        M	T	W	R	F	Hourly total	Hourly Target
+    08:30	2.0	2.0	2.0	3.0	1.0	10.0    	10  
+    ###
     '''
 
     start_slot = config['10PercRuleStartsAtid']
@@ -1333,7 +1345,7 @@ def generateHeatMap(Y, output_dir, config, NonExemptedC, TotalNonExemptedHours):
     end_slot = config['10PercRuleEndsAtid']
     target_value = math.ceil(TotalNonExemptedHours * config['RulePercentage'])
     with open(output_dir+"heatMap.txt", "w") as file:
-        file.write(f"\t\tM\tT\tW\tR\tF\tHourly total\tHourly Target\n")
+        file.write(f"\tM\tT\tW\tR\tF\tHourly total\tHourly Target\n")
         for i in range(start_slot, end_slot + 1, 2):
             time = timeSlotId2ISlot(start_time, i)
             weekly_sum = []
@@ -1465,6 +1477,12 @@ def generateNonExCSV(output_dir, X, course_instructor, config, NonExemptedC, Ins
     InsNotMe(defaultdict)
     BPNotMet(set)
     instructor_in_insPref(list)
+
+    Format for scedule-NonEx.csv file:
+    ###
+    Course,Instructor,Length,Meet-block-policy,Meet-Instructor-Preference,Days,Start,End,Notes,
+    LING 200,McGarrity,50,-,-,M W F,1430,1520,,
+    ###
     '''
 
     InstructorId2Name = course_instructor[3]
@@ -1500,6 +1518,12 @@ def generateCSV(output_dir, X, course_instructor, config, NonExemptedC, InsNotMe
     InsNotMe(defaultdict)
     BPNotMet(set)
     instructor_in_insPref(list)
+
+    Format for scedule.csv file:
+    ###
+    Course,Instructor,Length,Meet-block-policy,Meet-Instructor-Preference,Days,Start,Exempted,Notes,
+    LING 200,McGarrity,50,-,-,M W F,1430,1520,0,
+    ###
     '''
 
     InstructorId2Name = course_instructor[3]
