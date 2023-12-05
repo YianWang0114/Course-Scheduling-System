@@ -7,19 +7,16 @@
 # are taught by the same instructor; those pairs will be added automatically
 # to ConflictPairs.
 
+#### CLMS courses:
+450/550 566 567 570 571 572 573 574 575-guest1 575-guest2 575-guest3 575-Xia 575-Ben 575-Lev 575-Ste
 
-566 567 570 571 572 573 574 575-guest1 575-guest2 575-guest3 575-Xia 575-Ben 575-Levow 575-Ste
+### genling required courses:
+450/550 507 432/532 441/541 478/578 479/579
+452/552 507 432/532 441/541 478/578 479/579
 
-450/550 566 570 571 
-
-450/550 461
-
-450/550 507
-
-450/550 432/532
-
-450/550 441/541
-
+# undergrad required courses:
+450/550 461 
+450/550 462
 
 ## 599A is in conflict with all the seminars and 599B
 599A 575-Ben

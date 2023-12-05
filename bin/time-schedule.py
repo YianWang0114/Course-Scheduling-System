@@ -2,7 +2,7 @@
 Author: Yian Wang
 Supervisor: Professor Fei Xia
 Organization: University of Washington, the Linguistics Department
-Last Updated: Nov 29, 2023
+Last Update: Nov 29, 2023
 
 If you have any questions or need further clarification, please feel free to contact the author at wangyian@uw.edu.
 """
@@ -1567,7 +1567,16 @@ def generateCSV(output_dir, X, course_instructor, config, NonExemptedC, InsNotMe
 def printPath(config_file, courseInstructor_file, courseInfo_file, conflict_file, instructorPref_file, output_dir):
     '''
     Usage: print paths for input files and output directory. 
+
+    Input: 
+    config_file(string)
+    courseInstructor_file(string)
+    courseInfo_file(string)
+    conflict_file(string)
+    instructorPref_file(string)
+    output_dir(string)
     '''
+
     print(f"config file={config_file}", file=sys.stderr)
     print(f"courseInstructor file={courseInstructor_file}", file=sys.stderr)
     print(f"courseInfo file={courseInfo_file}", file=sys.stderr)

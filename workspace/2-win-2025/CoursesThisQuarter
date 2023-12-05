@@ -2,7 +2,7 @@
 
 # this file is used to set X and to expand conflicting course pairs
 
-200        McGarrity      MWF 14:30 15:20
+200        Cheng      MWF 14:30 15:20
 
 212        Ferjan-Ramirez -    -    16:20 
 
@@ -10,17 +10,17 @@
 
 269        McGarrity      -    -    15:20 
 
-400        Cheng          -    13:30    16:20   
+400        McGarrity      -    13:30    16:20   
 
 403        Rozelle        -    -    16:20 
 
 412        Ogihara        -    13:30   16:20 
 
-442/542    Cheng          -    -    12:20 
+442/542    Cheng          -    -    15:20 
 
 450/550    Wright         -    -   15:20
 
-451/551    LaPierre       -    -   15:20 
+451/551    Lapierre       -    -   15:20 
 
 453/553    Chai           -    -   15:20
 
@@ -71,8 +71,8 @@
 200AC      TA2           TR  -   15:20
 200AD      TA2           TR  -   15:20
 
-200AI      TA5           TR  -   15:20
-
+200AE      TA5           TR  -   15:20
+200AF      TA5           TR  -   15:20
 
 ## 269 has 3 sessions, 1 TA, must meet on R
 269AA      TA8           R   -   15:20
