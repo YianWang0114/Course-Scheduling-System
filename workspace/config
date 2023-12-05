@@ -4,6 +4,7 @@ UseDefaultPath = 1
 # The standard instructional day is from 8:30 am to 6:20 pm.
 InstructDayStartsAt = 8:30
 InstructDayEndsAt = 18:20
+Class-default-end-time = 16:50
 
 # block scheduling affecting courses ending before 14:30
 BlockSchedulingStartsAt = 8:30
@@ -26,11 +27,13 @@ RulePercentage = 0.12
 # if the first variable is 1, we strictly follow the block policy (i.e., we set the X
 # decision variables to 0 for any slots that do not meet the policy)
 # if it is 0, then we do not set X, but the slot in CW with a penalty.
-must-follow-block-policy = 1
-penalty-for-violating-block-policy = -50
+Must-follow-block-policy = 1
+Penalty-for-violating-block-policy = -50
 
-## it is 1 if  instructors' same-day preference is treated as a hard constraint
-same-day = 1
+## if Treat-same-day-preference-as-hard-constraint is 1, instructors' same-day preference is treated as a hard constraint
+# if Assume-same-day-if-not-specified, all the courses taught by same professor are assumed to be on the same day
+Treat-same-day-preference-as-hard-constraint = 1
+Assume-same-day-if-not-specified = 0
 
 # lambdas for CW matrix and IW matrix
 # UWPolicyWeight is set to 0 if must-follow-block-policy==1; set to 1 otherwise
@@ -44,7 +47,7 @@ CourseInfo = "inputs/CourseInfo"
 ConflictCourse = "inputs/ConflictCourse"
 InstructorPref = "inputs/2024-2025/InstructorPref"
 CourseInstructor = "inputs/2024-2025/fall2024/CourseInstructor"
-outputDir = "inputs/2024-2025/fall2024/output/"
+OutputDir = "inputs/2024-2025/fall2024/output/"
 
 #If input files are not specified, we will use default files. 
 DefaultCourseInfoFile = "./CourseInfo"

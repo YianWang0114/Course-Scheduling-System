@@ -2,45 +2,45 @@ Welcome to the CBC MILP Solver
 Version: 2.10.10 
 Build Date: Apr 19 2023 
 
-command line - cbc /tmp/67c151109a224b39a54e4b5472e41be2-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/67c151109a224b39a54e4b5472e41be2-pulp.sol (default strategy 1)
+command line - cbc /tmp/8de301c504734a78b9457c73122316f4-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/8de301c504734a78b9457c73122316f4-pulp.sol (default strategy 1)
 At line 2 NAME          MODEL
 At line 3 ROWS
-At line 26146 COLUMNS
-At line 97733 RHS
-At line 123875 BOUNDS
-At line 131476 ENDATA
-Problem MODEL has 26141 rows, 7600 columns and 70380 elements
+At line 21851 COLUMNS
+At line 85178 RHS
+At line 107025 BOUNDS
+At line 114626 ENDATA
+Problem MODEL has 21846 rows, 7600 columns and 61980 elements
 Coin0008I MODEL read with 0 errors
 seconds was changed from 1e+100 to 15
 Option for timeMode changed from cpu to elapsed
-Presolve 0 (-26141) rows, 0 (-7600) columns and 0 (-70380) elements
+Presolve 0 (-21846) rows, 0 (-7600) columns and 0 (-61980) elements
 Empty problem - 0 rows, 0 columns and 0 elements
-Optimal - objective value 18
-After Postsolve, objective 18, infeasibilities - dual 0 (0), primal 0 (0)
-Optimal objective 18 - 0 iterations time 0.072, Presolve 0.07
+Optimal - objective value 20
+After Postsolve, objective 20, infeasibilities - dual 0 (0), primal 0 (0)
+Optimal objective 20 - 0 iterations time 0.052, Presolve 0.05
 Option for printingOptions changed from normal to all
-Total time (CPU seconds):       0.33   (Wallclock seconds):       0.11
+Total time (CPU seconds):       0.29   (Wallclock seconds):       0.12
 
 Welcome to the CBC MILP Solver 
 Version: 2.10.10 
 Build Date: Apr 19 2023 
 
-command line - cbc /tmp/fb35209940cd4857919c2f4a169ea08b-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/fb35209940cd4857919c2f4a169ea08b-pulp.sol (default strategy 1)
+command line - cbc /tmp/9414ffc9693e475a9318be583891d047-pulp.mps max sec 15 timeMode elapsed branch printingOptions all solution /tmp/9414ffc9693e475a9318be583891d047-pulp.sol (default strategy 1)
 At line 2 NAME          MODEL
 At line 3 ROWS
-At line 26146 COLUMNS
-At line 112933 RHS
-At line 139075 BOUNDS
-At line 146676 ENDATA
-Problem MODEL has 26141 rows, 7600 columns and 70380 elements
+At line 21851 COLUMNS
+At line 100378 RHS
+At line 122225 BOUNDS
+At line 129826 ENDATA
+Problem MODEL has 21846 rows, 7600 columns and 61980 elements
 Coin0008I MODEL read with 0 errors
 seconds was changed from 1e+100 to 15
 Option for timeMode changed from cpu to elapsed
-Continuous objective value is 18 - 0.08 seconds
+Continuous objective value is 20 - 0.02 seconds
 Cgl0002I 3732 variables fixed
 Cgl0004I processed model has 0 rows, 0 columns (0 integer (0 of which binary)) and 0 elements
 Cbc3007W No integer variables - nothing to do
-Cuts at root node changed objective from 18 to 1.79769e+308
+Cuts at root node changed objective from 20 to 1.79769e+308
 Probing was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
 Gomory was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
 Knapsack was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
@@ -52,12 +52,12 @@ ZeroHalf was tried 0 times and created 0 cuts of which 0 were active after addin
 
 Result - Optimal solution found
 
-Objective value:                18.00000000
+Objective value:                20.00000000
 Enumerated nodes:               0
 Total iterations:               0
-Time (CPU seconds):             0.19
-Time (Wallclock seconds):       0.11
+Time (CPU seconds):             0.10
+Time (Wallclock seconds):       0.12
 
 Option for printingOptions changed from normal to all
-Total time (CPU seconds):       0.42   (Wallclock seconds):       0.20
+Total time (CPU seconds):       0.36   (Wallclock seconds):       0.23
 

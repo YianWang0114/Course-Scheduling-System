@@ -2,7 +2,7 @@
 Author: Yian Wang
 Supervisor: Professor Fei Xia
 Organization: University of Washington, the Linguistics Department
-Last Update: Nov 29, 2023
+Last Update: Dec 5, 2023
 
 If you have any questions or need further clarification, please feel free to contact the author at wangyian@uw.edu.
 """
@@ -35,7 +35,7 @@ class Course:
         self.slotNum = slotNum #int, = ceiling(lengPerSession / 30)
 
 #################################################################################
-def time_transfer(time_string):
+def time_transfer(time_string, filename, line_number):
     '''
     Usage: This function transfer time from string to datetime object
 
@@ -46,7 +46,10 @@ def time_transfer(time_string):
     time(datetime): The corresponding datetime object, e.g., datetime.datetime(1900, 1, 1, 10, 30)
     '''
 
-    time = datetime.strptime(time_string, '%H:%M')
+    try:
+        time = datetime.strptime(time_string, '%H:%M')
+    except:
+        sys.exit(f"Wrong time format. Time can not be '{time_string}' in {filename} file line {line_number}.")
 
     return time 
 
@@ -87,7 +90,7 @@ def timeSlotId2ISlot(start, timeSlotId):
     return name.strftime('%H:%M')
 
 #################################################################################
-def days2listint(days):
+def days2listint(days, filename, line_number):
     '''
     Usage: Maps days from 'MTWRF' to '01234'. 
 
@@ -99,10 +102,10 @@ def days2listint(days):
     '''
 
     day_list = []
-    day_mapping = {'M': 0, 'T': 1, 'W': 2, 'R': 3, 'F': 4}
+    day_mapping = {'m': 0, 't': 1, 'w': 2, 'r': 3, 'f': 4}
     for day in days:
         if (day not in day_mapping):
-            sys.exit(f"Days should be 'MTWRF'. Please modify.")
+            sys.exit(f"Days should be 'MTWRF'. Please modify line {line_number} of {filename} file.")
         else:
             day_list.append(day_mapping[day])
 
@@ -134,11 +137,12 @@ def check_config(config):
     config(dict): A dictionary that stores all the parameter we get from config file.
     '''
 
-    parameter = ['UseDefaultPath', 'InstructDayStartsAt', 'InstructDayEndsAt', 'BlockSchedulingStartsAt', 'BlockSchedulingEndsAt',\
-        '10PercRuleStartsAt', '10PercRuleEndsAt', 'RulePercentage', '50-min-class-start-time', '80-min-class-start-time',\
-        '110-min-class-start-time', '170-min-class-start-time', 'must-follow-block-policy', 'penalty-for-violating-block-policy',\
-        'same-day', 'UWPolicyWeight', 'InstructorPrefWeight', 'CourseInfo', 'ConflictCourse', 'InstructorPref','CourseInstructor',\
-        'outputDir', 'DefaultCourseInfoFile', 'DefaultConflictCourseFile', 'DefaultInstructorPrefFile',\
+    parameter = ['UseDefaultPath', 'InstructDayStartsAt', 'InstructDayEndsAt', 'Class-default-end-time', 'BlockSchedulingStartsAt',\
+        'BlockSchedulingEndsAt', '10PercRuleStartsAt', '10PercRuleEndsAt', 'RulePercentage', '50-min-class-start-time', '80-min-class-start-time',\
+        '110-min-class-start-time', '170-min-class-start-time', 'Must-follow-block-policy', 'Penalty-for-violating-block-policy',\
+        'Treat-same-day-preference-as-hard-constraint', 'Assume-same-day-if-not-specified', 'UWPolicyWeight', 'InstructorPrefWeight',\
+        'CourseInfo', 'ConflictCourse', 'InstructorPref','CourseInstructor',\
+        'OutputDir', 'DefaultCourseInfoFile', 'DefaultConflictCourseFile', 'DefaultInstructorPrefFile',\
         'DefaultCoursesThisQuarterFile', 'DefaultOutputDir']
     
     for i in parameter:
@@ -158,8 +162,8 @@ def convert_key_type(config, start_time):
     '''
 
     # Define keys that should be treated as floats, integers, or list
-    float_keys = ["RulePercentage", "penalty-for-violating-block-policy", "UWPolicyWeight", "InstructorPrefWeight"]
-    int_keys = ["UseDefaultPath", "must-follow-block-policy" ,"same-day"]
+    float_keys = ["RulePercentage", "Penalty-for-violating-block-policy", "UWPolicyWeight", "InstructorPrefWeight"]
+    int_keys = ["UseDefaultPath", "Must-follow-block-policy" ,"Treat-same-day-preference-as-hard-constraint", "Assume-same-day-if-not-specified"]
     list_keys = ["50-min-class-start-time", "80-min-class-start-time", "110-min-class-start-time", "170-min-class-start-time"]
 
     # Convert values to the appropriate data types
@@ -171,7 +175,7 @@ def convert_key_type(config, start_time):
         elif key in list_keys:
             new_list = []
             for timeName in value.split():
-                slot = timeSlotName2Id(start_time, time_transfer(timeName)) 
+                slot = timeSlotName2Id(start_time, time_transfer(timeName, "config", -1)) 
                 slotId = math.floor(slot) # slot can be an float num, we take the floor value
                 new_list.append(slotId)
             config[key] = new_list
@@ -214,18 +218,18 @@ def read_config(file_name):
             config[key] = value
 
     check_config(config) #Check if config file has all the parameters. If not, exits with an error message. 
-    start_time = time_transfer(config['InstructDayStartsAt'])
-    total_day_time = time_transfer(config['InstructDayEndsAt']) - start_time
+    start_time = time_transfer(config['InstructDayStartsAt'], "config", -1)
+    total_day_time = time_transfer(config['InstructDayEndsAt'], "config", -1) - start_time
     SlotNumPerday = math.ceil(total_day_time.total_seconds()/60/30) #A slot is 30 min
 
     convert_key_type(config, start_time) #Convert keys to appropriate data type.
-    bstart = time_transfer(config['BlockSchedulingStartsAt'])
+    bstart = time_transfer(config['BlockSchedulingStartsAt'], "config", -1)
     config['BlockSchedulingStartsAtid'] = math.floor(timeSlotName2Id(start_time, bstart))
-    bend = time_transfer(config['BlockSchedulingEndsAt'])
+    bend = time_transfer(config['BlockSchedulingEndsAt'], "config", -1)
     config['BlockSchedulingEndsAtid'] = math.floor(timeSlotName2Id(start_time, bend - timedelta(hours=0, minutes=1)))
-    tstart =  time_transfer(config['10PercRuleStartsAt'])
+    tstart =  time_transfer(config['10PercRuleStartsAt'], "config", -1)
     config['10PercRuleStartsAtid'] = math.floor(timeSlotName2Id(start_time, tstart))
-    tend = time_transfer(config['10PercRuleEndsAt'])
+    tend = time_transfer(config['10PercRuleEndsAt'], "config", -1)
     config['10PercRuleEndsAtid'] = math.floor(timeSlotName2Id(start_time, tend))
     config['SlotNumPerday'] = SlotNumPerday
 
@@ -248,7 +252,7 @@ def useDefaultPath(config):
         config['ConflictCourse'] = config['DefaultConflictCourseFile']
         config['InstructorPref'] = config['DefaultInstructorPrefFile' or config['UseDefaultPath'] == 1]
         config['CourseInstructor'] = config['DefaultCoursesThisQuarterFile']
-        config["outputDir"] = config['DefaultOutputDir']
+        config["OutputDir"] = config['DefaultOutputDir']
     
     return
 
@@ -293,7 +297,7 @@ def defineID(instructor_name, course_name_before_slash, InstructorName2Id, Instr
     return instructor_id, course_id
 
 #################################################################################
-def CourseInfoFromCTQ(Instructor2Courses, CourseInfo, instructor_id, course_id, course_name, config, must_on_days, must_start_time, must_end_time):
+def CourseInfoFromCTQ(Instructor2Courses, CourseInfo, instructor_id, course_id, course_name, config, must_on_days, must_start_time, must_end_time, line_number):
     '''
     Usage: Update course information read from CourseThisQuarter file.
 
@@ -314,15 +318,20 @@ def CourseInfoFromCTQ(Instructor2Courses, CourseInfo, instructor_id, course_id, 
     cur_course.courseId = course_id
     cur_course.courseName = course_name  #Full Name here
     cur_course.instructorId = instructor_id
-    start_time = time_transfer(config['InstructDayStartsAt'])
+    start_time = time_transfer(config['InstructDayStartsAt'], "config", -1)
 
     if (must_on_days != '-'):
-        cur_course.mustOnDays = days2listint(must_on_days) 
+        cur_course.mustOnDays = days2listint(must_on_days, "CTQ", line_number) 
+
     if (must_start_time != '-'):
-        mstart = time_transfer(must_start_time)
+        mstart = time_transfer(must_start_time, "CTQ", line_number)
         cur_course.mustStartSlot = math.floor(timeSlotName2Id(start_time, mstart))
+
     if (must_end_time != '-'):
-        mend = time_transfer(must_end_time)
+        mend = time_transfer(must_end_time, "CTQ", line_number)
+        cur_course.mustEndSlot = math.floor(timeSlotName2Id(start_time, mend - timedelta(hours=0, minutes=1)))
+    else: # By default, class will end by onfig['Class-default-end-time'])
+        mend = time_transfer(config['Class-default-end-time'], "config", -1)
         cur_course.mustEndSlot = math.floor(timeSlotName2Id(start_time, mend - timedelta(hours=0, minutes=1)))
 
     return
@@ -388,23 +397,24 @@ def read_courseInstructor(file_name, config):
                 continue
 
             # Extract course name and instructor name
-            course_name = values[0]
-            course_name_before_slash = course_name.split('/')[0]
-            instructor_name = values[1]
-            must_on_days = values[2]
+            course_name = values[0].lower()
+            course_name_before_slash = course_name.split('/')[0].lower()
+            instructor_name = values[1].lower()
+            must_on_days = values[2].lower()
             must_start_time = values[3]
             must_end_time = values[4]
             TotalCourseNum += 1
             instructor_id, course_id = defineID(instructor_name, course_name_before_slash, InstructorName2Id, InstructorId2Name, CourseName2Id, CourseId2Name)
 
-            CourseInfoFromCTQ(Instructor2Courses, CourseInfo, instructor_id, course_id, course_name, config, must_on_days, must_start_time, must_end_time)
+            CourseInfoFromCTQ(Instructor2Courses, CourseInfo, instructor_id, course_id, course_name, config, must_on_days, must_start_time, must_end_time, line_number)
 
     course_instructor = [CourseName2Id, CourseId2Name, InstructorName2Id, InstructorId2Name, Instructor2Courses, CourseInfo, TotalCourseNum]
 
     return course_instructor
 
 #################################################################################
-def CourseInfoFromCI(cur_course, length_per_session, num_sessions_per_week, large_class, ten_percent_rule_exempted, is_a_TA_session):
+def CourseInfoFromCI(cur_course, length_per_session, num_sessions_per_week, large_class, ten_percent_rule_exempted, is_a_TA_session,\
+                     mustOnDays, mustStartTime, mustEndTime, config, line_number):
     '''
     Usage: Update course information read from CourseInfo file.
 
@@ -417,6 +427,8 @@ def CourseInfoFromCI(cur_course, length_per_session, num_sessions_per_week, larg
     is_a_TA_session(int), either 0 or 1
     '''
 
+    start_time = time_transfer(config['InstructDayStartsAt'], "config", -1)
+
     cur_course.lengPerSession = length_per_session
     cur_course.sessionsPerWeek = num_sessions_per_week
     cur_course.largeClass = large_class
@@ -424,10 +436,32 @@ def CourseInfoFromCI(cur_course, length_per_session, num_sessions_per_week, larg
     cur_course.isTASession = is_a_TA_session
     cur_course.slotNum = math.ceil(length_per_session / 30)
 
+    # For mustOnDays,  mustStartTime, mustEndTime, do the intersection
+    if (mustOnDays != '-'):
+        mustOnDays_intersection = set(cur_course.mustOnDays) & set(days2listint(mustOnDays, "courseInfo", line_number))
+        cur_course.mustOnDays = list(mustOnDays_intersection)
+        if len(cur_course.mustOnDays) < num_sessions_per_week:
+            sys.exit(f"MustDays for {cur_course.courseName} should not be less than session per week.\
+                     Please check courseInfo and courseThisQuarter files")
+
+    if (mustStartTime != '-'):
+        mstart = time_transfer(mustStartTime, "courseInfo", line_number)
+        mstartslot = math.floor(timeSlotName2Id(start_time, mstart))
+        cur_course.mustStartSlot = max(cur_course.mustStartSlot, mstartslot) 
+    
+    if (mustEndTime != '-'):
+        mend = time_transfer(mustEndTime, "courseInfo", line_number)
+        mendslot = math.floor(timeSlotName2Id(start_time, mend - timedelta(hours=0, minutes=1)))
+        cur_course.mustEndSlot = min(cur_course.mustEndSlot, mendslot) 
+    
+    duration = cur_course.mustEndSlot - cur_course.mustStartSlot + 1
+    if (duration < cur_course.slotNum):
+        sys.exit(f"End time - start time for {cur_course.courseName} should be larger than course length.\
+                  Please check courseInfo and courseThisQuarter files.")
     return
 
 #################################################################################
-def read_courseInfo(file_name, course_instructor):
+def read_courseInfo(file_name, course_instructor, config):
     '''
     Usage: Read the courseInfo file and store all the parameters. 
 
@@ -464,11 +498,11 @@ def read_courseInfo(file_name, course_instructor):
 
             # Split the line into values and create a CourseInfo object
             values = line.strip().split('#')[0].split()
-            if (len(values) != 6):
-                sys.exit(f"Warning: Incorrect CoursesInfo format for line {line_number}. Each row should have 6 columns.", file=sys.stderr)
+            if (len(values) != 9):
+                sys.exit(f"Warning: Incorrect CoursesInfo format for line {line_number}. Each row should have 9 columns.")
 
-            course_name = values[0]
-            course_name_before_slash = course_name.split('/')[0]
+            course_name = values[0].lower()
+            course_name_before_slash = course_name.split('/')[0].lower()
             #If the course is not taught this quarter, skip the line.
             if (course_name_before_slash not in course_instructor[0]):
                 continue
@@ -478,6 +512,9 @@ def read_courseInfo(file_name, course_instructor):
             large_class = int(values[3])
             ten_percent_rule_exempted = int(values[4])
             is_a_TA_session = int(values[5])
+            mustOnDays = values[6].lower()
+            mustStartTime = values[7]
+            mustEndTime = values[8]
 
             if (CourseName2Id[course_name_before_slash] in TotalC):
                 print(f'Warning: {course_name} appears multiple times in courseInfo', file=sys.stderr)
@@ -485,7 +522,8 @@ def read_courseInfo(file_name, course_instructor):
 
             TotalC.append(CourseName2Id[course_name_before_slash])
             cur_course = CourseInfo[CourseName2Id[course_name_before_slash]]
-            CourseInfoFromCI(cur_course, length_per_session,  num_sessions_per_week, large_class, ten_percent_rule_exempted, is_a_TA_session)
+            CourseInfoFromCI(cur_course, length_per_session,  num_sessions_per_week, large_class, ten_percent_rule_exempted,\
+                              is_a_TA_session, mustOnDays, mustStartTime, mustEndTime, config, line_number)
 
             # NonExemptedC should not have duplicate element 
             if (ten_percent_rule_exempted == 0 and CourseName2Id[course_name_before_slash] not in NonExemptedC): # if a course is not exempted
@@ -571,7 +609,7 @@ def print_conflictPairs(conflict_course_pairs, course_instructor):
     return
 
 #################################################################################
-def setDefaultInsPref(prefStartTime, prefEndTime, prefDays, config):
+def setDefaultInsPref(prefStartTime, prefEndTime, prefDays, config, line_number):
     '''
     Usage: if a instructor does not have preference, set default value for him/her
 
@@ -588,21 +626,21 @@ def setDefaultInsPref(prefStartTime, prefEndTime, prefDays, config):
     '''
 
     #Set default value
-    start_time = time_transfer(config['InstructDayStartsAt'])
+    start_time = time_transfer(config['InstructDayStartsAt'], "config", -1)
     if (prefStartTime == '-'):
         prefStartSlot = 0
     else:
-        pstart = time_transfer(prefStartTime)
+        pstart = time_transfer(prefStartTime, "insPref", line_number)
         prefStartSlot = math.floor(timeSlotName2Id(start_time, pstart))
     if (prefEndTime == '-'):
         prefEndSlot = config['SlotNumPerday'] - 1
     else:
-        pend = time_transfer(prefEndTime)
+        pend = time_transfer(prefEndTime, "insPref", line_number)
         prefEndSlot = math.floor(timeSlotName2Id(start_time, pend - timedelta(hours=0, minutes=1)))
     if (prefDays == '-'):
         prefDayList = [0,1,2,3,4]
     else:
-        prefDayList = days2listint(prefDays)
+        prefDayList = days2listint(prefDays, "InsPref", line_number)
 
     return prefStartSlot, prefEndSlot, prefDayList
 
@@ -647,7 +685,10 @@ def read_instructorPref(file_name, course_instructor, config):
             if (len(line.split('#')[0].strip().split()) != 5):
                 print(f"Warning: Incorrect InstructorPref format for line {line_number}. Each row should have 5 columns.", file=sys.stderr)
                 continue
+
             instructor_name, prefDays, prefStartTime, prefEndTime, sameDay = line.strip().split()
+            instructor_name = instructor_name.lower()
+            prefDays = prefDays.lower()
 
             #If the instructor is not teaching that quarter, skip the line
             if (instructor_name not in InstructorName2Id):
@@ -655,7 +696,9 @@ def read_instructorPref(file_name, course_instructor, config):
             InstructorID = InstructorName2Id[instructor_name]
             instructor_in_insPref.append(InstructorID)
             course_ids = Instructor2Courses[InstructorID]
-            if (sameDay == '1' and len(course_ids) > 1):
+
+            if (config["Assume-same-day-if-not-specified"] == 0\
+                and sameDay == '1' and len(course_ids) > 1):
                 for i in range(len(course_ids)-1):
                     for j in range(i + 1, len(course_ids)):
                         if (CourseInfo[course_ids[i]].sessionsPerWeek <= CourseInfo[course_ids[j]].sessionsPerWeek):
@@ -663,7 +706,7 @@ def read_instructorPref(file_name, course_instructor, config):
                         else:
                             SameDayPairs.add((course_ids[j], course_ids[i]))  
 
-            prefStartSlot, prefEndSlot, prefDayList = setDefaultInsPref(prefStartTime, prefEndTime, prefDays, config)
+            prefStartSlot, prefEndSlot, prefDayList = setDefaultInsPref(prefStartTime, prefEndTime, prefDays, config, line_number)
 
             for c in course_ids:
                 for d in prefDayList:
@@ -671,10 +714,35 @@ def read_instructorPref(file_name, course_instructor, config):
                         IW[c][d][t] = 1 / CourseInfo[c].sessionsPerWeek
                         if (1 / CourseInfo[c].sessionsPerWeek < 0):
                             sys.exit(f"CourseInfo for {CourseInfo[c].courseName} fail to find")
-                            
+               
     insNotInPref(TotalCourseNum, CourseInfo, instructor_in_insPref, InstructorId2Name)   
+    if (config["Assume-same-day-if-not-specified"] == 1):
+        addSameDayPairs(Instructor2Courses, SameDayPairs, CourseInfo)
 
     return IW, SameDayPairs, instructor_in_insPref
+
+#################################################################################
+def addSameDayPairs(Instructor2Courses, SameDayPairs, CourseInfo):
+    '''
+    Usage: If Assume-same-day-if-not-specified is 1, we add all the courses taught by the same instructor
+            to same day pairs
+
+    Input:
+    Instructor2Courses(defaultdict)
+    SameDayPairs(set)
+    CourseInfo(list)
+    '''
+
+    for instructor_id, course_ids in Instructor2Courses.items():
+        if len(course_ids) > 1:
+            for i in range(len(course_ids)-1):
+                for j in range(i + 1, len(course_ids)):
+                        if (CourseInfo[course_ids[i]].sessionsPerWeek <= CourseInfo[course_ids[j]].sessionsPerWeek):
+                            SameDayPairs.add((course_ids[i], course_ids[j]))
+                        else:
+                            SameDayPairs.add((course_ids[j], course_ids[i]))  
+
+    return
 
 #################################################################################
 def insNotInPref(TotalCourseNum, CourseInfo, instructor_in_insPref, InstructorId2Name):
@@ -719,30 +787,31 @@ def createCW(course_instructor, config):
     BlockingSlot = list(range(config['BlockSchedulingStartsAtid'], config['BlockSchedulingEndsAtid'] + 1))
     CW = [[[0 for _ in range(config['SlotNumPerday'])] for _ in range(5)] for _ in range(TotalCourseNum)]
     
+    penalty = config['Penalty-for-violating-block-policy']
     for c in range(TotalCourseNum):
         match CourseInfo[c].lengPerSession:
             case 50:
                 for d in range(5):
                     for t in BlockingSlot:
-                        CW[CourseInfo[c].courseId][d][t] = config['penalty-for-violating-block-policy'] / CourseInfo[c].sessionsPerWeek
+                        CW[CourseInfo[c].courseId][d][t] = penalty / CourseInfo[c].sessionsPerWeek
                     for t in config['50-min-class-start-time']:
                         CW[CourseInfo[c].courseId][d][t] = 1 / CourseInfo[c].sessionsPerWeek
             case 80:
                 for d in range(5):
                     for t in BlockingSlot:
-                        CW[CourseInfo[c].courseId][d][t] = config['penalty-for-violating-block-policy'] / CourseInfo[c].sessionsPerWeek
+                        CW[CourseInfo[c].courseId][d][t] = penalty / CourseInfo[c].sessionsPerWeek
                     for t in config['80-min-class-start-time']:
                         CW[CourseInfo[c].courseId][d][t] = 1 / CourseInfo[c].sessionsPerWeek
             case 110:
                 for d in range(5):
                     for t in BlockingSlot:
-                        CW[CourseInfo[c].courseId][d][t] = config['penalty-for-violating-block-policy'] / CourseInfo[c].sessionsPerWeek
+                        CW[CourseInfo[c].courseId][d][t] = penalty / CourseInfo[c].sessionsPerWeek
                     for t in config['110-min-class-start-time']:
                         CW[CourseInfo[c].courseId][d][t] = 1 / CourseInfo[c].sessionsPerWeek 
             case 170:
                 for d in range(5):
                     for t in BlockingSlot:
-                        CW[CourseInfo[c].courseId][d][t] = config['penalty-for-violating-block-policy'] / CourseInfo[c].sessionsPerWeek
+                        CW[CourseInfo[c].courseId][d][t] = penalty / CourseInfo[c].sessionsPerWeek
                     for t in config['170-min-class-start-time']:
                         CW[CourseInfo[c].courseId][d][t] = 1 / CourseInfo[c].sessionsPerWeek  
 
@@ -939,7 +1008,7 @@ def addSamedayC(problem, config, SameDayPairs, CourseInfo, totalSlot, X):
     X(list)
     '''
 
-    sameday = config['same-day']
+    sameday = config['Treat-same-day-preference-as-hard-constraint']
     if (sameday == 1):
         for (c1, c2) in SameDayPairs:
             assert (CourseInfo[c1].sessionsPerWeek <= CourseInfo[c2].sessionsPerWeek)
@@ -1018,7 +1087,7 @@ def addBlockC(problem, TotalCourseNum, CourseInfo, config, X):
     '''
 
     BlockingSlot = list(range(config['BlockSchedulingStartsAtid'], config['BlockSchedulingEndsAtid'] + 1))
-    if (config['must-follow-block-policy'] == 1):
+    if (config['Must-follow-block-policy'] == 1):
         for c in range(TotalCourseNum):
             match CourseInfo[c].lengPerSession:
                 case 50:
@@ -1079,7 +1148,43 @@ def defineXY(X, Y, TotalCourseNum, totalSlot, type):
     return
 
 #################################################################################
-def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs, output_dir):
+def readParameterForProblem(course_instructor, config):
+    '''
+    Usage: read parameters for ILP/LP problem
+
+    Input:
+    course_instructor(list)
+    config(dict)
+
+    Output:
+    TotalCourseNum(int)
+    totalSlot(int)
+    l1(float): weight for CW matrix
+    l2(float): weight for IW matrix
+    '''
+
+    TotalCourseNum = course_instructor[6]
+    totalSlot = config['SlotNumPerday']
+    l1 = config['UWPolicyWeight']
+    l2 = config['InstructorPrefWeight']
+
+    return TotalCourseNum, totalSlot, l1, l2
+
+#################################################################################
+def solveProblem(problem):
+    '''
+    Usage: this function will set time limit for ILP/LP, call a solver, and then solve it.
+
+    Input: problem(pulp)
+    '''
+    pulp.LpSolverDefault.timeLimit = 15 #Set the time limit for pulp solver
+    solver = pulp.getSolver('COIN_CMD', timeLimit=15)
+    problem.solve(solver)
+
+    return
+
+#################################################################################
+def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs):
     '''
     Usage: Define an ILP problem then solve it.
 
@@ -1099,10 +1204,9 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
     problem(pulp)
     '''
 
-    TotalCourseNum = course_instructor[6]
-    totalSlot = config['SlotNumPerday']
-    l1 = config['UWPolicyWeight']
-    l2 = config['InstructorPrefWeight']
+    # Read parameters for ILP problem
+    TotalCourseNum, totalSlot, l1, l2 = readParameterForProblem(course_instructor, config)
+
     # Create the ILP problem
     problem = pulp.LpProblem("ILP_Maximization_Problem", pulp.LpMaximize)
     
@@ -1117,12 +1221,9 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
     #adding constraints
     addConstraints(problem, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs, X, Y)
 
-    pulp.LpSolverDefault.timeLimit = 15 #Set the time limit for pulp solver
-    #solver = pulp.getSolver('GLPK_CMD', timeLimit=15)
-    #pdb.set_trace()
-    solver = pulp.getSolver('COIN_CMD', timeLimit=15)
-    problem.solve(solver)
-    #problem.writeLP(output_dir+"my_problem.lp")
+    #solve problem
+    solveProblem(problem)
+
     if (pulp.LpStatus[problem.status] != 'Optimal'):
         sys.exit("Pulp fail to find an optimal solution.") 
 
@@ -1137,12 +1238,11 @@ def LP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, T
     upper_bound(float): the optimal value of the LP problem, which is the upper bound for the ILP problem.
     '''
 
-    TotalCourseNum = course_instructor[6]
-    totalSlot = config['SlotNumPerday']
-    l1 = config['UWPolicyWeight']
-    l2 = config['InstructorPrefWeight']
+    # Read parameters for LP problem
+    TotalCourseNum, totalSlot, l1, l2 = readParameterForProblem(course_instructor, config)
+
     # Create the LP problem
-    problem = pulp.LpProblem("ILP_Maximization_Problem", pulp.LpMaximize)
+    problem = pulp.LpProblem("LP_Maximization_Problem", pulp.LpMaximize)
     
     # Initialize variable X and Y (three dimensional array)
     X = []
@@ -1155,11 +1255,9 @@ def LP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, T
     #adding constraints
     addConstraints(problem, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs, X, Y)
 
-    pulp.LpSolverDefault.timeLimit = 15
-    #print(pulp.listSolvers(onlyAvailable=True))
-    #solver = pulp.getSolver('GLPK_CMD', timeLimit=15)
-    solver = pulp.getSolver('COIN_CMD', timeLimit=15)
-    problem.solve(solver)
+    #solve problem
+    solveProblem(problem)
+
     if (pulp.LpStatus[problem.status] != 'Optimal'):
         sys.exit("Pulp fail to find an optimal solution for LP.")  
     upper_bound =pulp.value(problem.objective)
@@ -1224,7 +1322,7 @@ def generate_output(X, output_dir, course_instructor, config, IW, instructor_in_
     InstructorId2Name = course_instructor[3]
     CourseInfo = course_instructor[5]
     TotalCourseNum = course_instructor[6]
-    start_time = time_transfer(config['InstructDayStartsAt'])
+    start_time = time_transfer(config['InstructDayStartsAt'], "config", -1)
     totalSlot = config['SlotNumPerday']
     BlockingSlot = list(range(config['BlockSchedulingStartsAtid'], config['BlockSchedulingEndsAtid'] + 1))
     NumCNoPref = 0
@@ -1265,11 +1363,12 @@ def generate_output(X, output_dir, course_instructor, config, IW, instructor_in_
 
             teaching_days = ''.join(intlist2days(days))
             session_length = CourseInfo[c].lengPerSession
-            course_end = (time_transfer(course_start) + timedelta(minutes=session_length)).strftime('%H:%M')
+            course_end = (time_transfer(course_start, "config", -1) + timedelta(minutes=session_length)).strftime('%H:%M')
             
             meetBP = checkMeetBP(config, slots, session_length, BPNotMet, BlockingSlot, course_name)
 
-            formatted_output = "{:<8}\t{:<20}\t{:<5}\t{:<8}\t{:<8}\t{:<5}\t{:<3}\t{:<3}\n".format(course_name, instructor_name, teaching_days, course_start, course_end, session_length, meetBP, meetIP)
+            formatted_output = "{:<8}\t{:<20}\t{:<5}\t{:<8}\t{:<8}\t{:<5}\t{:<3}\t{:<3}\n"\
+                .format(course_name.upper(), instructor_name, teaching_days, course_start, course_end, session_length, meetBP, meetIP)
             file.write(formatted_output)
     
     return NumCNoPref, InsNotMet, BPNotMet
@@ -1341,7 +1440,7 @@ def generateHeatMap(Y, output_dir, config, NonExemptedC, TotalNonExemptedHours):
     '''
 
     start_slot = config['10PercRuleStartsAtid']
-    start_time = time_transfer(config['10PercRuleStartsAt'])
+    start_time = time_transfer(config['10PercRuleStartsAt'], "config", -1)
     end_slot = config['10PercRuleEndsAtid']
     target_value = math.ceil(TotalNonExemptedHours * config['RulePercentage'])
     with open(output_dir+"heatMap.txt", "w") as file:
@@ -1382,7 +1481,7 @@ def printStandardOutput(config, course_instructor, NonExemptedC, TotalNonExempte
 
     InstructorId2Name = course_instructor[3]
     print(f"10%-rule-percentage={config['RulePercentage']}", file=sys.stderr)
-    print(f"must-follow-block-policy={config['must-follow-block-policy']}\n", file=sys.stderr)
+    print(f"Must-follow-block-policy={config['Must-follow-block-policy']}\n", file=sys.stderr)
     print(f"Result: {pulp.LpStatus[problem.status]}", file=sys.stderr)
     print(f"Objective value: {pulp.value(problem.objective)}", file=sys.stderr)
     print(f"Upper bound: {upper_bound}", file=sys.stderr) # Upper bound is the optimal value for LP problem
@@ -1445,7 +1544,7 @@ def createCSVrow(CourseInfo, c, config, InstructorId2Name, totalSlot, X, start_t
     else:
         course_start = timeSlotId2ISlot(start_time, slots[0])
     session_length = CourseInfo[c].lengPerSession
-    course_end = (time_transfer(course_start) + timedelta(minutes=session_length)).strftime('%H:%M')
+    course_end = (time_transfer(course_start, "config", -1) + timedelta(minutes=session_length)).strftime('%H:%M')
     teaching_days = ' '.join(intlist2days(days))
 
     if (slots[0]> config['BlockSchedulingEndsAtid'] or slots[0] < config['BlockSchedulingStartsAtid']):
@@ -1461,7 +1560,7 @@ def createCSVrow(CourseInfo, c, config, InstructorId2Name, totalSlot, X, start_t
     if (CourseInfo[c].instructorId not in instructor_in_insPref):
         meetIP = '-'
 
-    return course_name, instructor_name, session_length, meetBP, meetIP, teaching_days, course_start, course_end
+    return course_name.upper(), instructor_name, session_length, meetBP, meetIP, teaching_days, course_start, course_end
 
 #################################################################################
 def generateNonExCSV(output_dir, X, course_instructor, config, NonExemptedC, InsNotMet, BPNotMet, instructor_in_insPref):
@@ -1487,7 +1586,7 @@ def generateNonExCSV(output_dir, X, course_instructor, config, NonExemptedC, Ins
 
     InstructorId2Name = course_instructor[3]
     CourseInfo = course_instructor[5]
-    start_time = time_transfer(config['InstructDayStartsAt'])
+    start_time = time_transfer(config['InstructDayStartsAt'], "config", -1)
     totalSlot = config['SlotNumPerday']
     fields = ['Course', 'Instructor', 'Length', 'Meet-block-policy','Meet-Instructor-Preference','Days','Start','End','Notes','']
     rows = []
@@ -1529,7 +1628,7 @@ def generateCSV(output_dir, X, course_instructor, config, NonExemptedC, InsNotMe
     InstructorId2Name = course_instructor[3]
     CourseInfo = course_instructor[5]
     TotalCourseNum = course_instructor[6]
-    start_time = time_transfer(config['InstructDayStartsAt'])
+    start_time = time_transfer(config['InstructDayStartsAt'], "config", -1)
     totalSlot = config['SlotNumPerday']
     fields = ['Course', 'Instructor', 'Length', 'Meet-block-policy','Meet-Instructor-Preference','Days','Start','Exempted','Notes','']
     rows = []
@@ -1599,12 +1698,12 @@ def main():
     courseInstructor_file = config['CourseInstructor']
     conflict_file = config['ConflictCourse']
     instructorPref_file = config['InstructorPref']
-    output_dir = config['outputDir']
+    output_dir = config['OutputDir']
     printPath(config_file, courseInstructor_file, courseInfo_file, conflict_file, instructorPref_file, output_dir)
 
     #Step 2: read all the other files.
     course_instructor = read_courseInstructor(courseInstructor_file, config)
-    NonExemptedC, TotalNonExemptedHours = read_courseInfo(courseInfo_file, course_instructor)
+    NonExemptedC, TotalNonExemptedHours = read_courseInfo(courseInfo_file, course_instructor, config)
     conflict_course_pairs = read_conflict(conflict_file, course_instructor)
     print_conflictPairs(conflict_course_pairs, course_instructor)
     IW, SameDayPairs, instructor_in_insPref = read_instructorPref(instructorPref_file, course_instructor, config)
@@ -1612,7 +1711,7 @@ def main():
     #Step 3: set up the ILP problem and slove it.
     CW = createCW(course_instructor, config)
     upper_bound = LP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs)
-    X, Y, problem = ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs, output_dir)
+    X, Y, problem = ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs)
 
     #Step 4: generate outputs.
     isExist = os.path.exists(output_dir)     # Create a new directory if it does not exist
