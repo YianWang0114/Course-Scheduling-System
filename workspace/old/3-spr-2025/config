@@ -28,6 +28,8 @@ RulePercentage = 0.12
 # if it is 0, then we do not set X, but the slot in CW with a penalty.
 must-follow-block-policy = 1
 penalty-for-violating-block-policy = -50
+
+## it is 1 if  instructors' same-day preference is treated as a hard constraint
 same-day = 1
 
 # lambdas for CW matrix and IW matrix

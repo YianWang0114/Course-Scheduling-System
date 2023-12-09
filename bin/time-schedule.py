@@ -2,7 +2,7 @@
 Author: Yian Wang
 Supervisor: Professor Fei Xia
 Organization: University of Washington, the Linguistics Department
-Last Update: Dec 5, 2023
+Last Update: Dec 6, 2023
 
 If you have any questions or need further clarification, please feel free to contact the author at wangyian@uw.edu.
 """
@@ -58,7 +58,7 @@ def timeSlotName2Id(start, timeSlotName):
     '''
     Usage: This function transfer time from datetime object to slotid
 
-    Inpurt:
+    Input:
     start(datetime): A datetime object corresponding to instructional day starting time, e.g., datetime.datetime(1900, 1, 1, 8, 30)
     timeSlotName(datetime): A datetime object corresponding to a time you want to convert to slot id
 
@@ -278,26 +278,26 @@ def defineID(instructor_name, course_name_before_slash, InstructorName2Id, Instr
     if (instructor_name == '-'):
         instructor_id = -1  # Default to -1 if no instructor specified
     else:
-        if (instructor_name not in InstructorName2Id):
+        if (instructor_name.lower() not in InstructorName2Id):
             instructor_id = len(InstructorName2Id)
-            InstructorName2Id[instructor_name] = instructor_id
+            InstructorName2Id[instructor_name.lower()] = instructor_id
             InstructorId2Name.append(instructor_name)
             assert(len(InstructorName2Id) == len(InstructorId2Name)) # Make sure they are of equal length
         else:
-            instructor_id = InstructorName2Id[instructor_name]
+            instructor_id = InstructorName2Id[instructor_name.lower()]
 
-    if (course_name_before_slash not in CourseName2Id):
+    if (course_name_before_slash.lower() not in CourseName2Id):
         course_id = len(CourseName2Id)
-        CourseName2Id[course_name_before_slash] = course_id
+        CourseName2Id[course_name_before_slash.lower()] = course_id
         CourseId2Name.append(course_name_before_slash)
         assert(len(CourseName2Id) == len(CourseId2Name)) # Make sure they are of equal length
     else:
-        course_id = CourseName2Id[course_name_before_slash]
+        course_id = CourseName2Id[course_name_before_slash.lower()]
 
     return instructor_id, course_id
 
 #################################################################################
-def CourseInfoFromCTQ(Instructor2Courses, CourseInfo, instructor_id, course_id, course_name, config, must_on_days, must_start_time, must_end_time, line_number):
+def CourseInfoFromCTQ(information, Instructor2Courses, CourseInfo, config):
     '''
     Usage: Update course information read from CourseThisQuarter file.
 
@@ -313,28 +313,61 @@ def CourseInfoFromCTQ(Instructor2Courses, CourseInfo, instructor_id, course_id, 
     must_end_time(string)
     '''
 
-    Instructor2Courses[instructor_id].append(course_id)
-    cur_course = CourseInfo[course_id]
-    cur_course.courseId = course_id
-    cur_course.courseName = course_name  #Full Name here
-    cur_course.instructorId = instructor_id
-    start_time = time_transfer(config['InstructDayStartsAt'], "config", -1)
+    for instructor_id, course_id, course_name, must_on_days, must_start_time, must_end_time, line_number in information:
+        Instructor2Courses[instructor_id].append(course_id)
+        cur_course = CourseInfo[course_id]
+        cur_course.courseId = course_id
+        cur_course.courseName = course_name  #Full Name here
+        cur_course.instructorId = instructor_id
+        start_time = time_transfer(config['InstructDayStartsAt'], "config", -1)
 
-    if (must_on_days != '-'):
-        cur_course.mustOnDays = days2listint(must_on_days, "CTQ", line_number) 
+        if (must_on_days != '-'):
+            cur_course.mustOnDays = days2listint(must_on_days, "CourseThisQuarter", line_number) 
 
-    if (must_start_time != '-'):
-        mstart = time_transfer(must_start_time, "CTQ", line_number)
-        cur_course.mustStartSlot = math.floor(timeSlotName2Id(start_time, mstart))
+        if (must_start_time != '-'):
+            mstart = time_transfer(must_start_time, "CTQ", line_number)
+            cur_course.mustStartSlot = math.floor(timeSlotName2Id(start_time, mstart))
 
-    if (must_end_time != '-'):
-        mend = time_transfer(must_end_time, "CTQ", line_number)
-        cur_course.mustEndSlot = math.floor(timeSlotName2Id(start_time, mend - timedelta(hours=0, minutes=1)))
-    else: # By default, class will end by onfig['Class-default-end-time'])
-        mend = time_transfer(config['Class-default-end-time'], "config", -1)
-        cur_course.mustEndSlot = math.floor(timeSlotName2Id(start_time, mend - timedelta(hours=0, minutes=1)))
+        if (must_end_time != '-'):
+            mend = time_transfer(must_end_time, "CourseThisQuarter", line_number)
+            cur_course.mustEndSlot = math.floor(timeSlotName2Id(start_time, mend - timedelta(hours=0, minutes=1)))
 
     return
+
+#################################################################################
+def readCTQline(values, TotalCourseNum, line_number):
+    '''
+    Usage: read lines from CourseThisQuarter, can read both txt format and csv format
+    
+    Input: 
+    values(list): a list of information read from CTQ file
+    TotalCourseNum(int)
+    line_number(int): line number 
+
+    Output:
+    course_name(string): e.g., '450/550'
+    course_name_before_slash(string): e.g., '450'
+    instructor_name(string): e.g., 'cheng'
+    must_on_days(string): e.g., 'mwf'
+    must_start_time(string): e.g., '8:30'
+    must_end_time(string): e.g., '15:20'
+    TotalCourseNum(int): e.g., 1
+    '''
+    
+    # Check the length of values, if not 5 or 8, exit
+    if (len(values) != 5 and len(values) != 8):
+        sys.exit(f"Warning: Incorrect CoursesThisQuarter format for line {line_number}. Each row should have 5 or 8 columns.")
+
+    # Extract course name and instructor name
+    course_name = values[0]
+    course_name_before_slash = course_name.split('/')[0]
+    instructor_name = values[1]
+    must_on_days = values[2].lower()
+    must_start_time = values[3]
+    must_end_time = values[4]
+    TotalCourseNum += 1
+
+    return course_name, course_name_before_slash, instructor_name, must_on_days, must_start_time, must_end_time, TotalCourseNum
 
 #################################################################################
 def read_courseInstructor(file_name, config):
@@ -373,92 +406,165 @@ def read_courseInstructor(file_name, config):
     CourseId2Name = []
     InstructorName2Id = {}
     InstructorId2Name = []
+
     # Course: courseId, courseName, instructorId, mustOnDays, mustStartSlot, mustEndSlot, lengPerSession, sessionsPerWeek, largeClass, exempted, isTASession, slotNum
     CourseInfo = [Course(-1, -1, -1, [], -1, -1, -1, -1, -1, -1, -1, -1) for _ in range(100)]
     Instructor2Courses = defaultdict(list)
     TotalCourseNum = 0
     line_number = 0
 
-    # Read the CourseInstructor file line by line
-    with open(file_name, "r") as file:
-        for line in file:
-            line_number += 1
+    information = []
 
-            #Ignore empty lines and lines starting with "#"
-            if not line.strip() or line.startswith("#"):
-                continue
+    if file_name.endswith('.csv'):
+        with open(file_name, 'r', newline='') as csvfile:
+                csv_reader = csv.reader(csvfile)
 
-            # Split each line into its components
-            values = line.strip().split()
+                # Skip the header line
+                header = next(csv_reader, None)
+                line_number += 1
+                
+                # Iterate through the remaining lines 
+                for values in csv_reader:
+                    line_number += 1
 
-            # Check the length of values, if not 5 or 8, print warning and skip the line
-            if (len(values) != 5 and len(values) != 8):
-                print(f"Warning: Incorrect CoursesThisQuarter format for line {line_number}. Each row should have 5 or 8 columns.", file=sys.stderr)
-                continue
+                    # Skip empty lines or line starting with '#'
+                    if not any(values):
+                        continue
 
-            # Extract course name and instructor name
-            course_name = values[0].lower()
-            course_name_before_slash = course_name.split('/')[0].lower()
-            instructor_name = values[1].lower()
-            must_on_days = values[2].lower()
-            must_start_time = values[3]
-            must_end_time = values[4]
-            TotalCourseNum += 1
-            instructor_id, course_id = defineID(instructor_name, course_name_before_slash, InstructorName2Id, InstructorId2Name, CourseName2Id, CourseId2Name)
+                    course_name, course_name_before_slash, instructor_name, must_on_days, must_start_time, must_end_time, TotalCourseNum = readCTQline(values, TotalCourseNum, line_number)
+                    instructor_id, course_id = defineID(instructor_name, course_name_before_slash, InstructorName2Id, InstructorId2Name, CourseName2Id, CourseId2Name)
+    
+                    information.append([instructor_id, course_id, course_name, must_on_days, must_start_time, must_end_time, line_number])
+                     
+    else:
+        # Read the CourseInstructor file line by line
+        with open(file_name, "r") as file:
+            for line in file:
+                line_number += 1
 
-            CourseInfoFromCTQ(Instructor2Courses, CourseInfo, instructor_id, course_id, course_name, config, must_on_days, must_start_time, must_end_time, line_number)
+                #Ignore empty lines and lines starting with "#"
+                if not line.strip() or line.startswith("#"):
+                    continue
 
+                # Split each line into its components
+                values = line.strip().split()
+
+                course_name, course_name_before_slash, instructor_name, must_on_days, must_start_time, must_end_time, TotalCourseNum = readCTQline(values, TotalCourseNum, line_number)
+                instructor_id, course_id = defineID(instructor_name, course_name_before_slash, InstructorName2Id, InstructorId2Name, CourseName2Id, CourseId2Name)
+                information.append([instructor_id, course_id, course_name, must_on_days, must_start_time, must_end_time, line_number])
+                
+    CourseInfoFromCTQ(information, Instructor2Courses, CourseInfo, config)
     course_instructor = [CourseName2Id, CourseId2Name, InstructorName2Id, InstructorId2Name, Instructor2Courses, CourseInfo, TotalCourseNum]
 
     return course_instructor
 
 #################################################################################
-def CourseInfoFromCI(cur_course, length_per_session, num_sessions_per_week, large_class, ten_percent_rule_exempted, is_a_TA_session,\
-                     mustOnDays, mustStartTime, mustEndTime, config, line_number):
+def CourseInfoFromCI(information, config, CourseInfo, CourseName2Id):
     '''
     Usage: Update course information read from CourseInfo file.
 
     Input: 
-    cur_course(course)
-    length_per_session(int)
-    num_sessions_per_week(int)
-    large_class(int), either 0 or 1
-    ten_percent_rule_exempted(int), either 0 or 1
-    is_a_TA_session(int), either 0 or 1
+    information(list): a list that contains all the information read from CI file
+    config(dict)
+    CourseInfo(list)
+    CourseName2Id(dict)
+
+    Output:
+    NonExemptedC(list): a list of non-exempted course's course id
+    TotalNonExemptedHours(float): total number of non-ExemptedHours
     '''
 
-    start_time = time_transfer(config['InstructDayStartsAt'], "config", -1)
+    TotalC = []
+    TotalNonExemptedHours = 0
+    NonExemptedC = []
 
-    cur_course.lengPerSession = length_per_session
-    cur_course.sessionsPerWeek = num_sessions_per_week
-    cur_course.largeClass = large_class
-    cur_course.exempted = ten_percent_rule_exempted
-    cur_course.isTASession = is_a_TA_session
-    cur_course.slotNum = math.ceil(length_per_session / 30)
+    for course_name, course_name_before_slash, length_per_session, num_sessions_per_week, large_class, ten_percent_rule_exempted,\
+        is_a_TA_session, mustOnDays, mustStartTime, mustEndTime, line_number in information:
 
-    # For mustOnDays,  mustStartTime, mustEndTime, do the intersection
-    if (mustOnDays != '-'):
-        mustOnDays_intersection = set(cur_course.mustOnDays) & set(days2listint(mustOnDays, "courseInfo", line_number))
-        cur_course.mustOnDays = list(mustOnDays_intersection)
-        if len(cur_course.mustOnDays) < num_sessions_per_week:
-            sys.exit(f"MustDays for {cur_course.courseName} should not be less than session per week.\
-                     Please check courseInfo and courseThisQuarter files")
+        if (CourseName2Id[course_name_before_slash.lower()] in TotalC):
+            print(f'Warning: {course_name} appears multiple times in courseInfo', file=sys.stderr)
+            continue
+        
+        TotalC.append(CourseName2Id[course_name_before_slash.lower()])
+        cur_course = CourseInfo[CourseName2Id[course_name_before_slash.lower()]]
+        start_time = time_transfer(config['InstructDayStartsAt'], "config", -1)
 
-    if (mustStartTime != '-'):
-        mstart = time_transfer(mustStartTime, "courseInfo", line_number)
-        mstartslot = math.floor(timeSlotName2Id(start_time, mstart))
-        cur_course.mustStartSlot = max(cur_course.mustStartSlot, mstartslot) 
+        cur_course.lengPerSession = length_per_session
+        cur_course.sessionsPerWeek = num_sessions_per_week
+        cur_course.largeClass = large_class
+        cur_course.exempted = ten_percent_rule_exempted
+        cur_course.isTASession = is_a_TA_session
+        cur_course.slotNum = math.ceil(length_per_session / 30)
     
-    if (mustEndTime != '-'):
-        mend = time_transfer(mustEndTime, "courseInfo", line_number)
-        mendslot = math.floor(timeSlotName2Id(start_time, mend - timedelta(hours=0, minutes=1)))
-        cur_course.mustEndSlot = min(cur_course.mustEndSlot, mendslot) 
+        if (ten_percent_rule_exempted == 0 and CourseName2Id[course_name_before_slash.lower()] not in NonExemptedC): # if a course is not exempted
+            NonExemptedC.append(CourseName2Id[course_name_before_slash.lower()])
+            TotalNonExemptedHours += cur_course.slotNum * num_sessions_per_week / 2
+
+        # For mustOnDays,  mustStartTime, mustEndTime, do the intersection
+        if (mustOnDays != '-'):
+            mustOnDays_intersection = set(cur_course.mustOnDays) & set(days2listint(mustOnDays, "courseInfo", line_number))
+            cur_course.mustOnDays = list(mustOnDays_intersection)
+            if len(cur_course.mustOnDays) < num_sessions_per_week:
+                sys.exit(f"MustDays for {cur_course.courseName} should not be less than session per week.\
+                        Please check courseInfo and courseThisQuarter files")
+
+        if (mustStartTime != '-'):
+            mstart = time_transfer(mustStartTime, "courseInfo", line_number)
+            mstartslot = math.floor(timeSlotName2Id(start_time, mstart))
+            cur_course.mustStartSlot = max(cur_course.mustStartSlot, mstartslot) 
+        
+        if (mustEndTime != '-'):
+            mend = time_transfer(mustEndTime, "courseInfo", line_number)
+            mendslot = math.floor(timeSlotName2Id(start_time, mend - timedelta(hours=0, minutes=1)))
+            # If both files have an end time, take the earlier one
+            if (cur_course.mustEndSlot != -1):
+                cur_course.mustEndSlot = min(cur_course.mustEndSlot, mendslot) 
+            # If only courseInfo file have an end time, take it
+            else:
+                cur_course.mustEndSlot = mendslot
+
+        # If end time is not specified in any file. By default, class will end by config['Class-default-end-time'])
+        elif (cur_course.mustEndSlot == -1 and mustEndTime == '-'):
+            mend = time_transfer(config['Class-default-end-time'], "config", -1)
+            cur_course.mustEndSlot = math.floor(timeSlotName2Id(start_time, mend - timedelta(hours=0, minutes=1)))
+        
+        duration = cur_course.mustEndSlot - cur_course.mustStartSlot + 1
+        if (duration < cur_course.slotNum):
+            pdb.set_trace()
+            sys.exit(f"End time minus start time for LING {cur_course.courseName} should be larger than course length.\
+                    Please check courseInfo and courseThisQuarter files.")
     
-    duration = cur_course.mustEndSlot - cur_course.mustStartSlot + 1
-    if (duration < cur_course.slotNum):
-        sys.exit(f"End time - start time for {cur_course.courseName} should be larger than course length.\
-                  Please check courseInfo and courseThisQuarter files.")
-    return
+    NonExemptedC.sort()
+
+    return NonExemptedC, TotalNonExemptedHours
+
+#################################################################################
+def readCIline(values, course_instructor, line_number):
+    '''
+    Usage: read lines in courseInfo file.
+    '''
+
+    if (len(values) != 9):
+        sys.exit(f"Warning: Incorrect CoursesInfo format for line {line_number}. Each row should have 9 columns.")
+
+    course_name = values[0]
+    course_name_before_slash = course_name.split('/')[0]
+    
+    #If the course is not taught this quarter, skip the line.
+    if (course_name_before_slash.lower() not in course_instructor[0]):
+        return -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+
+    length_per_session = int(values[1])
+    num_sessions_per_week = int(values[2])
+    large_class = int(values[3])
+    ten_percent_rule_exempted = int(values[4])
+    is_a_TA_session = int(values[5])
+    mustOnDays = values[6].lower()
+    mustStartTime = values[7]
+    mustEndTime = values[8]
+
+    return course_name, course_name_before_slash, length_per_session, num_sessions_per_week, large_class, ten_percent_rule_exempted,\
+        is_a_TA_session, mustOnDays, mustStartTime, mustEndTime
 
 #################################################################################
 def read_courseInfo(file_name, course_instructor, config):
@@ -480,56 +586,59 @@ def read_courseInfo(file_name, course_instructor, config):
     ###
     '''
 
-    TotalNonExemptedHours = 0
-    NonExemptedC = []
     CourseName2Id = course_instructor[0]
     CourseInfo = course_instructor[5]
-    TotalC = []
+    information = []
 
     # Read the CourseInfo file
     line_number = 0
-    with open(file_name, "r") as file:
-        for line in file:
-            line_number += 1
+    if file_name.endswith('.csv'):
+        with open(file_name, 'r', newline='') as csvfile:
+                csv_reader = csv.reader(csvfile)
 
-            # Ignore empty lines and lines starting with "#"
-            if not line.strip() or line.startswith("#"):
-                continue
+                # Skip the header line
+                header = next(csv_reader, None)
+                line_number += 1
+                
+                # Iterate through the remaining lines
+                for values in csv_reader:
+                    line_number += 1
 
-            # Split the line into values and create a CourseInfo object
-            values = line.strip().split('#')[0].split()
-            if (len(values) != 9):
-                sys.exit(f"Warning: Incorrect CoursesInfo format for line {line_number}. Each row should have 9 columns.")
+                    # Skip empty lines or line starting with '#'
+                    if not any(values) or values[0].startswith('#'):
+                        continue
 
-            course_name = values[0].lower()
-            course_name_before_slash = course_name.split('/')[0].lower()
-            #If the course is not taught this quarter, skip the line.
-            if (course_name_before_slash not in course_instructor[0]):
-                continue
+                    course_name, course_name_before_slash, length_per_session, num_sessions_per_week, large_class, ten_percent_rule_exempted,\
+                        is_a_TA_session, mustOnDays, mustStartTime, mustEndTime\
+                        = readCIline(values, course_instructor, line_number)
+                    
+                    if (course_name != -1):
+                        information.append([course_name, course_name_before_slash, length_per_session, num_sessions_per_week, large_class, ten_percent_rule_exempted,\
+                            is_a_TA_session, mustOnDays, mustStartTime, mustEndTime, line_number])
 
-            length_per_session = int(values[1])
-            num_sessions_per_week = int(values[2])
-            large_class = int(values[3])
-            ten_percent_rule_exempted = int(values[4])
-            is_a_TA_session = int(values[5])
-            mustOnDays = values[6].lower()
-            mustStartTime = values[7]
-            mustEndTime = values[8]
+    else:
+        with open(file_name, "r") as file:
+            for line in file:
+                line_number += 1
 
-            if (CourseName2Id[course_name_before_slash] in TotalC):
-                print(f'Warning: {course_name} appears multiple times in courseInfo', file=sys.stderr)
-                continue
+                # Ignore empty lines and lines starting with "#"
+                if not line.strip() or line.startswith("#"):
+                    continue
 
-            TotalC.append(CourseName2Id[course_name_before_slash])
-            cur_course = CourseInfo[CourseName2Id[course_name_before_slash]]
-            CourseInfoFromCI(cur_course, length_per_session,  num_sessions_per_week, large_class, ten_percent_rule_exempted,\
-                              is_a_TA_session, mustOnDays, mustStartTime, mustEndTime, config, line_number)
+                # Split the line into values and create a CourseInfo object
+                values = line.strip().split('#')[0].split()
 
-            # NonExemptedC should not have duplicate element 
-            if (ten_percent_rule_exempted == 0 and CourseName2Id[course_name_before_slash] not in NonExemptedC): # if a course is not exempted
-                NonExemptedC.append(CourseName2Id[course_name_before_slash])
-                TotalNonExemptedHours += cur_course.slotNum * num_sessions_per_week / 2
-                NonExemptedC.sort()
+                course_name, course_name_before_slash, length_per_session, num_sessions_per_week, large_class, ten_percent_rule_exempted,\
+                    is_a_TA_session, mustOnDays, mustStartTime, mustEndTime\
+                    = readCIline(values, course_instructor, line_number)
+
+                if (course_name != -1):
+                    information.append([course_name, course_name_before_slash, length_per_session, num_sessions_per_week, large_class, ten_percent_rule_exempted,\
+                        is_a_TA_session, mustOnDays, mustStartTime, mustEndTime, line_number])
+
+    CourseInfoFromCI(information, config, CourseInfo, CourseName2Id)
+
+    NonExemptedC, TotalNonExemptedHours = CourseInfoFromCI(information, config, CourseInfo, CourseName2Id)
 
     return NonExemptedC, TotalNonExemptedHours
 
@@ -564,7 +673,7 @@ def read_conflict(file_name, course_instructor):
             courses = line.split('#')[0].strip().split()
             
             # Adding conflicted pairs from conflicted files
-            course_ids = [CourseName2Id[course.split('/')[0]] for course in courses if course.split('/')[0] in CourseName2Id]
+            course_ids = [CourseName2Id[course.split('/')[0].lower()] for course in courses if course.split('/')[0].lower() in CourseName2Id]
             for i in range(len(course_ids)-1):
                 #print out the course name for i
                 for j in range(i + 1, len(course_ids)):
@@ -645,6 +754,70 @@ def setDefaultInsPref(prefStartTime, prefEndTime, prefDays, config, line_number)
     return prefStartSlot, prefEndSlot, prefDayList
 
 #################################################################################
+def readInsPrefline(values, line_number):
+    '''
+    Usage: Read lines in inspref file
+
+    Input:
+    values(list): e,g., ['Bender', 'TRF', '-', '-', '1']
+    line_number(int): the line number in txt file or csv file
+
+    Output:
+    instructor_name(string): e.g., 'bender'
+    prefDays(string): e.g., 'trf'
+    prefStartTime(string): e.g., '-'
+    prefEndTime(string): e.g., '-'
+    sameDay(string): e.g., '1'
+    '''
+
+    if (len(values) != 5):
+        sys.exit(f"Incorrect InstructorPref format for line {line_number}. Each row should have 5 columns.")
+    instructor_name = values[0]
+    prefDays = values[1].lower()
+    prefStartTime = values[2]
+    prefEndTime = values[3]
+    sameDay = values[4]
+
+    return instructor_name, prefDays, prefStartTime, prefEndTime, sameDay
+
+#################################################################################
+def processInsPref(information, InstructorName2Id, Instructor2Courses, config, CourseInfo, IW, line_number):
+    '''
+    Usage: processing insPref file, adding sameDay pairs, setting up IW matrix.
+    '''
+
+    instructor_in_insPref = [] 
+    SameDayPairs = set()
+    for instructor_name, prefDays, prefStartTime, prefEndTime, sameDay in information:
+        InstructorID = InstructorName2Id[instructor_name.lower()]
+
+        instructor_in_insPref.append(InstructorID)
+        course_ids = Instructor2Courses[InstructorID]
+
+        if (config["Assume-same-day-if-not-specified"] == 0\
+            and sameDay == '1' and len(course_ids) > 1):
+            for i in range(len(course_ids)-1):
+                for j in range(i + 1, len(course_ids)):
+                    if (CourseInfo[course_ids[i]].sessionsPerWeek <= CourseInfo[course_ids[j]].sessionsPerWeek):
+                        SameDayPairs.add((course_ids[i], course_ids[j]))
+                    else:
+                        SameDayPairs.add((course_ids[j], course_ids[i]))  
+
+        prefStartSlot, prefEndSlot, prefDayList = setDefaultInsPref(prefStartTime, prefEndTime, prefDays, config, line_number)
+
+        for c in course_ids:
+            for d in prefDayList:
+                for t in range(prefStartSlot, prefEndSlot - math.ceil(CourseInfo[c].lengPerSession/30) + 1):
+                    try:
+                        IW[c][d][t] = 1 / CourseInfo[c].sessionsPerWeek
+                    except:
+                        sys.exit(f"CourseInfo for {CourseInfo[c].courseName} fail to find")
+                    if (1 / CourseInfo[c].sessionsPerWeek < 0):
+                        sys.exit(f"CourseInfo for {CourseInfo[c].courseName} fail to find")
+
+    return instructor_in_insPref, SameDayPairs, IW
+
+#################################################################################
 def read_instructorPref(file_name, course_instructor, config):
     '''
     Usage: Read the instructor preference file and create matrix IW(instructor pref weight). 
@@ -666,54 +839,51 @@ def read_instructorPref(file_name, course_instructor, config):
     ###
     '''
 
-    SameDayPairs = set()
     InstructorName2Id = course_instructor[2]
     InstructorId2Name = course_instructor[3]
     Instructor2Courses = course_instructor[4]
     CourseInfo = course_instructor[5]
     TotalCourseNum = course_instructor[6]
     IW = [[[0 for _ in range(config['SlotNumPerday'])] for _ in range(5)] for _ in range(TotalCourseNum)]
-    instructor_in_insPref = [] 
     line_number = 0
+    information = []
 
-    with open(file_name, "r") as file:
-        for line in file:
+    if file_name.endswith('.csv'):
+        with open(file_name, 'r', newline='') as csvfile:
+            csv_reader = csv.reader(csvfile)
+
+            # Skip the header line
+            header = next(csv_reader, None)
             line_number += 1
-            # Ignore empty lines and lines starting with "#"
-            if not line.strip() or line.startswith("#"):
-                continue
-            if (len(line.split('#')[0].strip().split()) != 5):
-                print(f"Warning: Incorrect InstructorPref format for line {line_number}. Each row should have 5 columns.", file=sys.stderr)
-                continue
 
-            instructor_name, prefDays, prefStartTime, prefEndTime, sameDay = line.strip().split()
-            instructor_name = instructor_name.lower()
-            prefDays = prefDays.lower()
+            # Iterate through the remaining lines
+            for values in csv_reader:
+                line_number += 1
 
-            #If the instructor is not teaching that quarter, skip the line
-            if (instructor_name not in InstructorName2Id):
-                continue
-            InstructorID = InstructorName2Id[instructor_name]
-            instructor_in_insPref.append(InstructorID)
-            course_ids = Instructor2Courses[InstructorID]
+                # Skip empty lines or line starting with '#'
+                if not any(values) or values[0].startswith('#'):
+                    continue
 
-            if (config["Assume-same-day-if-not-specified"] == 0\
-                and sameDay == '1' and len(course_ids) > 1):
-                for i in range(len(course_ids)-1):
-                    for j in range(i + 1, len(course_ids)):
-                        if (CourseInfo[course_ids[i]].sessionsPerWeek <= CourseInfo[course_ids[j]].sessionsPerWeek):
-                            SameDayPairs.add((course_ids[i], course_ids[j]))
-                        else:
-                            SameDayPairs.add((course_ids[j], course_ids[i]))  
+                instructor_name, prefDays, prefStartTime, prefEndTime, sameDay = readInsPrefline(values, line_number)
+                if (instructor_name.lower() not in InstructorName2Id):
+                    continue
+                information.append([instructor_name, prefDays, prefStartTime, prefEndTime, sameDay])
 
-            prefStartSlot, prefEndSlot, prefDayList = setDefaultInsPref(prefStartTime, prefEndTime, prefDays, config, line_number)
+    else:
+        with open(file_name, "r") as file:
+            for line in file:
+                line_number += 1
+                # Ignore empty lines and lines starting with "#"
+                if not line.strip() or line.startswith("#"):
+                    continue
 
-            for c in course_ids:
-                for d in prefDayList:
-                    for t in range(prefStartSlot, prefEndSlot - math.ceil(CourseInfo[c].lengPerSession/30) + 1):
-                        IW[c][d][t] = 1 / CourseInfo[c].sessionsPerWeek
-                        if (1 / CourseInfo[c].sessionsPerWeek < 0):
-                            sys.exit(f"CourseInfo for {CourseInfo[c].courseName} fail to find")
+                values = line.strip().split()
+                instructor_name, prefDays, prefStartTime, prefEndTime, sameDay = readInsPrefline(values, line_number)
+                if (instructor_name.lower() not in InstructorName2Id):
+                    continue
+                information.append([instructor_name, prefDays, prefStartTime, prefEndTime, sameDay])
+
+    instructor_in_insPref, SameDayPairs, IW = processInsPref(information, InstructorName2Id, Instructor2Courses, config, CourseInfo, IW, line_number)
                
     insNotInPref(TotalCourseNum, CourseInfo, instructor_in_insPref, InstructorId2Name)   
     if (config["Assume-same-day-if-not-specified"] == 1):
@@ -1368,7 +1538,7 @@ def generate_output(X, output_dir, course_instructor, config, IW, instructor_in_
             meetBP = checkMeetBP(config, slots, session_length, BPNotMet, BlockingSlot, course_name)
 
             formatted_output = "{:<8}\t{:<20}\t{:<5}\t{:<8}\t{:<8}\t{:<5}\t{:<3}\t{:<3}\n"\
-                .format(course_name.upper(), instructor_name, teaching_days, course_start, course_end, session_length, meetBP, meetIP)
+                .format(course_name, instructor_name, teaching_days, course_start, course_end, session_length, meetBP, meetIP)
             file.write(formatted_output)
     
     return NumCNoPref, InsNotMet, BPNotMet
@@ -1560,7 +1730,7 @@ def createCSVrow(CourseInfo, c, config, InstructorId2Name, totalSlot, X, start_t
     if (CourseInfo[c].instructorId not in instructor_in_insPref):
         meetIP = '-'
 
-    return course_name.upper(), instructor_name, session_length, meetBP, meetIP, teaching_days, course_start, course_end
+    return course_name, instructor_name, session_length, meetBP, meetIP, teaching_days, course_start, course_end
 
 #################################################################################
 def generateNonExCSV(output_dir, X, course_instructor, config, NonExemptedC, InsNotMet, BPNotMet, instructor_in_insPref):

@@ -4,11 +4,11 @@
 
 200        McGarrity      MWF 14:30 15:20
 
-233        Evans          MWF  -    15:20    
+233        Evans          MWF  8:30  9:20    
 
 234        234-TBA        -    -    15:20 
 
-269        McGarrity      -    -    15:20 
+269        McGarrity      -    10:30    15:20 
 
 432/532    Evans          -    -    15:20  
 
@@ -28,7 +28,7 @@
 
 520        Cheng          -    -    15:20 
 
-573        Levow          -    9:30    15:20 
+573        Levow          -    10:30    15:20 
 
 574        Steinert-Threlkeld  -    -  14:20
 
@@ -64,24 +64,24 @@
 200AE      TA3           TR  -   15:20
 200AF      TA3           TR  -   15:20
 
-200AG      TA9           TR  -   17:20 
-200AH      TA9           TR  -   17:20 
+200AG      TA4           TR  -   17:20 
+200AH      TA4           TR  -   17:20 
 
 ## 233 has 6 sessions, 2 TAs, must meet on R
-233AA      TA4           R   -   15:20
-233AD      TA4           R   -   15:20
-233AE      TA4           R   -   15:20
+233AA      TA5           R   -   15:20
+233AD      TA5           R   -   15:20
+233AE      TA5           R   -   15:20
 
-233AF      TA5           R   -   15:20 
-233AG      TA5           R   -   15:20 
-233AH      TA5           R   -   15:20 
+233AF      TA6           R   -   15:20 
+233AG      TA6           R   -   15:20 
+233AH      TA6           R   -   15:20 
 
 ## 269 has 3 sessions, 1 TA, must meet on R
-269AA      TA6           R   -   15:20
-269AB      TA6           R   -   15:20
-269AC      TA6           R   -   15:20
+269AA      TA7           R   -   15:20
+269AB      TA7           R   -   15:20
+269AC      TA7           R   -   15:20
 
 ## Does 472 have a TA session, if so, on which day?
-472AA      TA7           -   -   15:20
+472AA      TA8           -   -   15:20
 
-450AA      TA8           R   -   15:20
+450AA      TA9           R   -   15:20

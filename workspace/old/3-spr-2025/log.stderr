@@ -1,161 +1,170 @@
-Log file generate at 2023-11-16 12:32:33.904103
+Log file generate at 2023-11-29 13:23:11.645400
 python version: 3.10.13 | packaged by conda-forge | (main, Oct 26 2023, 18:07:37) [GCC 12.3.0]
 pulp version: 2.7.0
 config file=config
-courseInstructor file=./CourseInfo
+courseInstructor file=./CoursesThisQuarter
 courseInfo file=./CourseInfo
 conflict file=./ConflictCourses
 instructorPref file=./InstructorPref
+output dir=./output/
 
-573, 575-guest2 are conflicted
-573, 575-guest3 are conflicted
-573, 575-Ste are conflicted
-575-guest2, 575-guest3 are conflicted
-575-Ste, 575-guest2 are conflicted
-575-Ste, 575-guest3 are conflicted
-450/550, 461 are conflicted
-432/532, 450/550 are conflicted
-575-Lev, 599A are conflicted
-575-Ste, 599A are conflicted
-575-guest2, 599A are conflicted
-575-guest3, 599A are conflicted
-580-Lap, 599A are conflicted
-580-Wri, 599A are conflicted
-580-TBA, 599A are conflicted
-599A, 599B are conflicted
-200, 599B are conflicted
-599B, 200AA are conflicted
+233AA, 233AH are conflicted
+233AD, 233AG are conflicted
+200AC, 200AG are conflicted
 599B, 200AB are conflicted
-200, 200AA are conflicted
-200, 200AB are conflicted
-200, 599B are conflicted
-599B, 200AC are conflicted
-599B, 200AD are conflicted
-200, 200AC are conflicted
-200, 200AD are conflicted
-200, 599B are conflicted
-599B, 200AE are conflicted
-599B, 200AF are conflicted
-200, 200AE are conflicted
-200, 200AF are conflicted
-233, 599B are conflicted
-599B, 233AA are conflicted
-599B, 233AD are conflicted
+233AE, 233AH are conflicted
 599B, 233AE are conflicted
-233, 233AA are conflicted
+200AE, 200AG are conflicted
+200, 599B are conflicted
+269, 269AC are conflicted
+573, 575-guest2 are conflicted
+200AA, 200AC are conflicted
+575-Ste, 599A are conflicted
 233, 233AD are conflicted
-233, 233AE are conflicted
-233, 599B are conflicted
-599B, 233AF are conflicted
+580-Che, 599A are conflicted
+574, 575-Lev are conflicted
+599B, 200AD are conflicted
 599B, 233AG are conflicted
-599B, 233AH are conflicted
+575-Lev, 575-Ste are conflicted
+200AA, 200AE are conflicted
+200AB, 200AD are conflicted
 233, 233AF are conflicted
-233, 233AG are conflicted
-233, 233AH are conflicted
-269, 599B are conflicted
+574, 575-guest2 are conflicted
+450/550, 574 are conflicted
+599B, 200AF are conflicted
 599B, 269AA are conflicted
-599B, 269AB are conflicted
-599B, 269AC are conflicted
-269, 269AA are conflicted
-269, 269AB are conflicted
-269, 269AC are conflicted
-200, 200AA are conflicted
-200, 200AB are conflicted
-200, 200AC are conflicted
-200, 200AD are conflicted
-200, 200AE are conflicted
-200, 200AF are conflicted
+200AD, 200AF are conflicted
+575-Lev, 575-guest3 are conflicted
+575-Ste, 575-guest2 are conflicted
+200AA, 200AG are conflicted
 200, 200AG are conflicted
-200, 200AH are conflicted
-200, 200AI are conflicted
-233, 233AA are conflicted
-233, 233AD are conflicted
-233, 233AE are conflicted
-233, 233AF are conflicted
-233, 233AG are conflicted
+200AB, 200AF are conflicted
 233, 233AH are conflicted
-269, 269AA are conflicted
-269, 269AB are conflicted
-269, 269AC are conflicted
+599A, 599B are conflicted
+450/550, 575-Ste are conflicted
+599B, 200AH are conflicted
+599B, 269AC are conflicted
+573, 574 are conflicted
+200AD, 200AH are conflicted
+233AD, 233AF are conflicted
+200AB, 200AH are conflicted
 472, 472AA are conflicted
+200AF, 200AH are conflicted
+450/550, 462 are conflicted
+599B, 200AA are conflicted
+450/550, 575-guest3 are conflicted
+599B, 233AD are conflicted
+573, 575-Ste are conflicted
+200, 200AB are conflicted
+233, 599B are conflicted
+233AD, 233AH are conflicted
+233, 233AA are conflicted
+599B, 200AC are conflicted
+269, 599B are conflicted
+599B, 233AF are conflicted
+580-Lap, 599A are conflicted
+573, 575-guest3 are conflicted
+200, 200AD are conflicted
+200AB, 200AC are conflicted
+580-TBA, 599A are conflicted
+450/550, 573 are conflicted
+599B, 200AE are conflicted
+599B, 233AH are conflicted
+575-guest2, 575-guest3 are conflicted
+200AD, 200AE are conflicted
+200, 200AF are conflicted
+200AB, 200AE are conflicted
+233AA, 233AG are conflicted
+200AC, 200AF are conflicted
+574, 575-guest3 are conflicted
+599B, 200AG are conflicted
+233AE, 233AG are conflicted
+200AD, 200AG are conflicted
+269, 269AB are conflicted
+200, 200AH are conflicted
+575-Lev, 599A are conflicted
+200AC, 200AH are conflicted
+200AF, 200AG are conflicted
+575-guest2, 599A are conflicted
+200AE, 200AH are conflicted
+200, 200AA are conflicted
+200AA, 200AD are conflicted
+233, 233AE are conflicted
+200, 200AC are conflicted
+575-Lev, 575-guest2 are conflicted
+200AA, 200AF are conflicted
+432/532, 450/550 are conflicted
+575-guest3, 599A are conflicted
+233, 233AG are conflicted
+450/550, 575-Lev are conflicted
+599B, 269AB are conflicted
+200, 200AE are conflicted
+450/550, 450AA are conflicted
+233AA, 233AF are conflicted
+575-Ste, 575-guest3 are conflicted
+200AA, 200AH are conflicted
+200AC, 200AE are conflicted
+200AB, 200AG are conflicted
+432/532, 452/552 are conflicted
+450/550, 461 are conflicted
+450/550, 575-guest2 are conflicted
+233AE, 233AF are conflicted
+599B, 233AA are conflicted
+269, 269AA are conflicted
 
-200AA, 200AB are conflicted because they are taught by TA1
-200AC, 200AD are conflicted because they are taught by TA2
-200AE, 200AF are conflicted because they are taught by TA3
-233AA, 233AD are conflicted because they are taught by TA8
-233AA, 233AE are conflicted because they are taught by TA8
-233AD, 233AE are conflicted because they are taught by TA8
-233AF, 233AG are conflicted because they are taught by TA9
-233AF, 233AH are conflicted because they are taught by TA9
-233AG, 233AH are conflicted because they are taught by TA9
+461, 462 are conflicted because they are taught by Citko
+452/552, 580-Lap are conflicted because they are taught by LaPierre
+233AF, 233AH are conflicted because they are taught by TA5
 269AA, 269AB are conflicted because they are taught by TA6
-269AA, 269AC are conflicted because they are taught by TA6
-269AB, 269AC are conflicted because they are taught by TA6
+520, 580-Che are conflicted because they are taught by Cheng
 200AA, 200AB are conflicted because they are taught by TA1
+200AG, 200AH are conflicted because they are taught by TA9
+233AA, 233AE are conflicted because they are taught by TA4
 200AC, 200AD are conflicted because they are taught by TA2
-200AE, 200AF are conflicted because they are taught by TA3
-200AG, 200AH are conflicted because they are taught by TA4
-233AA, 233AD are conflicted because they are taught by TA8
-233AA, 233AE are conflicted because they are taught by TA8
-233AD, 233AE are conflicted because they are taught by TA8
-233AF, 233AG are conflicted because they are taught by TA9
-233AF, 233AH are conflicted because they are taught by TA9
-233AG, 233AH are conflicted because they are taught by TA9
-269AA, 269AB are conflicted because they are taught by TA6
+574, 575-Ste are conflicted because they are taught by Steinert-Threlkeld
+450/550, 451/551 are conflicted because they are taught by Hargus
 269AA, 269AC are conflicted because they are taught by TA6
+200AE, 200AF are conflicted because they are taught by TA3
+233, 432/532 are conflicted because they are taught by Evans
+233AF, 233AG are conflicted because they are taught by TA5
+233AG, 233AH are conflicted because they are taught by TA5
+233AA, 233AD are conflicted because they are taught by TA4
+233AD, 233AE are conflicted because they are taught by TA4
 269AB, 269AC are conflicted because they are taught by TA6
 200, 269 are conflicted because they are taught by McGarrity
-233, 432/532 are conflicted because they are taught by Evans
-450/550, 451/551 are conflicted because they are taught by Hargus
-452/552, 580-Lap are conflicted because they are taught by LaPierre
-461, 462 are conflicted because they are taught by Citko
 573, 575-Lev are conflicted because they are taught by Levow
-200AA, 200AB are conflicted because they are taught by TA1
-200AC, 200AD are conflicted because they are taught by TA2
-200AE, 200AF are conflicted because they are taught by TA3
-200AG, 200AH are conflicted because they are taught by TA4
-233AA, 233AD are conflicted because they are taught by TA8
-233AA, 233AE are conflicted because they are taught by TA8
-233AD, 233AE are conflicted because they are taught by TA8
-233AF, 233AG are conflicted because they are taught by TA9
-233AF, 233AH are conflicted because they are taught by TA9
-233AG, 233AH are conflicted because they are taught by TA9
-269AA, 269AB are conflicted because they are taught by TA6
-269AA, 269AC are conflicted because they are taught by TA6
-269AB, 269AC are conflicted because they are taught by TA6
 
-Warning: TA2 doesn't appear in the instructor preference file
-Warning: guest3 doesn't appear in the instructor preference file
-Warning: proseminar doesn't appear in the instructor preference file
-Warning: TA3 doesn't appear in the instructor preference file
-Warning: TA9 doesn't appear in the instructor preference file
-Warning: TA8 doesn't appear in the instructor preference file
-Warning: Chai doesn't appear in the instructor preference file
 Warning: Levow doesn't appear in the instructor preference file
-Warning: LaPierre doesn't appear in the instructor preference file
-Warning: lingColloq doesn't appear in the instructor preference file
-Warning: TA6 doesn't appear in the instructor preference file
-Warning: TA5 doesn't appear in the instructor preference file
-Warning: TA1 doesn't appear in the instructor preference file
-Warning: TBA doesn't appear in the instructor preference file
-Warning: TA4 doesn't appear in the instructor preference file
+Warning: proseminar doesn't appear in the instructor preference file
 Warning: guest2 doesn't appear in the instructor preference file
-Warning: McGarrity doesn't appear in the instructor preference file
+Warning: 234-TBA doesn't appear in the instructor preference file
+Warning: TA8 doesn't appear in the instructor preference file
+Warning: 580-TBA doesn't appear in the instructor preference file
 Warning: TA7 doesn't appear in the instructor preference file
+Warning: TA2 doesn't appear in the instructor preference file
+Warning: Chai doesn't appear in the instructor preference file
+Warning: TA6 doesn't appear in the instructor preference file
+Warning: TA4 doesn't appear in the instructor preference file
+Warning: TA3 doesn't appear in the instructor preference file
+Warning: guest3 doesn't appear in the instructor preference file
+Warning: lingColloq doesn't appear in the instructor preference file
+Warning: TA9 doesn't appear in the instructor preference file
+Warning: TA1 doesn't appear in the instructor preference file
+Warning: TA5 doesn't appear in the instructor preference file
 10%-rule-percentage=0.12
 must-follow-block-policy=1
 
 Result: Optimal
-Objective value: 11.0
-Upper bound: 10.999999990000001
-IW points earned: 11.0
+Objective value: 15.0
+Upper bound: 15.0
+IW points earned: 15.0
 CW points earned: 29.0
-Total Number of Course: 42
-Exempted Courses List: ['573', '575-Lev', '575-Ste', '575-guest2', '575-guest3']
+Total Number of Course: 43
+Exempted Courses List: ['573', '574', '575-Lev', '575-Ste', '575-guest2', '575-guest3']
 Total Number of Non-Exempted Courses: 37
-Total Number of Non-Exempted Hours: 87.0
+Total Number of Non-Exempted Hours: 86.0
 
-The number of courses for which the instructors are not listed in the instructorpref file: 31
+The number of courses for which the instructors are not listed in the instructorpref file: 28
 The number of courses for which the instructors' preference are not met: 0
 
 The number of courses that violate Block Policy: 0

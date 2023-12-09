@@ -13,12 +13,12 @@ BlockSchedulingEndsAt = 14:30
 # Right now, the percentage is 12%
 10PercRuleStartsAt = 8:30
 10PercRuleEndsAt = 18:20
-RulePercentage = 0.12 
+RulePercentage = 0.12
 
 # block scheduling requires the following starting time:
 50-min-class-start-time = 8:30 9:30 10:30 11:30 12:30 13:30
 80-min-class-start-time = 8:30 10:00 11:30 13:00
-110-min-class-start-time = 8:30 10:30 12:30 13:00
+110-min-class-start-time = 8:30 10:30 12:30 13:30 
 170-min-class-start-time = 8:30 11:30
 
 
@@ -27,10 +27,14 @@ RulePercentage = 0.12
 # decision variables to 0 for any slots that do not meet the policy)
 # if it is 0, then we do not set X, but the slot in CW with a penalty.
 must-follow-block-policy = 1
-penalty-for-violating-block-policy = -10
+penalty-for-violating-block-policy = -50
+
+## it is 1 if  instructors' same-day preference is treated as a hard constraint
+same-day = 1
 
 # lambdas for CW matrix and IW matrix
-UWPolicyWeight = 1
+# UWPolicyWeight is set to 0 if must-follow-block-policy==1; set to 1 otherwise
+UWPolicyWeight = 0
 InstructorPrefWeight = 1
 
 

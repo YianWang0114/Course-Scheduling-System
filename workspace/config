@@ -33,7 +33,7 @@ Penalty-for-violating-block-policy = -50
 ## if Treat-same-day-preference-as-hard-constraint is 1, instructors' same-day preference is treated as a hard constraint
 # if Assume-same-day-if-not-specified, all the courses taught by same professor are assumed to be on the same day
 Treat-same-day-preference-as-hard-constraint = 1
-Assume-same-day-if-not-specified = 0
+Assume-same-day-if-not-specified = 1
 
 # lambdas for CW matrix and IW matrix
 # UWPolicyWeight is set to 0 if must-follow-block-policy==1; set to 1 otherwise

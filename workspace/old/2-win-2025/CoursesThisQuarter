@@ -2,45 +2,47 @@
 
 # this file is used to set X and to expand conflicting course pairs
 
-200        McGarrity      MWF 14:30 15:20
+200        Cheng      MWF 14:30 15:20
 
-212        Ferjan-Ramirez -    -    15:20 
+212        Ferjan-Ramirez -    -    16:20 
 
-234        LaPierre       -    -    15:20 
+234        Lapierre       -    -    15:20 
 
-269        McGarrity      -    -    15:20 
+269        McGarrity      -    10:30    15:20 
 
-400        Cheng          -    -    16:50   
+400        McGarrity      -    13:30    16:20   
 
-403        Rozelle        -    -    16:50 
+403        Rozelle        -    -    16:20 
 
-412        Ogihara        -    -   16:50 
+412        Ogihara        -    13:30   16:20 
 
 442/542    Cheng          -    -    15:20 
 
-451/551    LaPierre       -    -   15:20 
+450/550    Wright         -    -   15:20
 
-453/553    Wright         -    -   15:20 
+451/551    Lapierre       -    -   15:20 
 
-449/549    Dobao          -    -    15:20 
+453/553    Chai           -    -   15:20
 
-461        Hedding        -    -    16:50 
+449/549    Dobao          -    -    16:20 
 
-462        Citko          -    -    16:50 
+461        Hedding        -    -    16:20 
 
-430        Wassink        -    -    16:50 
+462        Citko          -    -    16:20 
 
-479/579    Ogihara        -    -    15:20 
+430        Wassink        -    -    12:20 
+
+479/579    Ogihara        -    -    12:20 
 
 481/581    Hargus         -    -    15:20 
 
-534        Wassink        -    -    16:20 
+534        Wassink        -    13:00 15:20 
 
-567        Bender         -    -    15:20 
+567        Bender         -    15:30 17:20 
 
-571        Levow          -    -   15:20
+571        Levow          -    9:30 15:20
 
-572        Xia            -    -    15:20
+572        Xia            -    13:00 14:20
 
 575-Xia    Xia            -    15:30 17:50
 
@@ -69,14 +71,8 @@
 200AC      TA2           TR  -   15:20
 200AD      TA2           TR  -   15:20
 
-200AE      TA3           TR  -   -  
-200AF      TA3           TR  -   - 
-
-200AG      TA4           TR  -   - 
-200AH      TA4           TR  -   -
-
-200AI      TA5           TR  -   15:20
-
+200AE      TA5           TR  -   15:20
+200AF      TA5           TR  -   15:20
 
 ## 269 has 3 sessions, 1 TA, must meet on R
 269AA      TA8           R   -   15:20

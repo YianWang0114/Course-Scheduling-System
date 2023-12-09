@@ -6,9 +6,9 @@
 
 212        Ferjan-Ramirez -    -    16:20 
 
-234        LaPierre       -    -    15:20 
+234        Lapierre       -    -    15:20 
 
-269        McGarrity      -    -    15:20 
+269        McGarrity      -    10:30    15:20 
 
 400        McGarrity      -    13:30    16:20   
 
@@ -38,11 +38,11 @@
 
 534        Wassink        -    13:00 15:20 
 
-567        Bender         -    9:30 15:20 
+567        Bender         -    15:30 17:20 
 
 571        Levow          -    9:30 15:20
 
-572        Xia            -    9:30 15:20
+572        Xia            -    13:00 14:20
 
 575-Xia    Xia            -    15:30 17:50
 
@@ -63,7 +63,7 @@
 
 ### TA sessions
 
-## 200 has 9 sessions, 5 TAs, must meet on TR
+## 200 has 6 sessions, 3 TAs, must meet on TR
 200AA      TA1           TR  -   15:20
 200AB      TA1           TR  -   15:20
 
@@ -71,11 +71,11 @@
 200AC      TA2           TR  -   15:20
 200AD      TA2           TR  -   15:20
 
-200AE      TA5           TR  -   15:20
-200AF      TA5           TR  -   15:20
+200AE      TA3           TR  -   15:20
+200AF      TA3           TR  -   15:20
 
 ## 269 has 3 sessions, 1 TA, must meet on R
-269AA      TA8           R   -   15:20
-269AB      TA8           R   -   15:20
-269AC      TA8           R   -   15:20
+269AA      TA4           R   -   15:20
+269AB      TA4           R   -   15:20
+269AC      TA4           R   -   15:20
 
