@@ -2,7 +2,7 @@
 Author: Yian Wang
 Supervisor: Professor Fei Xia
 Organization: University of Washington, the Linguistics Department
-Last Update: Dec 15, 2023
+Last Update: Dec 16, 2023
 
 If you have any questions or need further clarification, please feel free to contact the author at 118010310@link.cuhk.edu.cn
 """
@@ -306,7 +306,8 @@ def CourseInfoFromCTQ(information, config, Instructor2Courses, CourseInfo):
     Usage: Update course information read from CourseThisQuarter file.
 
     Argument:
-    information(list): information read from courseThisQuarter file, e.g., information[0] = [0, 0, '200', 'mwf', '8:30', '15:20', 1]
+    information(list): information is a list that stores information for courses read from courseThisQuarter file,
+                        we will use it to update "courseInfo", e.g., information[0] = [0, 0, '200', 'mwf', '8:30', '15:20', 1]
     config(dict)
     Instructor2Courses(dict) {modified}: stores the course(s) that an instructor teaches.
     CourseInfo(list) {modified}: every element of it is an instance of a python class called "course" that store course information
@@ -464,7 +465,8 @@ def CourseInfoFromCI(information, config, CourseName2Id, CourseInfo):
     Usage: Update course information read from CourseInfo file.
 
     Argument:
-    information(list): a list that contains all the information read from CI file, e.g., information[0] = ['200', '200', 50, 3, 1, 0, 0, '-', '-', '-', 4]
+    information(list): information is a list that stores information for courses read from courseInfo file,
+                        we will use it to update "courseInfo", e.g., information[0] = ['200', '200', 50, 3, 1, 0, 0, '-', '-', '-', 4]
     config(dict)
     CourseName2Id(dict)
     CourseInfo(list) {modified}
