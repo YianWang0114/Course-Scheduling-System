@@ -2,9 +2,9 @@
 Author: Yian Wang
 Supervisor: Professor Fei Xia
 Organization: University of Washington, the Linguistics Department
-Last Update: Dec 6, 2023
+Last Update: Dec 15, 2023
 
-If you have any questions or need further clarification, please feel free to contact the author at wangyian@uw.edu.
+If you have any questions or need further clarification, please feel free to contact the author at 118010310@link.cuhk.edu.cn
 """
 
 import pdb
@@ -39,10 +39,12 @@ def time_transfer(time_string, filename, line_number):
     '''
     Usage: This function transfer time from string to datetime object
 
-    Inpurt:
+    Argument:
     time_string(string): A specific time in the 24-hour clock format represented as a string, e.g., "10:30"
+    filename(string): if "time_string" has wrong format, we will output the file name where we read in "time_string"
+    line_number(int): if "time_string" has wrong format, we will output the line number where we read in "time_string"
 
-    Output: 
+    Return variable: 
     time(datetime): The corresponding datetime object, e.g., datetime.datetime(1900, 1, 1, 10, 30)
     '''
 
@@ -58,11 +60,11 @@ def timeSlotName2Id(start, timeSlotName):
     '''
     Usage: This function transfer time from datetime object to slotid
 
-    Input:
+    Argument:
     start(datetime): A datetime object corresponding to instructional day starting time, e.g., datetime.datetime(1900, 1, 1, 8, 30)
     timeSlotName(datetime): A datetime object corresponding to a time you want to convert to slot id
 
-    Output: 
+    Return variable: 
     id(float): The corresponding slot id, e.g., 0,0. 
 
     Note: output is a float number. Depending on usage, you need to choose whether to ceiling or floor it. 
@@ -77,11 +79,11 @@ def timeSlotId2ISlot(start, timeSlotId):
     '''
     Usage: This function transfer time from slotId to string in "%H:%M" format
 
-    Inpurt:
+    Argument:
     start(datetime): A datetime object corresponding to instructional day starting time, e.g., datetime.datetime(1900, 1, 1, 8, 30)
     timeSlotId(int): A time slot, e.g., 12
 
-    Output: 
+    Return variable: 
     name(string): The corresponding time in "%H:%M" format, e.g., '14:30'
     '''
 
@@ -94,10 +96,12 @@ def days2listint(days, filename, line_number):
     '''
     Usage: Maps days from 'MTWRF' to '01234'. 
 
-    Inpurt:
+    Argument:
     days(string): A string representing teaching days of a course, e.g., 'MWF'
+    filename(string): if "days" has wrong format, we will output the file name where we read in "days"
+    line_number(int): if "days" has wrong format, we will output the line number where we read in "days"
 
-    Output: 
+    Return variable: 
     day_list(list): A list of int. e.g., [0,2,4] means a course is taught on Monday, Wednesday, and Friday
     '''
 
@@ -116,10 +120,10 @@ def intlist2days(intlist):
     '''
     Usage: Maps teaching days from [0,2,4] to ['M', 'W', 'F']. 
 
-    Inpurt:
+    Argument:
     intlist(list): A list of int, e.g., [0,2,4]
 
-    Output: 
+    Return variable: 
     day_list(list): A list of string. e.g., ['M', 'W', 'F'] means a course is taught on Monday, Wednesday, and Friday
     '''
 
@@ -133,7 +137,7 @@ def check_config(config):
     '''
     Usage: Check whether config file has all the parameter it should have. If not, exit with an error message.
 
-    Input:
+    Argument:
     config(dict): A dictionary that stores all the parameter we get from config file.
     '''
 
@@ -152,13 +156,13 @@ def check_config(config):
     return
 
 #################################################################################
-def convert_key_type(config, start_time):
+def convert_key_type(start_time, config):
     '''
     Usage: Convert some keys from string to appropriate data types(int, float, list...).
     
-    Input:
-    config(dict): A dictionary that stores all the parameter we get from config file.
+    Argument:
     start_time(datetime): A datetime object corresponding to instructional day starting time. e.g., datetime.datetime(1900, 1, 1, 8, 30)
+    config(dict) {modified}: A dictionary that stores all the parameter we get from config file.
     '''
 
     # Define keys that should be treated as floats, integers, or list
@@ -187,10 +191,10 @@ def read_config(file_name):
     '''
     Usage: Read the config file and store all the parameter. 
 
-    Inpurt:
+    Argument:
     file_name(string): config file's file name. e.g., 'config'
 
-    Output: 
+    Return variable: 
     config(dict): a dictionary that store all the information. 
 
     Format for config file:
@@ -222,7 +226,7 @@ def read_config(file_name):
     total_day_time = time_transfer(config['InstructDayEndsAt'], "config", -1) - start_time
     SlotNumPerday = math.ceil(total_day_time.total_seconds()/60/30) #A slot is 30 min
 
-    convert_key_type(config, start_time) #Convert keys to appropriate data type.
+    convert_key_type(start_time, config) #Convert keys to appropriate data type.
     bstart = time_transfer(config['BlockSchedulingStartsAt'], "config", -1)
     config['BlockSchedulingStartsAtid'] = math.floor(timeSlotName2Id(start_time, bstart))
     bend = time_transfer(config['BlockSchedulingEndsAt'], "config", -1)
@@ -242,8 +246,8 @@ def useDefaultPath(config):
     '''
     Usage: If "UseDefaultPath" is set to 1 in config file, use the default path instead.
 
-    Input:
-    config(dict): a dictionary that store all the information. 
+    Argument:
+    config(dict) {modified}: a dictionary that store all the information. 
     '''
 
     # Use default file path if UseDefaultPath is set to 1 in the config file
@@ -261,15 +265,15 @@ def defineID(instructor_name, course_name_before_slash, InstructorName2Id, Instr
     '''
     Usage: if insturtcor already has an id, return the id; else, define a new id for him/her. Do the same for course.
 
-    Input:
+    Argument:
     instructor_name(string): name of an instructor, e.g., 'McGarrity'
     course_name_before_slash(string): e.g., '200'
-    InstructorName2Id(dict): maps instructor names to instructor ids. e.g., {'McGarrity': 0}
-    InstructorId2Name(list): maps instructor ids to instructor names. e.g., ['McGarrity']
-    CourseName2Id(dict): maps course names to course ids.
-    CourseId2Name(list): maps course ids to course names.
+    InstructorName2Id(dict) {modified}: maps instructor names to instructor ids. e.g., {'McGarrity': 0}
+    InstructorId2Name(list) {modified}: maps instructor ids to instructor names. e.g., ['McGarrity']
+    CourseName2Id(dict) {modified}: maps course names to course ids.
+    CourseId2Name(list) {modified}: maps course ids to course names.
 
-    Output:
+    Return variable: 
     instructor_id(int): e.g., 0
     course_id(int):e.g., 0
     '''
@@ -297,20 +301,15 @@ def defineID(instructor_name, course_name_before_slash, InstructorName2Id, Instr
     return instructor_id, course_id
 
 #################################################################################
-def CourseInfoFromCTQ(information, Instructor2Courses, CourseInfo, config):
+def CourseInfoFromCTQ(information, config, Instructor2Courses, CourseInfo):
     '''
     Usage: Update course information read from CourseThisQuarter file.
 
-    Input: 
-    Instructor2Courses(dict): stores the course(s) that an instructor teaches.
-    CourseInfo(list)
-    instructor_id(int)
-    course_id(int)
-    course_name(string)
+    Argument:
+    information(list): information read from courseThisQuarter file, e.g., information[0] = [0, 0, '200', 'mwf', '8:30', '15:20', 1]
     config(dict)
-    must_on_days(string)
-    must_start_time(string)
-    must_end_time(string)
+    Instructor2Courses(dict) {modified}: stores the course(s) that an instructor teaches.
+    CourseInfo(list) {modified}: every element of it is an instance of a python class called "course" that store course information
     '''
 
     for instructor_id, course_id, course_name, must_on_days, must_start_time, must_end_time, line_number in information:
@@ -339,12 +338,12 @@ def readCTQline(values, TotalCourseNum, line_number):
     '''
     Usage: read lines from CourseThisQuarter, can read both txt format and csv format
     
-    Input: 
-    values(list): a list of information read from CTQ file
+    Argument:
+    values(list): a list of information read from courseThisQuarter file
     TotalCourseNum(int)
     line_number(int): line number 
 
-    Output:
+    Return variable: 
     course_name(string): e.g., '450/550'
     course_name_before_slash(string): e.g., '450'
     instructor_name(string): e.g., 'cheng'
@@ -374,19 +373,20 @@ def read_courseInstructor(file_name, config):
     '''
     Usage: Read the courseInstructor(courseThisQuarter) file and store all the parameter. 
 
-    Input:
+    Argument:
     file_name(string): courseInstructor(courseThisQuarter) file's file name. e.g., './courseThisQuarter'
+    config(dict)
 
-    Output: 
+    Return variable: 
     course_instructor(list): 
     course_instructor = [
-    CourseName2Id(dict): maps course names to course ids.
-    CourseId2Name(list): maps course ids to course names.
-    InstructorName2Id(dict): maps instructor names to instructor ids.
-    InstructorId2Name(list): maps instructor ids to instructor names.
-    Instructor2Courses(dict): stores the course(s) that an instructor teaches.
-    CourseInfo(list): CourseInfo[courseId] is a Course class that stores course information we read from CourseInfo and CourseThisQuarter.
-    TotalCourseNum(int): Total number of courses, including regular sessions and TA sessions.
+        CourseName2Id(dict): maps course names to course ids.
+        CourseId2Name(list): maps course ids to course names.
+        InstructorName2Id(dict): maps instructor names to instructor ids.
+        InstructorId2Name(list): maps instructor ids to instructor names.
+        Instructor2Courses(dict): stores the course(s) that an instructor teaches.
+        CourseInfo(list): CourseInfo[courseId] is a Course class that stores course information we read from CourseInfo and CourseThisQuarter.
+        TotalCourseNum(int): Total number of courses, including regular sessions and TA sessions.
     ]
 
     Format for courseInstructor file:
@@ -453,23 +453,23 @@ def read_courseInstructor(file_name, config):
                 instructor_id, course_id = defineID(instructor_name, course_name_before_slash, InstructorName2Id, InstructorId2Name, CourseName2Id, CourseId2Name)
                 information.append([instructor_id, course_id, course_name, must_on_days, must_start_time, must_end_time, line_number])
                 
-    CourseInfoFromCTQ(information, Instructor2Courses, CourseInfo, config)
+    CourseInfoFromCTQ(information, config, Instructor2Courses, CourseInfo)
     course_instructor = [CourseName2Id, CourseId2Name, InstructorName2Id, InstructorId2Name, Instructor2Courses, CourseInfo, TotalCourseNum]
 
     return course_instructor
 
 #################################################################################
-def CourseInfoFromCI(information, config, CourseInfo, CourseName2Id):
+def CourseInfoFromCI(information, config, CourseName2Id, CourseInfo):
     '''
     Usage: Update course information read from CourseInfo file.
 
-    Input: 
-    information(list): a list that contains all the information read from CI file
+    Argument:
+    information(list): a list that contains all the information read from CI file, e.g., information[0] = ['200', '200', 50, 3, 1, 0, 0, '-', '-', '-', 4]
     config(dict)
-    CourseInfo(list)
     CourseName2Id(dict)
+    CourseInfo(list) {modified}
 
-    Output:
+    Return variable: 
     NonExemptedC(list): a list of non-exempted course's course id
     TotalNonExemptedHours(float): total number of non-ExemptedHours
     '''
@@ -530,7 +530,6 @@ def CourseInfoFromCI(information, config, CourseInfo, CourseName2Id):
         
         duration = cur_course.mustEndSlot - cur_course.mustStartSlot + 1
         if (duration < cur_course.slotNum):
-            pdb.set_trace()
             sys.exit(f"End time minus start time for LING {cur_course.courseName} should be larger than course length.\
                     Please check courseInfo and courseThisQuarter files.")
     
@@ -541,7 +540,24 @@ def CourseInfoFromCI(information, config, CourseInfo, CourseName2Id):
 #################################################################################
 def readCIline(values, course_instructor, line_number):
     '''
-    Usage: read lines in courseInfo file.
+    Usage: read lines from CourseInfo file.
+
+    Argument: 
+    values(list): a line from CourseInfo file, e.g., ['200', '50', '3', '1', '0', '0', '-', '-', '-']
+    course_instructor(list)
+    line_number(int)
+
+    Return variable: 
+    course_name(string)
+    course_name_before_slash(string)
+    length_per_session(int)
+    num_sessions_per_week(int)
+    large_class(int)
+    ten_percent_rule_exempted(int)
+    is_a_TA_session(int)
+    mustOnDays(string)
+    mustStartTime(string)
+    mustEndTime(string)
     '''
 
     if (len(values) != 9):
@@ -571,11 +587,12 @@ def read_courseInfo(file_name, course_instructor, config):
     '''
     Usage: Read the courseInfo file and store all the parameters. 
 
-    Input:
+    Argument: 
     file_name(string): courseInfo file's file name. e.g., './courseInfo'
     course_instructor(list): a list that stores all the information read from courseInstructor file
+    config(dict)
 
-    Output:
+    Return variable: 
     NonExemptedC(list): a list of course ids of non-exempted courses
     TotalNonExemptedHours(float): total number of non-exempted hours
 
@@ -636,9 +653,7 @@ def read_courseInfo(file_name, course_instructor, config):
                     information.append([course_name, course_name_before_slash, length_per_session, num_sessions_per_week, large_class, ten_percent_rule_exempted,\
                         is_a_TA_session, mustOnDays, mustStartTime, mustEndTime, line_number])
 
-    CourseInfoFromCI(information, config, CourseInfo, CourseName2Id)
-
-    NonExemptedC, TotalNonExemptedHours = CourseInfoFromCI(information, config, CourseInfo, CourseName2Id)
+    NonExemptedC, TotalNonExemptedHours = CourseInfoFromCI(information, config, CourseName2Id, CourseInfo)
 
     return NonExemptedC, TotalNonExemptedHours
 
@@ -647,11 +662,11 @@ def read_conflict(file_name, course_instructor):
     '''
     Usage: Read the conflict file and store all the parameters. 
 
-    Input:
+    Argument: 
     file_name(string): conflict file's file name. e.g., './ConflictCourses'
     course_instructor(list): a list that stores all the information read from courseInstructor file
 
-    Output:
+    Return variable: 
     conflict_course_pairs(set): a set of conflicted course pair, e.g., {(13, 14), (13, 17)}
 
     Format for conflict file:
@@ -696,7 +711,7 @@ def print_conflictPairs(conflict_course_pairs, course_instructor):
     '''
     Usage: Print our conflicted course pairs in stderr file
 
-    Input:
+    Argument: 
     conflict_course_pairs(list): a list of conflicted course pair generated from read_conflit() function
     course_instructor(list): a list that stores all the information read from courseInstructor file generated from read_courseInstructor() function
     '''
@@ -722,13 +737,13 @@ def setDefaultInsPref(prefStartTime, prefEndTime, prefDays, config, line_number)
     '''
     Usage: if a instructor does not have preference, set default value for him/her
 
-    Input: 
+    Argument: 
     prefStartTime(string): prefered starting time for an instructor, could be '-' or a specific time, e.g., "9:30"
     prefStartTime(string): prefered ending time for an instructor, could be '-' or a specific time, e.g., "14:30"
     prefDays(string): prefered days for an instructor, e.g., 'TR'
     config(dict): a dictionary that store all the information from config file.
 
-    Output:
+    Return variable: 
     prefStartSlot(int): prefered starting time's slotId, e.g., 0
     prefEndSlot(int): prefered ending time's slotId, e.g., 19
     prefDayList(list): prefered days' list, e.g., [1,3,4] which means M, W, and R are prefered.
@@ -758,11 +773,11 @@ def readInsPrefline(values, line_number):
     '''
     Usage: Read lines in inspref file
 
-    Input:
+    Argument: 
     values(list): e,g., ['Bender', 'TRF', '-', '-', '1']
     line_number(int): the line number in txt file or csv file
 
-    Output:
+    Return variable: 
     instructor_name(string): e.g., 'bender'
     prefDays(string): e.g., 'trf'
     prefStartTime(string): e.g., '-'
@@ -781,9 +796,22 @@ def readInsPrefline(values, line_number):
     return instructor_name, prefDays, prefStartTime, prefEndTime, sameDay
 
 #################################################################################
-def processInsPref(information, InstructorName2Id, Instructor2Courses, config, CourseInfo, IW, line_number):
+def processInsPref(information, InstructorName2Id, Instructor2Courses, config, CourseInfo, line_number, IW):
     '''
     Usage: processing insPref file, adding sameDay pairs, setting up IW matrix.
+
+    Argument: 
+    information(list)
+    InstructorName2Id(list)
+    Instructor2Courses(list)
+    config(dict)
+    CourseInfo(list)
+    line_number(int)
+    IW(list) {modified}: instructor's preference weight matrix
+
+    Return variable: 
+    instructor_in_insPref(list): a list of instructor id who appears in the instructor's preference file
+    SameDayPairs: a set of same day course pairs.
     '''
 
     instructor_in_insPref = [] 
@@ -815,19 +843,19 @@ def processInsPref(information, InstructorName2Id, Instructor2Courses, config, C
                     if (1 / CourseInfo[c].sessionsPerWeek < 0):
                         sys.exit(f"CourseInfo for {CourseInfo[c].courseName} fail to find")
 
-    return instructor_in_insPref, SameDayPairs, IW
+    return instructor_in_insPref, SameDayPairs
 
 #################################################################################
 def read_instructorPref(file_name, course_instructor, config):
     '''
     Usage: Read the instructor preference file and create matrix IW(instructor pref weight). 
 
-    Input:
+    Argument: 
     file_name(string): instructor preference file's file name. e.g., './InstructorPref'.
     course_instructor(list): a list that stores all the information read from courseInstructor file.
     config(dict): a dictionary that store all the information read from config file. 
 
-    Output:
+    Return variable: 
     IW(list): Instructor preference weight matrix. IW[c][d][s] = 1/CourseInfo[c].sessionsPerWeek if the slot is prefered and = 0 otherwise; where c is courseId, d is day, s is slotId. 
     SameDayPairs:  a set of course pairs that insrtuctors want them to be on the same day, e.g., {(16, 14), (8, 9), (4, 1), (5, 6)}.
     instructor_in_insPref(list): a list of instructor id who appears in insturctorPref file. e.g., [7, 8, 5, 1, 3, 10, 2, 13]
@@ -883,24 +911,25 @@ def read_instructorPref(file_name, course_instructor, config):
                     continue
                 information.append([instructor_name, prefDays, prefStartTime, prefEndTime, sameDay])
 
-    instructor_in_insPref, SameDayPairs, IW = processInsPref(information, InstructorName2Id, Instructor2Courses, config, CourseInfo, IW, line_number)
+    instructor_in_insPref, SameDayPairs = processInsPref(information, InstructorName2Id, Instructor2Courses, config, CourseInfo, line_number, IW)
                
     insNotInPref(TotalCourseNum, CourseInfo, instructor_in_insPref, InstructorId2Name)   
     if (config["Assume-same-day-if-not-specified"] == 1):
-        addSameDayPairs(Instructor2Courses, SameDayPairs, CourseInfo)
+        addSameDayPairs(Instructor2Courses, CourseInfo, SameDayPairs)
 
     return IW, SameDayPairs, instructor_in_insPref
 
 #################################################################################
-def addSameDayPairs(Instructor2Courses, SameDayPairs, CourseInfo):
+def addSameDayPairs(Instructor2Courses, CourseInfo, SameDayPairs):
     '''
     Usage: If Assume-same-day-if-not-specified is 1, we add all the courses taught by the same instructor
             to same day pairs
 
-    Input:
+    Argument: 
     Instructor2Courses(defaultdict)
-    SameDayPairs(set)
     CourseInfo(list)
+    SameDayPairs(set) {modified}: a set contains all pairs of same day courses. In this function we
+                                add same day pairs due to same instructors into this set.
     '''
 
     for instructor_id, course_ids in Instructor2Courses.items():
@@ -919,7 +948,7 @@ def insNotInPref(TotalCourseNum, CourseInfo, instructor_in_insPref, InstructorId
     '''
     Usage: For TA sessions or guest lecturer's sessions that we can't find insturctors' pref, we print a warning
 
-    Input:
+    Argument: 
     TotalCourseNum(int): total number of course.
     CourseInfo(list): CourseInfo[courseId] is a Course class that stores course information we read from CourseInfo and CourseThisQuarter.
     instructor_in_insPref(list): instructor id for those who appear in instructor pref file.
@@ -943,11 +972,11 @@ def createCW(course_instructor, config):
     '''
     Usage: Create matrix CW (UW policy's weight)
 
-    Input:
+    Argument: 
     course_instructor(list): a list that stores all the information we read from courseInstructor file.
     config(dict): a dictionary that stores all the information we read from config file.
 
-    output:
+    Return variable: 
     CW(list): UW policy weight matrix. CW[c][d][s] where c is courseId, d is day, s is slotId. 
     '''
 
@@ -988,12 +1017,11 @@ def createCW(course_instructor, config):
     return CW
 
 #################################################################################
-def addConstraints(problem, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs, X, Y):
+def addConstraints(course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs, X, Y, problem):
     '''
     Usage: adding constraints for ILP 
 
-    Input:
-    problem(pulp): ILP problem we defined using pulp
+    Argument: 
     course_instructor(list)
     config(dict)
     conflict_course_pairs(set)
@@ -1002,36 +1030,37 @@ def addConstraints(problem, course_instructor, config, conflict_course_pairs, No
     SameDayPairs(set)
     X(list): variable X for our ILP problem. X[c][d][s] = 1 means course c start at slot s on day d.
     Y(list): variable Y for our ILP problem. Y[c][d][s] = 1 means course c durates at slot s on day d.
+    problem(pulp){modified}: ILP problem we defined using pulp. In this function, we will add new constraints to it.
     '''
 
     TotalCourseNum = course_instructor[6]
     CourseInfo = course_instructor[5]
     totalSlot = config['SlotNumPerday']
-    addMatrixYC(problem, TotalCourseNum, CourseInfo, totalSlot, X, Y)
-    addSessionC(problem, TotalCourseNum, CourseInfo, totalSlot, X, config)
-    addTwiceAWeekC(problem, TotalCourseNum, CourseInfo, totalSlot, X)
-    addThreeTimesAWeekC(problem, TotalCourseNum, CourseInfo, totalSlot, X)
-    addConflictedC(problem, conflict_course_pairs, totalSlot, Y)
-    add10PercentC(problem, config,TotalNonExemptedHours, NonExemptedC, Y)
-    addSamedayC(problem, config, SameDayPairs, CourseInfo, totalSlot, X)
-    addLatestStartC(problem, TotalCourseNum, totalSlot, CourseInfo, config, X)
-    addMustTimeC(problem, TotalCourseNum, totalSlot, CourseInfo, X)
-    addBlockC(problem, TotalCourseNum, CourseInfo, config, X)
+    addMatrixYC(TotalCourseNum, CourseInfo, totalSlot, X, Y, problem)
+    addSessionC(TotalCourseNum, CourseInfo, totalSlot, X, config, problem)
+    addTwiceAWeekC(TotalCourseNum, CourseInfo, totalSlot, X, problem)
+    addThreeTimesAWeekC(TotalCourseNum, CourseInfo, totalSlot, X, problem)
+    addConflictedC(conflict_course_pairs, totalSlot, Y, problem)
+    add10PercentC(config,TotalNonExemptedHours, NonExemptedC, Y, problem)
+    addSamedayC(config, SameDayPairs, CourseInfo, totalSlot, X, problem)
+    addLatestStartC(TotalCourseNum, totalSlot, CourseInfo, config, X, problem)
+    addMustTimeC(TotalCourseNum, totalSlot, CourseInfo, X, problem)
+    addBlockC(TotalCourseNum, CourseInfo, config, X, problem)
 
     return
 
 #################################################################################
-def addMatrixYC(problem, TotalCourseNum, CourseInfo, totalSlot, X, Y):
+def addMatrixYC(TotalCourseNum, CourseInfo, totalSlot, X, Y, problem):
     '''
     Usage: adding Constraint 1: Matrix Y must be consistent with Matrix X
 
-    Input:
-    problem(pulp)
+    Argument: 
     TotalCourseNum(int)
     CourseInfo(list)
     totalSlot(int)
     X(list)
     Y(list)
+    problem(pulp) {modified}
     '''
 
     for c in range(TotalCourseNum):
@@ -1045,16 +1074,16 @@ def addMatrixYC(problem, TotalCourseNum, CourseInfo, totalSlot, X, Y):
     return
 
 #################################################################################
-def addSessionC(problem, TotalCourseNum, CourseInfo, totalSlot, X, config):
+def addSessionC(TotalCourseNum, CourseInfo, totalSlot, X, config, problem):
     '''
     Usage: adding Constraint 2: Each course must meet the correct number of times per week
 
-    Input:
-    problem(pulp)
+    Argument: 
     TotalCourseNum(int)
     CourseInfo(list)
     totalSlot(int)
     X(list)
+    problem(pulp) {modified}
     '''
 
     for c in range(TotalCourseNum):
@@ -1074,17 +1103,17 @@ def addSessionC(problem, TotalCourseNum, CourseInfo, totalSlot, X, config):
     return
 
 #################################################################################
-def addTwiceAWeekC(problem, TotalCourseNum, CourseInfo, totalSlot, X):
+def addTwiceAWeekC(TotalCourseNum, CourseInfo, totalSlot, X, problem):
     '''
     Usage: adding Constraint 3: Each course that meets twice per week must be taught on MW or TR
            (This should be for regular courses, but by coincident, it also works for TA session.)
 
-    Input:
-    problem(pulp)
+    Argument: 
     TotalCourseNum(int)
     CourseInfo(list)
     totalSlot(int)
     X(list)
+    problem(pulp) {modified}
     '''
 
     for c in range(TotalCourseNum):
@@ -1103,16 +1132,16 @@ def addTwiceAWeekC(problem, TotalCourseNum, CourseInfo, totalSlot, X):
     return
 
 #################################################################################
-def addThreeTimesAWeekC(problem, TotalCourseNum, CourseInfo, totalSlot, X):
+def addThreeTimesAWeekC(TotalCourseNum, CourseInfo, totalSlot, X, problem):
     '''
     Usage: adding Constraint 4: Courses that meet three times per week must be taught on MWF
 
-    Input:
-    problem(pulp)
+    Argument: 
     TotalCourseNum(int)
     CourseInfo(list)
     totalSlot(int)
     X(list)
+    problem(pulp) {modified}
     '''
 
     for c in range(TotalCourseNum):
@@ -1129,15 +1158,15 @@ def addThreeTimesAWeekC(problem, TotalCourseNum, CourseInfo, totalSlot, X):
     return  
 
 #################################################################################
-def addConflictedC(problem, conflict_course_pairs, totalSlot, Y):
+def addConflictedC(conflict_course_pairs, totalSlot, Y, problem):
     '''
     Usage: adding Constraint 5: Conflicted courses should not overlap in time
 
-    Input:
-    problem(pulp)
+    Argument: 
     conflict_course_pairs(set)
     totalSlot(int)
     Y(list)
+    problem(pulp) {modified}
     '''
 
     for (c1, c2) in conflict_course_pairs:
@@ -1148,34 +1177,37 @@ def addConflictedC(problem, conflict_course_pairs, totalSlot, Y):
     return
 
 #################################################################################
-def add10PercentC(problem, config, TotalNonExemptedHours, NonExemptedC, Y):
+def add10PercentC(config, TotalNonExemptedHours, NonExemptedC, Y, problem):
     '''
     Usage: adding Constraint 5: Meet the 10%-rule requirement
 
-    Input:
-    problem(pulp)
+    Argument: 
     config(dict)
     TotalNonExemptedHour(float)
     Y(list)
+    problem(pulp) {modified}
     '''
+
     target = math.ceil(config['RulePercentage'] * TotalNonExemptedHours)
     for t in range(config['10PercRuleStartsAtid'], config['10PercRuleEndsAtid'] + 1, 2):
         t1 = pulp.lpSum(Y[c][d][t] for c in NonExemptedC for d in range(5))
         t2 = pulp.lpSum(Y[c][d][t + 1] for c in NonExemptedC for d in range(5))
         problem += t1 + t2 <= 2 * target
+    
+    return
 
 #################################################################################
-def addSamedayC(problem, config, SameDayPairs, CourseInfo, totalSlot, X):
+def addSamedayC(config, SameDayPairs, CourseInfo, totalSlot, X, problem):
     '''
     Usage: adding Constraint 7: Whether SameDay preferences are treated as hard constraint is specified in config file
 
-    Input:
-    problem(pulp)
+    Argument: 
     config(dict)
     SameDayPairs(set)
     CourseInfo(list)
     totalSlot(int): total number of slot in a day
     X(list)
+    problem(pulp) {modified}
     '''
 
     sameday = config['Treat-same-day-preference-as-hard-constraint']
@@ -1188,17 +1220,17 @@ def addSamedayC(problem, config, SameDayPairs, CourseInfo, totalSlot, X):
     return
 
 #################################################################################
-def addLatestStartC(problem, TotalCourseNum, totalSlot, CourseInfo, config, X):
+def addLatestStartC(TotalCourseNum, totalSlot, CourseInfo, config, X, problem):
     '''
     Usage: adding Constraint 8: X's time later than InstructDayEndsAt - course length should be set to 0
 
-    Input:
-    problem(pulp)
+    Argument: 
     TotalCourseNum(int)
     totalSlot(int): total number of slot in a day
     CourseInfo(list)
     config(dict)
     X(list)
+    problem(pulp) {modified}
     '''
     
     for c in range(TotalCourseNum):
@@ -1209,16 +1241,16 @@ def addLatestStartC(problem, TotalCourseNum, totalSlot, CourseInfo, config, X):
     return
 
 #################################################################################
-def addMustTimeC(problem, TotalCourseNum, totalSlot, CourseInfo, X):
+def addMustTimeC(TotalCourseNum, totalSlot, CourseInfo, X, problem):
     '''
     Usage: adding Constraint 9: mustOnDays, mustStartSlot and mustEndSlot
 
-    Input:
-    problem(pulp)
+    Argument: 
     TotalCourseNum(int)
     totalSlot(int): total number of slot in a day
     CourseInfo(list)
     X(list)
+    problem(pulp) {modified}
     '''
 
     for c in range(TotalCourseNum):
@@ -1244,16 +1276,16 @@ def addMustTimeC(problem, TotalCourseNum, totalSlot, CourseInfo, X):
     return
 
 #################################################################################
-def addBlockC(problem, TotalCourseNum, CourseInfo, config, X):
+def addBlockC(TotalCourseNum, CourseInfo, config, X, problem):
     '''
     Usage: adding Constraint 10: If must-follow-block-policy is 1, we set corresponding X value
 
-    Input:
-    problem(pulp)
+    Argument: 
     TotalCourseNum(int)
     CourseInfo(list)
     config(list)
     X(list)
+    problem(pulp) {modified}
     '''
 
     BlockingSlot = list(range(config['BlockSchedulingStartsAtid'], config['BlockSchedulingEndsAtid'] + 1))
@@ -1284,18 +1316,22 @@ def addBlockC(problem, TotalCourseNum, CourseInfo, config, X):
     return
 
 #################################################################################
-def defineXY(X, Y, TotalCourseNum, totalSlot, type):
+def defineXY(TotalCourseNum, totalSlot, type):
     '''
     Usage: Define variable X and Y. Their types can be either binary or continous depending on it is a ILP problem or LP problem.
     
-    Input:
-    X(list): an empty list
-    Y(list): an empty list
+    Argument: 
     TotalCourseNum(int)
     totalSlot(int)
     type(string): either "binary" or "continous"
+
+    Return variable: 
+    X(list): an three-dimensional list
+    Y(list): an three-dimensional list
     '''
 
+    X = []
+    Y = []
     for c in range(TotalCourseNum):
         X_c = []
         Y_c = []
@@ -1315,18 +1351,18 @@ def defineXY(X, Y, TotalCourseNum, totalSlot, type):
         X.append(X_c)
         Y.append(Y_c)
     
-    return
+    return X, Y
 
 #################################################################################
 def readParameterForProblem(course_instructor, config):
     '''
     Usage: read parameters for ILP/LP problem
 
-    Input:
+    Argument: 
     course_instructor(list)
     config(dict)
 
-    Output:
+    Return variable: 
     TotalCourseNum(int)
     totalSlot(int)
     l1(float): weight for CW matrix
@@ -1345,8 +1381,10 @@ def solveProblem(problem):
     '''
     Usage: this function will set time limit for ILP/LP, call a solver, and then solve it.
 
-    Input: problem(pulp)
+    Argument:  
+    problem(pulp) {modified}
     '''
+
     pulp.LpSolverDefault.timeLimit = 15 #Set the time limit for pulp solver
     solver = pulp.getSolver('COIN_CMD', timeLimit=15)
     problem.solve(solver)
@@ -1358,17 +1396,17 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
     '''
     Usage: Define an ILP problem then solve it.
 
-    Input:
+    Argument:  
     IW(list): instructor preference weight matrix
     CW(list): UW policy weight matrix
     course_instructor(list)
+    config(dict)
     conflict_course_pairs(set)
     NonExemptedC(list)
     TotalNonExemptedHours(float)
     SameDayPairs(list)
-    output_dir(string): the directory where output will be generated
 
-    Output:
+    Return variable: 
     X(list)
     Y(list)
     problem(pulp)
@@ -1380,16 +1418,14 @@ def ILP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, 
     # Create the ILP problem
     problem = pulp.LpProblem("ILP_Maximization_Problem", pulp.LpMaximize)
     
-    # Initialize variable X and Y (three dimensional array)
-    X = []
-    Y = []
-    defineXY(X, Y, TotalCourseNum, totalSlot, "binary")
+    # Initialize variable X and Y (three dimensional list)
+    X, Y = defineXY(TotalCourseNum, totalSlot, "binary")
 
     # objective function
     problem +=  pulp.lpSum((l1 * CW[c][d][t] + l2 * IW[c][d][t]) * X[c][d][t] for c in range(TotalCourseNum) for d in range(5) for t in range(totalSlot))
     
     #adding constraints
-    addConstraints(problem, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs, X, Y)
+    addConstraints(course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs, X, Y, problem)
 
     #solve problem
     solveProblem(problem)
@@ -1404,7 +1440,17 @@ def LP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, T
     '''
     Usage: Define an LP problem then solve it. Only differences with ILP() is we set the varaible to be continuous instead of binary
 
-    Output: 
+    Argument:  
+    IW(list): instructor preference weight matrix
+    CW(list): UW policy weight matrix
+    course_instructor(list)
+    config(dict)
+    conflict_course_pairs(set)
+    NonExemptedC(list)
+    TotalNonExemptedHours(float)
+    SameDayPairs(list)
+
+    Return variable: 
     upper_bound(float): the optimal value of the LP problem, which is the upper bound for the ILP problem.
     '''
 
@@ -1417,13 +1463,13 @@ def LP(IW, CW, course_instructor, config, conflict_course_pairs, NonExemptedC, T
     # Initialize variable X and Y (three dimensional array)
     X = []
     Y = []
-    defineXY(X, Y, TotalCourseNum, totalSlot, "continuous")
+    X, Y = defineXY(TotalCourseNum, totalSlot, "continuous")
 
     # objective function
     problem +=  pulp.lpSum((l1 * CW[c][d][t] + l2 * IW[c][d][t]) * X[c][d][t] for c in range(TotalCourseNum) for d in range(5) for t in range(totalSlot))
     
     #adding constraints
-    addConstraints(problem, course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs, X, Y)
+    addConstraints(course_instructor, config, conflict_course_pairs, NonExemptedC, TotalNonExemptedHours, SameDayPairs, X, Y, problem)
 
     #solve problem
     solveProblem(problem)
@@ -1439,14 +1485,14 @@ def computeCWIWPoint(course_instructor, config, X, IW, CW):
     '''
     Usage: Compute IW and CW points earned from objective function
 
-    Input:
+    Argument: 
     course_instructor(list)
     config(dict)
     X(list)
     IW(list)
     CW(list)
 
-    Output: 
+    Return variable: 
     IW_point(float): IW points earned from objective function
     CW_point(float): CW points earned from objective function
     '''
@@ -1468,7 +1514,7 @@ def generate_output(X, output_dir, course_instructor, config, IW, instructor_in_
     '''
     Usage: generate schedule.txt based on X.varValue we get from ILP problem
 
-    Input:
+    Argument: 
     X(list)
     output_dir(string)
     course_instructor(list)
@@ -1476,11 +1522,14 @@ def generate_output(X, output_dir, course_instructor, config, IW, instructor_in_
     IW(list)
     instructor_in_insPref(list): instructor id for those who appear in instrutcor pref file
 
-    Output:
+    Return variable: 
     NumCNoPref(int): total number of courses that don't have an instructor preference (could be regular course or TA session)
     InsNotMet(defaultdict): instructor who has a preference that are not met. 
         key is the instructor id and value is a set of course names that didn't meet preference. e.g., {8: {'520'}})
     BPNotMet(set): a set of course names that didn't meet block policy. e.g., {'234', '233AH'}
+
+    File output:
+    schedule.txt
 
     Format for schedule.txt file:
     ###
@@ -1497,7 +1546,6 @@ def generate_output(X, output_dir, course_instructor, config, IW, instructor_in_
     BlockingSlot = list(range(config['BlockSchedulingStartsAtid'], config['BlockSchedulingEndsAtid'] + 1))
     NumCNoPref = 0
     InsNotMet = defaultdict(set)
-    BPNotMet = set()
 
     with open(output_dir+"schedule.txt", "w") as file:
         for c in range(TotalCourseNum):
@@ -1535,7 +1583,7 @@ def generate_output(X, output_dir, course_instructor, config, IW, instructor_in_
             session_length = CourseInfo[c].lengPerSession
             course_end = (time_transfer(course_start, "config", -1) + timedelta(minutes=session_length)).strftime('%H:%M')
             
-            meetBP = checkMeetBP(config, slots, session_length, BPNotMet, BlockingSlot, course_name)
+            meetBP, BPNotMet = checkMeetBP(config, slots, session_length, BlockingSlot, course_name)
 
             formatted_output = "{:<8}\t{:<20}\t{:<5}\t{:<8}\t{:<8}\t{:<5}\t{:<3}\t{:<3}\n"\
                 .format(course_name, instructor_name, teaching_days, course_start, course_end, session_length, meetBP, meetIP)
@@ -1544,23 +1592,24 @@ def generate_output(X, output_dir, course_instructor, config, IW, instructor_in_
     return NumCNoPref, InsNotMet, BPNotMet
 
 #################################################################################
-def checkMeetBP(config, slots, session_length, BPNotMet, BlockingSlot, course_name):
+def checkMeetBP(config, slots, session_length, BlockingSlot, course_name):
     '''
     Usage: check whether a course meet Block Policy or not
 
-    Input: 
+    Argument: 
     config(dict)
     slots(dict): currently we only have one element in slots, which is slot id for a course
     session_length(int): session length for a course 
-    BPNotMet(set): an set that contain course id that doesn't meet block policy
     BlockingSlot(list): slot id that are between block starting time and block ending time
     course_name(string): e.g., '200'
 
-    Output: 
+    Return variable: 
     meetBP(string): 'n' or 'y' or '-'. '-' means its before block starting time or after block ending time. 
+    BPNotMet(set): an set that contain course id that doesn't meet block policy
     '''
 
-    meetBP = 'y'          
+    meetBP = 'y'  
+    BPNotMet = set()        
     #if course begin after 14:30, meetBP = '-'
     if (slots[0] > config['BlockSchedulingEndsAtid'] or slots[0] < config['BlockSchedulingStartsAtid']):
         meetBP = '-'
@@ -1588,19 +1637,22 @@ def checkMeetBP(config, slots, session_length, BPNotMet, BlockingSlot, course_na
                         meetBP = 'n'
                         BPNotMet.add(course_name)
 
-    return meetBP
+    return meetBP, BPNotMet
 
 #################################################################################
 def generateHeatMap(Y, output_dir, config, NonExemptedC, TotalNonExemptedHours):
     '''
     Usage: generate heatmap.txt based on Y.varValue we get from ILP problem
 
-    Input:
+    Argument: 
     Y(list)
     output_dir(string)
     config(dict)
     NonExemptedC(list): a list of non-exempted course's course id
     TotalNonExemptedHours(float)
+
+    File output: 
+    headtmap.txt
 
     Format for headtmap.txt file:
     ###
@@ -1634,7 +1686,7 @@ def printStandardOutput(config, course_instructor, NonExemptedC, TotalNonExempte
     '''
     Usage: print out some useful information in stderr file
 
-    Input:
+    Argument: 
     config(dict): parameters read from config file
     course_instructor(list): information read from course instructor(courseThisQuarter) file
     NonExemptedC(list): a list of non-exempted course's course id
@@ -1683,7 +1735,7 @@ def createCSVrow(CourseInfo, c, config, InstructorId2Name, totalSlot, X, start_t
     '''
     Usage: generate one row in schedule.txt file
 
-    Input:
+    Argument: 
     CourseInfo(list)
     c(int): a course id
     config(dict)
@@ -1694,6 +1746,16 @@ def createCSVrow(CourseInfo, c, config, InstructorId2Name, totalSlot, X, start_t
     BPNotMet(set)
     InsNotMet(defaultdict)
     instructor_in_insPref(list): instructor id for those appears in instructor preference file
+
+    Return variable: 
+    course_name(string), e.g., '200'
+    instructor_name(string), e.g., 'Cheng'
+    session_length(int), e.g., 50
+    meetBP(string), e.g., '-'
+    meetIP(string), e.g., 'y'
+    teaching_days(string), e.g., 'M W F'
+    course_start(string), e.g., '14:30'
+    course_end(string), e.g., '15:20'
     '''
 
     course_name = CourseInfo[c].courseName
@@ -1729,7 +1791,6 @@ def createCSVrow(CourseInfo, c, config, InstructorId2Name, totalSlot, X, start_t
         meetIP = 'n'
     if (CourseInfo[c].instructorId not in instructor_in_insPref):
         meetIP = '-'
-
     return course_name, instructor_name, session_length, meetBP, meetIP, teaching_days, course_start, course_end
 
 #################################################################################
@@ -1737,7 +1798,7 @@ def generateNonExCSV(output_dir, X, course_instructor, config, NonExemptedC, Ins
     '''
     Usage: generate schedule-nonEx.csv. Only include non-exempt courses.
 
-    Input:
+    Argument: 
     output_dir(string)
     X(list)
     course_instructor(list)
@@ -1746,6 +1807,9 @@ def generateNonExCSV(output_dir, X, course_instructor, config, NonExemptedC, Ins
     InsNotMe(defaultdict)
     BPNotMet(set)
     instructor_in_insPref(list)
+
+    File output:
+    scedule-NonEx.csv
 
     Format for scedule-NonEx.csv file:
     ###
@@ -1778,7 +1842,7 @@ def generateCSV(output_dir, X, course_instructor, config, NonExemptedC, InsNotMe
     '''
     Usage: generate schedule.csv. Include all the courses. The order is non-exempted courses, exempted courses, TA sessions.
 
-    Input:
+    Argument: 
     output_dir(string)
     X(list)
     course_instructor(list)
@@ -1787,6 +1851,9 @@ def generateCSV(output_dir, X, course_instructor, config, NonExemptedC, InsNotMe
     InsNotMe(defaultdict)
     BPNotMet(set)
     instructor_in_insPref(list)
+
+    File output:
+    schedule.csv
 
     Format for scedule.csv file:
     ###
@@ -1837,7 +1904,7 @@ def printPath(config_file, courseInstructor_file, courseInfo_file, conflict_file
     '''
     Usage: print paths for input files and output directory. 
 
-    Input: 
+    Argument: 
     config_file(string)
     courseInstructor_file(string)
     courseInfo_file(string)
