@@ -1,5 +1,5 @@
 
-Course,Instructor,Length,Meet-block-policy,Meet-Instructor-Preference,Days,Start,Exempted,Notes,
+Course,Instructor,Length,Meet-block-policy,Meet-Instructor-Preference,Days,Start,End,Exempted,Notes,
 LING 200,Ferjan-Ramirez,50,y,y,M W F,0930,1020,0,
 LING 210,McGarrity,50,-,y,M W F,1430,1520,0,
 LING 233,Evans,50,y,y,M W F,0830,0920,0,

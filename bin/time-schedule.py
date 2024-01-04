@@ -2,7 +2,7 @@
 Author: Yian Wang
 Supervisor: Professor Fei Xia
 Organization: University of Washington, the Linguistics Department
-Last Update: Dec 16, 2023
+Last Update: Jan 3, 2024
 
 If you have any questions or need further clarification, please feel free to contact the author at 118010310@link.cuhk.edu.cn
 """
@@ -22,7 +22,7 @@ class Course:
     def __init__(self, courseId, courseName, instructorId, mustOnDays, mustStartSlot, mustEndSlot,\
                  lengPerSession, sessionsPerWeek, largeClass, exempted, isTASession, slotNum):
         self.courseId = courseId #int, e.g., 0
-        self.courseName = courseName #string e.g., '200'
+        self.T = courseName #string e.g., '200'
         self.instructorId = instructorId #int, e.g., 0
         self.mustOnDays = mustOnDays #list of int, e.g., [1,3,5]
         self.mustStartSlot = mustStartSlot #int, e.g., 0
@@ -428,11 +428,12 @@ def read_courseInstructor(file_name, config):
                 for values in csv_reader:
                     line_number += 1
 
-                    # Skip empty lines or line starting with '#'
-                    if not any(values):
+                    # Skip lines whose first filed is empty
+                    if not values[0]:
                         continue
 
-                    course_name, course_name_before_slash, instructor_name, must_on_days, must_start_time, must_end_time, TotalCourseNum = readCTQline(values, TotalCourseNum, line_number)
+                    # In csv file, the last field is ignored since it is for commenting use only
+                    course_name, course_name_before_slash, instructor_name, must_on_days, must_start_time, must_end_time, TotalCourseNum = readCTQline(values[:-1], TotalCourseNum, line_number)
                     instructor_id, course_id = defineID(instructor_name, course_name_before_slash, InstructorName2Id, InstructorId2Name, CourseName2Id, CourseId2Name)
     
                     information.append([instructor_id, course_id, course_name, must_on_days, must_start_time, must_end_time, line_number])
@@ -623,13 +624,14 @@ def read_courseInfo(file_name, course_instructor, config):
                 for values in csv_reader:
                     line_number += 1
 
-                    # Skip empty lines or line starting with '#'
-                    if not any(values) or values[0].startswith('#'):
+                    # Skip lines where the first field is empty
+                    if not values[0]:
                         continue
 
+                    # In csv file, the last field is ignored since it is for commenting use only
                     course_name, course_name_before_slash, length_per_session, num_sessions_per_week, large_class, ten_percent_rule_exempted,\
                         is_a_TA_session, mustOnDays, mustStartTime, mustEndTime\
-                        = readCIline(values, course_instructor, line_number)
+                        = readCIline(values[:-1], course_instructor, line_number)
                     
                     if (course_name != -1):
                         information.append([course_name, course_name_before_slash, length_per_session, num_sessions_per_week, large_class, ten_percent_rule_exempted,\
@@ -890,11 +892,12 @@ def read_instructorPref(file_name, course_instructor, config):
             for values in csv_reader:
                 line_number += 1
 
-                # Skip empty lines or line starting with '#'
-                if not any(values) or values[0].startswith('#'):
+                # Skip lines whose first field is empty
+                if not values[0]: 
                     continue
 
-                instructor_name, prefDays, prefStartTime, prefEndTime, sameDay = readInsPrefline(values, line_number)
+                # In csv file, the last field is ignored since it is for commenting use only
+                instructor_name, prefDays, prefStartTime, prefEndTime, sameDay = readInsPrefline(values[:-1], line_number)
                 if (instructor_name.lower() not in InstructorName2Id):
                     continue
                 information.append([instructor_name, prefDays, prefStartTime, prefEndTime, sameDay])
@@ -1824,11 +1827,11 @@ def generateNonExCSV(output_dir, X, course_instructor, config, NonExemptedC, Ins
     CourseInfo = course_instructor[5]
     start_time = time_transfer(config['InstructDayStartsAt'], "config", -1)
     totalSlot = config['SlotNumPerday']
-    fields = ['Course', 'Instructor', 'Length', 'Meet-block-policy','Meet-Instructor-Preference','Days','Start','End','Notes','']
+    fields = ['Course', 'Instructor', 'Length', 'Meet-block-policy','Meet-Instructor-Preference','Days','Start','End','Notes']
     rows = []
     for c in NonExemptedC:
         course_name, instructor_name, session_length, meetBP, meetIP, teaching_days, course_start, course_end = createCSVrow(CourseInfo, c, config, InstructorId2Name, totalSlot, X, start_time, BPNotMet, InsNotMet, instructor_in_insPref)
-        rows.append(['LING '+course_name, instructor_name, session_length, meetBP, meetIP, teaching_days, course_start.replace(':',''), course_end.replace(':',''), '', ''])
+        rows.append(['LING '+course_name, instructor_name, session_length, meetBP, meetIP, teaching_days, course_start.replace(':',''), course_end.replace(':',''), ''])
 
     with open(output_dir+"schedule-nonEx.csv", 'w') as csvfile:  
         # creating a csv writer object  
@@ -1869,7 +1872,7 @@ def generateCSV(output_dir, X, course_instructor, config, NonExemptedC, InsNotMe
     TotalCourseNum = course_instructor[6]
     start_time = time_transfer(config['InstructDayStartsAt'], "config", -1)
     totalSlot = config['SlotNumPerday']
-    fields = ['Course', 'Instructor', 'Length', 'Meet-block-policy','Meet-Instructor-Preference','Days','Start','Exempted','Notes','']
+    fields = ['Course', 'Instructor', 'Length', 'Meet-block-policy','Meet-Instructor-Preference','Days','Start','End','Exempted','Notes','']
     rows = []
 
     #First NonExempted Course

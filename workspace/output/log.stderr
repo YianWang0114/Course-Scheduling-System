@@ -1,4 +1,4 @@
-Log file generate at 2023-12-16 10:14:21.264530
+Log file generate at 2024-01-03 17:17:45.804820
 python version: 3.10.13 | packaged by conda-forge | (main, Oct 26 2023, 18:07:37) [GCC 12.3.0]
 pulp version: 2.7.0
 config file=config
@@ -115,16 +115,16 @@ output dir=./output/
 233AG, 233AH are conflicted because they are taught by TA6
 566, 575-Ben are conflicted because they are taught by Bender
 
+Warning: TA3 doesn't appear in the instructor preference file
+Warning: TA1 doesn't appear in the instructor preference file
+Warning: TBA doesn't appear in the instructor preference file
 Warning: TA6 doesn't appear in the instructor preference file
-Warning: lingColloq doesn't appear in the instructor preference file
 Warning: TA2 doesn't appear in the instructor preference file
 Warning: TA7 doesn't appear in the instructor preference file
 Warning: TA4 doesn't appear in the instructor preference file
-Warning: TA3 doesn't appear in the instructor preference file
-Warning: TA5 doesn't appear in the instructor preference file
-Warning: TA1 doesn't appear in the instructor preference file
 Warning: proseminar doesn't appear in the instructor preference file
-Warning: TBA doesn't appear in the instructor preference file
+Warning: TA5 doesn't appear in the instructor preference file
+Warning: lingColloq doesn't appear in the instructor preference file
 10%-rule-percentage=0.12
 Must-follow-block-policy=1
 
