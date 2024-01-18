@@ -2,7 +2,7 @@
 Author: Yian Wang
 Supervisor: Professor Fei Xia
 Organization: University of Washington, the Linguistics Department
-Last Update: Jan 3, 2024
+Last Update: Jan 17, 2024
 
 If you have any questions or need further clarification, please feel free to contact the author at 118010310@link.cuhk.edu.cn
 """
@@ -187,6 +187,48 @@ def convert_key_type(start_time, config):
     return
 
 #################################################################################
+def delete_files_in_directory(directory_path):
+    '''
+    Usage: Delete all the files in a directory.
+
+    Argument: 
+    directory_path(str): name of a directory
+    '''
+
+    try:
+        files = os.listdir(directory_path)
+        for file in files:
+            file_path = os.path.join(directory_path, file)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+        print("All files deleted successfully.")
+    except OSError:
+        print("Error occurred while deleting files.")
+
+    return
+
+#################################################################################
+def copyfiles(config):
+    '''
+    Usage: copy input files to output directory based on what we read from config file
+
+    Argument: 
+    config(dict) A dictionary that stores all the parameter we get from config file.
+    '''
+    output_dir = config["OutputDir"]
+    CourseInfo_dir = config['CourseInfo']
+    ConflictCourse_dir = config['ConflictCourse']
+    InstructorPref_dir = config['InstructorPref']
+    CourseInstructor_dir = config['CourseInstructor']
+    delete_files_in_directory(output_dir)
+    shutil.copy2(ConflictCourse_dir, output_dir)
+    shutil.copy2(CourseInfo_dir, output_dir)
+    shutil.copy2(InstructorPref_dir, output_dir)
+    shutil.copy2(CourseInstructor_dir, output_dir)
+
+    return
+
+#################################################################################
 def read_config(file_name):
     '''
     Usage: Read the config file and store all the parameter. 
@@ -238,6 +280,7 @@ def read_config(file_name):
     config['SlotNumPerday'] = SlotNumPerday
 
     useDefaultPath(config)
+    copyfiles(config)
 
     return config
 

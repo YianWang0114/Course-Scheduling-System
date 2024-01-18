@@ -50,9 +50,9 @@ CourseInstructor = "inputs/2024-2025/fall2024/CourseInstructor"
 OutputDir = "inputs/2024-2025/fall2024/output/"
 
 #If input files are not specified, we will use default files. 
-DefaultCourseInfoFile = "./CourseInfo"
+DefaultCourseInfoFile = "./CourseInfo.csv"
 DefaultConflictCourseFile = "./ConflictCourses"
-DefaultInstructorPrefFile = "./InstructorPref"
-DefaultCoursesThisQuarterFile = "./CoursesThisQuarter"
+DefaultInstructorPrefFile = "./InstructorPref.csv"
+DefaultCoursesThisQuarterFile = "./CoursesThisQuarter.csv"
 DefaultOutputDir = "./output/"
 
